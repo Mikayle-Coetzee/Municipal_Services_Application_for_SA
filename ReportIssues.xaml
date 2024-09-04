@@ -1,0 +1,23 @@
+﻿<Window x:Class="PROG7312_ST10023767.ReportIssues"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PROG7312_ST10023767"
+        mc:Ignorable="d"
+        Title="ReportIssues" Height="450" Width="800">
+    <Grid>
+
+        <TextBox Name="txtLocation" Width="400" Height="30" Margin="35,29,365,375" />
+        <ComboBox Name="cmbCategory" Width="400" Height="30" Margin="35,57,365,347">
+            <ComboBoxItem Content="Sanitation"/>
+            <ComboBoxItem Content="Roads"/>
+            <ComboBoxItem Content="Utilities"/>
+        </ComboBox>
+        <RichTextBox Name="rtbDescription" Width="400" Height="100" Margin="35,92,365,242" />
+        <Button Name="btnAttachFile" Content="Attach File" Width="100" Height="30" Margin="335,299,365,105" Click="btnAttachFile_Click"/>
+        <Button Name="btnSubmit" Content="Submit" Width="100" Height="30" Margin="335,239,365,165" Click="btnSubmit_Click"/>
+        <Button Name="btnBack" Content="Back to Main Menu" Width="150" Height="30" Margin="35,239,615,165" Click="btnBack_Click"/>
+        <Label Name="lblEngagement" Width="400" Height="30" Margin="35,364,365,40" Content="Thank you for your report!"/>
+    </Grid>
+</Window>

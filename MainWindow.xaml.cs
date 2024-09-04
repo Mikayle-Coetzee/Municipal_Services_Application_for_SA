@@ -24,5 +24,12 @@ namespace PROG7312_ST10023767
         {
             InitializeComponent();
         }
+
+        private void btnReportIssues_Click(object sender, RoutedEventArgs e)
+        {
+            ReportIssues reportIssuesWindow = new ReportIssues();
+            reportIssuesWindow.Show();
+            this.Close();
+        }
     }
-}
+}//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//

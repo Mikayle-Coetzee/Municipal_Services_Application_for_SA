@@ -1,0 +1,32 @@
+﻿<!--Documentation Header
+    File: ColorPalette.xaml
+    Author: Mikayle Coetzee (ST10023767)
+    Course: PROG7312 POE 2024
+    Description: This XAML resource dictionary defines various color, border, font, icon, panel, and button 
+                 styles for the application's user interface -->
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+
+    <Color x:Key="darkestColor">#00414B</Color>
+    <Color x:Key="darkColor">#1F7A8C</Color>
+    <Color x:Key="blueColor">#BFDBF7</Color>
+    <Color x:Key="offWhiteColor">#E1E5F2</Color>
+    <Color x:Key="whiteColor">#FFFFFF</Color>
+    <Color x:Key="redColor">#E63946</Color>
+    <Color x:Key="darkRedColor">#913C48</Color>
+    <Color x:Key="greenColor">#06D6A0</Color>
+
+
+    <SolidColorBrush x:Key="darkestSolidColorBrush">#00414B</SolidColorBrush>
+    <SolidColorBrush x:Key="darkSolidColorBrush">#1F7A8C</SolidColorBrush>
+    <SolidColorBrush x:Key="blueSolidColorBrush">#BFDBF7</SolidColorBrush>
+    <SolidColorBrush x:Key="offWhiteSolidColorBrush">#E1E5F2</SolidColorBrush>
+    <SolidColorBrush x:Key="whiteSolidColorBrush">#FFFFFF</SolidColorBrush>
+    <SolidColorBrush x:Key="redSolidColorBrush">#E63946</SolidColorBrush>
+    <SolidColorBrush x:Key="greenSolidColorBrush">#06D6A0</SolidColorBrush>
+    <SolidColorBrush x:Key="darkRedSolidColorBrush">#913C48</SolidColorBrush>
+
+    <!--・♫ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ♫・-->
+</ResourceDictionary>
