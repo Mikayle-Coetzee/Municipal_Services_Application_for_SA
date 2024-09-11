@@ -7,11 +7,22 @@ using System.Threading.Tasks;
 
 namespace PROG7312_ST10023767.Classes
 {
-    public class IssueManagerClass
+    public class IssueManager
     {
         private List<IssueClass> issues;
+        public enum ReportCategory
+        {
+            Utilities,
+            Sanitation,
+            Potholes,
+            Traffic,
+            RoadSigns,
+            OtherIssue,
+            TrafficLights,
+            CarCrash
+        }
 
-        public IssueManagerClass()
+        public IssueManager()
         {
             issues = new List<IssueClass>();
         }

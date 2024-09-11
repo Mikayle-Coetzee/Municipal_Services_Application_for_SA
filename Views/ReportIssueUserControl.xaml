@@ -125,25 +125,30 @@ RenderTransformOrigin="0.5,0.5" Width="152" HorizontalAlignment="Right" Grid.Col
                             <ScrollViewer Margin="10,7,10,45" Grid.RowSpan="2" VerticalScrollBarVisibility="Auto" Grid.Column="1" AutomationProperties.IsOffscreenBehavior="Offscreen" HorizontalScrollBarVisibility="Auto">
 
                                 <Grid Margin="10,0,10,0" Grid.RowSpan="2" Grid.Column="1" Height="528" Width="538">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="23*"/>
+                                        <RowDefinition Height="505*"/>
+                                    </Grid.RowDefinitions>
                                     <ProgressBar x:Name="progressBar" 
+                                                 
              Height="30" 
              Width="512" 
              Margin="0,10,0,0" 
              Minimum="0" 
-             Maximum="100"
-             Value="25" 
+             Maximum="91"
+             Value="1" 
              Foreground="{DynamicResource greenSolidColorBrush}" 
              Background="{DynamicResource offWhiteSolidColorBrush}" 
              HorizontalAlignment="Center" 
-             VerticalAlignment="Top"/>
-                                    <TextBox x:Name="txtLocation" Height="44" Margin="230,58,18,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{DynamicResource greenSolidColorBrush}" Foreground="White" SelectionTextBrush="Gainsboro" BorderThickness="1,1,1,1" FontSize="16" VerticalContentAlignment="Center" TextChanged="txtLocation_TextChanged" />
+             VerticalAlignment="Top" Grid.RowSpan="2"/>
+                                    <TextBox x:Name="txtLocation" Height="44" Margin="230,35,18,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{DynamicResource greenSolidColorBrush}" Foreground="White" SelectionTextBrush="Gainsboro" BorderThickness="1,1,1,1" FontSize="16" VerticalContentAlignment="Center" TextChanged="txtLocation_TextChanged" Grid.Row="1" />
                                     <fa:IconImage Icon="LocationDot" 
                                 Style="{StaticResource iconInIconButtonLight}"
-                                Height="NaN" Width="20" Margin="13,67,0,0" Foreground="{DynamicResource greenSolidColorBrush}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                    <ComboBox x:Name="cmbCategory" Height="45" Margin="230,134,18,0"
+                                Height="NaN" Width="20" Margin="13,44,0,0" Foreground="{DynamicResource greenSolidColorBrush}" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1"/>
+                                    <ComboBox x:Name="cmbCategory" Height="45" Margin="230,111,18,0"
                                       Style="{DynamicResource ComboBoxFlatStyle}"
 Background="{x:Null}"
-                                      VerticalAlignment="Top" FontSize="16" SelectedIndex="0" SelectionChanged="cmbCategory_SelectionChanged">
+                                      VerticalAlignment="Top" FontSize="16" SelectedIndex="0" SelectionChanged="cmbCategory_SelectionChanged" Grid.Row="1">
                                         <ComboBoxItem Content="Utilities"/>
                                         <ComboBoxItem Content="Sanitation"/>
                                         <ComboBoxItem Content="Potholes"/>
@@ -155,9 +160,9 @@ Background="{x:Null}"
                                     </ComboBox>
                                     <Button x:Name="btnAttachFile" Click="btnAttachFile_Click"
                                 Height="30" Width="100" VerticalAlignment="Top"
-                                Margin="229,309,0,0" Background="Transparent"
+                                Margin="229,286,0,0" Background="Transparent"
                                 ToolTip="Upload Media" BorderBrush="{DynamicResource greenSolidColorBrush}" 
-                                HorizontalAlignment="Left">
+                                HorizontalAlignment="Left" Grid.Row="1">
                                         <fa:IconImage Icon="FileUpload"
                                           Foreground="{DynamicResource greenSolidColorBrush}"
                                           Height="20" Width="20"/>
@@ -166,58 +171,90 @@ Background="{x:Null}"
 
 
                                     <!-- Re-upload Button (Visible after first upload) -->
-                                    <Button x:Name="btnReuploadFile" Click="btnReuploadFile_Click"
+                                    <Button x:Name="btnClearFile" 
  Height="30" Width="100" VerticalAlignment="Top"
- Margin="230,470,0,0" Background="Transparent"
+ Margin="230,447,0,0" Background="Transparent"
  ToolTip="Upload Media" BorderBrush="{DynamicResource greenSolidColorBrush}" 
- HorizontalAlignment="Left" Visibility="Collapsed">
-                                        <fa:IconImage Icon="FileUpload"
+ HorizontalAlignment="Left" Visibility="Collapsed" Click="btnClearFile_Click" Grid.Row="1">
+                                        <fa:IconImage Icon="Trash"
            Foreground="{DynamicResource greenSolidColorBrush}"
            Height="20" Width="20"/>
                                     </Button>
 
-                                    <RichTextBox x:Name="txtDescription" Height="74" Margin="230,206,18,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{DynamicResource greenSolidColorBrush}" Foreground="White" SelectionTextBrush="Gainsboro" BorderThickness="1,1,1,1" FontSize="16" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Visible" TextChanged="txtDescription_TextChanged"  />
+                                    <RichTextBox x:Name="txtDescription" Height="74" Margin="230,183,18,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{DynamicResource greenSolidColorBrush}" Foreground="White" SelectionTextBrush="Gainsboro" BorderThickness="1,1,1,1" FontSize="16" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Visible" TextChanged="txtDescription_TextChanged" Grid.Row="1"  />
                                     <fa:IconImage Icon="ExclamationTriangle" 
                                 Style="{StaticResource iconInIconButtonLight}"
-                                Height="NaN" Width="20" Margin="13,146,0,0" Foreground="{DynamicResource greenSolidColorBrush}" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                Height="NaN" Width="20" Margin="13,123,0,0" Foreground="{DynamicResource greenSolidColorBrush}" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Row="1"/>
                                     <fa:IconImage Icon="BookOpen" 
                                 Style="{StaticResource iconInIconButtonLight}"
-                                Height="NaN" Width="20" Margin="13,214,0,0" Foreground="{DynamicResource greenSolidColorBrush}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                    <Label x:Name="lblLocation" Width="156" Height="30" Margin="45,65,0,0" Content="Enter Your Location:" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" FontSize="14" FontWeight="Bold"/>
-                                    <Label x:Name="lblLocation_Copy" Width="156" Height="30" Margin="45,141,0,0" Content="Select Issue Category:" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" FontSize="14" FontWeight="Bold"/>
-                                    <Label x:Name="lblLocation_Copy1" Width="188" Height="30" Margin="45,207,0,0" Content="Enter Description of Issue:" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" FontSize="14" FontWeight="Bold"/>
+                                Height="NaN" Width="20" Margin="13,191,0,0" Foreground="{DynamicResource greenSolidColorBrush}" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1"/>
+                                    <Label x:Name="lblLocation" Width="156" Height="30" Margin="45,42,0,0" Content="Enter Your Location:" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" FontSize="14" FontWeight="Bold" Grid.Row="1"/>
+                                    <Label x:Name="lblLocation_Copy" Width="156" Height="30" Margin="45,118,0,0" Content="Select Issue Category:" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" FontSize="14" FontWeight="Bold" Grid.Row="1"/>
+                                    <Label x:Name="lblLocation_Copy1" Width="188" Height="30" Margin="45,184,0,0" Content="Enter Description of Issue:" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" FontSize="14" FontWeight="Bold" Grid.Row="1"/>
                                     <fa:IconImage Icon="Upload" 
                                 Style="{StaticResource iconInIconButtonLight}"
-                                Height="NaN" Width="20" Margin="13,314,0,0" Foreground="{DynamicResource greenSolidColorBrush}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                    <Label x:Name="lblLocation_Copy2" Width="188" Height="30" Margin="45,309,0,0" Content="Upload Media:" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" FontSize="14" FontWeight="Bold"/>
-                                    <fa:IconImage x:Name="reUploadIcon" Icon="Upload" 
+                                Height="NaN" Width="20" Margin="13,291,0,0" Foreground="{DynamicResource greenSolidColorBrush}" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1"/>
+                                    <Label x:Name="lblLocation_Copy2" Width="188" Height="30" Margin="45,286,0,0" Content="Upload Media:" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" FontSize="14" FontWeight="Bold" Grid.Row="1"/>
+                                    <fa:IconImage x:Name="reUploadIcon" Icon="Trash" 
                                     Style="{StaticResource iconInIconButtonLight}"
-                                    Height="NaN" Width="20" Margin="13,473,0,0" Foreground="{DynamicResource greenSolidColorBrush}" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed"/>
-                                    <Label x:Name="lblReUploadMedia" Width="188" Height="30" Margin="45,468,0,0" Content="Re-Upload Media:" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" FontSize="14" FontWeight="Bold" Visibility="Collapsed"/>
-                                    <Grid Margin="358,309,18,-28">
-                                        <ScrollViewer
-              HorizontalScrollBarVisibility="Hidden"
-              VerticalScrollBarVisibility="Hidden" Height="191" VerticalAlignment="Center" Margin="27,0,28,0">
+                                    Height="NaN" Width="20" Margin="13,450,0,0" Foreground="{DynamicResource greenSolidColorBrush}" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed" Grid.Row="1"/>
+                                    <Label x:Name="lblReUploadMedia" Width="188" Height="30" Margin="45,445,0,0" Content="Remove Uploaded Media:" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" FontSize="14" FontWeight="Bold" Visibility="Collapsed" Grid.Row="1"/>
+                                    <Grid Margin="334,286,18,10" Grid.Row="1">
+                                        <!-- Main grid to center content -->
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
 
-                                            <StackPanel x:Name="mediaContainer"
-                Orientation="Vertical"
-                Visibility="Collapsed" 
-                                        Width="Auto"
-                Height="Auto"/>
-                                        </ScrollViewer>
-                                        <Button x:Name="btnNext" Background="Transparent"
-ToolTip="Next" BorderBrush="Transparent"  HorizontalAlignment="Left" VerticalAlignment="Center" Height="26" Margin="134,0,0,0" Width="28" Visibility="Collapsed" >
-                                            <fa:IconImage Icon="Forward"
-          Foreground="{DynamicResource greenSolidColorBrush}"
-          Height="19" Width="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                        </Button>
-                                        <Button x:Name="btnPrevious" Background="Transparent"
-ToolTip="Next" BorderBrush="Transparent" HorizontalAlignment="Left" VerticalAlignment="Center" Height="26" Width="27" Visibility="Collapsed">
+                                        <Button x:Name="btnPrevious"
+            Background="Transparent"
+            BorderBrush="Transparent"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Height="40"
+            Width="40"
+            Visibility="Collapsed"
+            Grid.Column="0"
+            ToolTip="Previous">
                                             <fa:IconImage Icon="Backward"
-          Foreground="{DynamicResource greenSolidColorBrush}"
-          Height="19" Width="24" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                      Foreground="{DynamicResource greenSolidColorBrush}"
+                      Height="30"
+                      Width="30"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"/>
+                                        </Button>
+
+                                        <StackPanel Grid.Column="1" x:Name="mediaContainer"
+                    Orientation="Vertical"
+                    Visibility="Visible"
+                    HorizontalAlignment="Center" Margin="0,10,0,10" />
+
+                                        <Button x:Name="btnNext"
+            Background="Transparent"
+            BorderBrush="Transparent"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Height="40"
+            Width="40"
+            Visibility="Collapsed"
+            Grid.Column="2"
+            ToolTip="Next">
+                                            <fa:IconImage Icon="Forward"
+                      Foreground="{DynamicResource greenSolidColorBrush}"
+                      Height="30"
+                      Width="30"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"/>
                                         </Button>
                                     </Grid>
+                                    <Label x:Name="lblMotivation" Height="30" Content="You're off to a great start! A category has been selected." 
+                                           Foreground="{DynamicResource darkestSolidColorBrush}" FontSize="14" 
+                                           FontWeight="Medium" Margin="0,10,0,0" VerticalContentAlignment="Center" 
+                                           VerticalAlignment="Top" HorizontalAlignment="Center" Width="518" 
+                                           HorizontalContentAlignment="Center" Grid.RowSpan="2" />
+
+
 
                                 </Grid>
                             </ScrollViewer>

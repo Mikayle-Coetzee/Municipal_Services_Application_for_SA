@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PROG7312_ST10023767.Classes
 {
-    public class InputValidationClass
+    public class InputValidationService
     {
         public static bool ValidateLocation(string location)
         {

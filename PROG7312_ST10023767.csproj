@@ -93,9 +93,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\ButtonHelper.cs" />
-    <Compile Include="Classes\InputValidationClass.cs" />
-    <Compile Include="Classes\MediaUploadClass.cs" />
-    <Compile Include="Classes\ProgressBarManagerClass.cs" />
+    <Compile Include="Classes\ChatService.cs" />
+    <Compile Include="Classes\InputValidationService.cs" />
+    <Compile Include="Classes\MediaService.cs" />
+    <Compile Include="Classes\ProgressBarManager.cs" />
     <Compile Include="Views\MainReportUserControl.xaml.cs">
       <DependentUpon>MainReportUserControl.xaml</DependentUpon>
     </Compile>
@@ -111,7 +112,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\IssueClass.cs" />
-    <Compile Include="Classes\IssueManagerClass.cs" />
+    <Compile Include="Classes\IssueManager.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

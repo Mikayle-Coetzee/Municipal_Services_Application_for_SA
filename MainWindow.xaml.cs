@@ -22,12 +22,12 @@ namespace PROG7312_ST10023767
     /// </summary>
     public partial class MainWindow : Window
     {
-        private IssueManagerClass issueManager;
+        private IssueManager issueManager;
 
         public MainWindow()
         {
             InitializeComponent();
-            issueManager = new IssueManagerClass();
+            issueManager = new IssueManager();
 
         }
 

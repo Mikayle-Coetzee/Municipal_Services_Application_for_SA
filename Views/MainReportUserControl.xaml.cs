@@ -21,9 +21,9 @@ namespace PROG7312_ST10023767.Views
     /// </summary>
     public partial class MainReportUserControl : UserControl
     {
-        private IssueManagerClass issueManager;
+        private IssueManager issueManager;
 
-        public MainReportUserControl(IssueManagerClass issueManager)
+        public MainReportUserControl(IssueManager issueManager)
         {
             InitializeComponent();
             this.issueManager = issueManager;
