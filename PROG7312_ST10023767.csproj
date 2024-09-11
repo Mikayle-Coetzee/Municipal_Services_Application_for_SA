@@ -92,8 +92,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ReportIssues.xaml.cs">
-      <DependentUpon>ReportIssues.xaml</DependentUpon>
+    <Compile Include="Classes\ButtonHelper.cs" />
+    <Compile Include="Classes\InputValidationClass.cs" />
+    <Compile Include="Classes\MediaUploadClass.cs" />
+    <Compile Include="Classes\ProgressBarManagerClass.cs" />
+    <Compile Include="Views\MainReportUserControl.xaml.cs">
+      <DependentUpon>MainReportUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportIssueUserControl.xaml.cs">
+      <DependentUpon>ReportIssueUserControl.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -109,15 +116,27 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ReportIssues.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Styles\ButtonStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\ColorPalette.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ComboBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ScrollBarStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainReportUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReportIssueUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -136,6 +155,34 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Images\Buttons\back_to_main_hover.png" />
+    <Resource Include="Images\Buttons\back_to_main.png" />
+    <Resource Include="Images\Buttons\report_traffic_lights.png" />
+    <Resource Include="Images\Buttons\report_traffic_lights_click.png" />
+    <Resource Include="Images\Buttons\report_traffic_lights_hover.png" />
+    <Resource Include="Images\Buttons\report_car_crash.png" />
+    <Resource Include="Images\Buttons\report_car_crash_click.png" />
+    <Resource Include="Images\Buttons\report_car_crash_hover.png" />
+    <Resource Include="Images\Buttons\report_traffic.png" />
+    <Resource Include="Images\Buttons\report_traffic_hover.png" />
+    <Resource Include="Images\Buttons\report_traffic_click.png" />
+    <Resource Include="Images\Buttons\report_other_issue.png" />
+    <Resource Include="Images\Buttons\report_other_issue_click.png" />
+    <Resource Include="Images\Buttons\report_other_issue_hover.png" />
+    <Resource Include="Images\Buttons\report_road_signs.png" />
+    <Resource Include="Images\Buttons\report_road_signs_click.png" />
+    <Resource Include="Images\Buttons\report_road_signs_hover.png" />
+    <Resource Include="Images\Buttons\report_potholes.png" />
+    <Resource Include="Images\Buttons\report_potholes_click.png" />
+    <Resource Include="Images\Buttons\report_potholes_hover.png" />
+    <Resource Include="Images\Buttons\report_sanitation.png" />
+    <Resource Include="Images\Buttons\report_sanitation_click.png" />
+    <Resource Include="Images\Buttons\report_sanitation_hover.png" />
+    <Resource Include="Images\Logos\new_logo.png" />
+    <Resource Include="Images\Buttons\report_utilities.png" />
+    <Resource Include="Images\Buttons\report_utilities_click.png" />
+    <Resource Include="Images\Buttons\report_utilities_hover.png" />
+    <Resource Include="Images\Backgrounds\report_background.png" />
     <Resource Include="Images\Buttons\event_image_hover.png" />
     <Resource Include="Images\Buttons\report_image_hover.png" />
     <Resource Include="Images\Buttons\status_image_hover.png" />
@@ -143,7 +190,6 @@
     <Resource Include="Images\Buttons\report_image_click.png" />
     <Resource Include="Images\Buttons\status_image_click.png" />
     <Resource Include="Images\Images\side_image.png" />
-    <Resource Include="Images\Logos\new_logo.png" />
     <Resource Include="Images\Buttons\event_image.png" />
     <Resource Include="Images\Buttons\report_image.png" />
     <Resource Include="Images\Buttons\status_image.png" />

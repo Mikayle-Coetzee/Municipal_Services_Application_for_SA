@@ -12,30 +12,23 @@ namespace PROG7312_ST10023767.Classes
         public string Location { get; set; }
         public string Category { get; set; }
         public string Description { get; set; }
-        public List<string> Attachments { get; set; }
+        public DateTime Timestamp { get; set; }
+        
+        public List<string> Attachments = new List<string>();
 
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
-        /// Default Constructor
-        /// </summary>
-        public IssueClass() { }
-
-        //・♫-------------------------------------------------------------------------------------------------♫・//
         public IssueClass(string location, string category, string description)
         {
             Location = location;
             Category = category;
             Description = description;
-            Attachments = new List<string>();
-        }
-        public void AddAttachment(string filePath)
-        {
-            if (File.Exists(filePath))
-            {
-                Attachments.Add(filePath);
-            }
+            Timestamp = DateTime.Now;
         }
 
+        public void AddAttachment(string media)
+        {
+            Attachments.Add(media);
+        }
     }
+
 }
 //★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//

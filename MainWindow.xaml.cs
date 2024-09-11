@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PROG7312_ST10023767.Classes;
+using PROG7312_ST10023767.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,16 +22,25 @@ namespace PROG7312_ST10023767
     /// </summary>
     public partial class MainWindow : Window
     {
+        private IssueManagerClass issueManager;
+
         public MainWindow()
         {
             InitializeComponent();
+            issueManager = new IssueManagerClass();
+
         }
 
         private void btnReportIssues_Click(object sender, RoutedEventArgs e)
         {
-            ReportIssues reportIssuesWindow = new ReportIssues();
-            reportIssuesWindow.Show();
-            this.Close();
+            // Navigate to the MainReportUserControl view
+            MainReportUserControl mainReport = new MainReportUserControl(issueManager);
+
+            // Set the visibility of the mainReport section to visible
+            mainReport.Visibility = Visibility.Visible;
+
+            // Navigate to the mainReport using the MainFrame
+            MainFrame.Navigate(content: mainReport);
         }
     }
 }//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//

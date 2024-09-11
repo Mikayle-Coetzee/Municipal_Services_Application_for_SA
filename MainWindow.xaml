@@ -7,8 +7,11 @@
         Title="South Africa" Height="700" Width="1200"
         WindowStartupLocation="CenterScreen" 
         UseLayoutRounding="False"
-        MinHeight="500" MinWidth="500">
+        MinHeight="500" MinWidth="750">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         <Border BorderThickness="2">
 
             <!--#region Border Color -->
@@ -57,48 +60,42 @@
 
                         </StackPanel>
 
-                        <StackPanel
-                              Orientation="Horizontal"
-                              FlowDirection="RightToLeft"
-                              VerticalAlignment ="Center" Height="50" HorizontalAlignment="Left" Width="189" Margin="-3,0,0,0">
-
-                            <Image  Stretch="UniformToFill" Source="/Images/Logos/new_logo.png" Margin="0,0,10,0" VerticalAlignment="Center" Width="146"/>
-
-
-
-
-
-
+                        <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" VerticalAlignment ="Center" 
+            Height="50" HorizontalAlignment="Left" Width="209" Margin="-3,0,0,0">
+                            <Image Stretch="Fill" Source="/Images/Logos/new_logo.png" VerticalAlignment="Center" Width="165" Height="34"/>
                         </StackPanel>
                         <!--#endregion-->
 
                         <!--#region Usercontrol section -->
                         <Grid Grid.Row="1" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="166*"/>
+                                <RowDefinition Height="139*"/>
+                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="637*"/>
+                                <ColumnDefinition Width="558*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.Background>
                                 <ImageBrush ImageSource="/Images/Backgrounds/new_background.png"/>
                             </Grid.Background>
                             <Label x:Name="lblHeadding" Content="South Africa  &#xD;&#xA;Municipality" HorizontalAlignment="Left" Margin="33,9,0,0" VerticalAlignment="Top" Height="216" Width="594" FontSize="72" FontFamily="Tahoma" FontWeight="Bold" Foreground="White"/>
-                            <Label x:Name="lblHeadding_Copy" Content="We are here to help you through the process of &#xD;&#xA;reporting issues, view server request statuses, and &#xD;&#xA;stay updated on local events and announcements. " HorizontalAlignment="Left" Margin="34,213,0,0" VerticalAlignment="Top" Height="98" Width="774" FontSize="25" FontFamily="Tahoma" Foreground="White"/>
+                            <Label x:Name="lblHeadding_Copy" Content="We are here to help you through the process of &#xD;&#xA;reporting issues, view server request statuses, and &#xD;&#xA;stay updated on local events and announcements. " HorizontalAlignment="Left" Margin="34,213,0,0" VerticalAlignment="Top" Height="98" Width="593" FontSize="25" FontFamily="Tahoma" Foreground="White"/>
                             <Button x:Name="btnReportIssues"  
                                     Click="btnReportIssues_Click"   
-                                    Style="{StaticResource CustomImageButtonReportIssue}" 
+                                    Style="{StaticResource CustomImageButtonReportIssue}" Grid.Row="1" 
                                     >
 
 
                             </Button>
 
-                            <Button x:Name="btnLocalEvents"  Style="{StaticResource CustomImageButtonEvent}" 
+                            <Button x:Name="btnLocalEvents"  Style="{StaticResource CustomImageButtonEvent}" Margin="0,0,0,69" Grid.Row="1" HorizontalAlignment="Center" 
+/>
+                            <Button x:Name="btnServiceRequestStatus" Style="{StaticResource CustomImageButtonStatus}" Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,37,74" 
 >
 
                             </Button>
-                            <Button x:Name="btnServiceRequestStatus" Style="{StaticResource CustomImageButtonStatus}" 
->
-
-                            </Button>
-                            <Label x:Name="lblHeadding_Copy1" Content="Click one of the buttons below to access a feature:" HorizontalAlignment="Left" Margin="33,0,0,229" VerticalAlignment="Bottom" Height="39" Width="774" FontSize="22" FontFamily="Tahoma" Foreground="White" RenderTransformOrigin="0.5,0.5">
+                            <Label x:Name="lblHeadding_Copy1" Content="Click one of the buttons below to access a feature:" HorizontalAlignment="Left" Margin="33,0,0,229" VerticalAlignment="Bottom" Height="39" Width="594" FontSize="22" FontFamily="Tahoma" Foreground="White" RenderTransformOrigin="0.5,0.5" Grid.Row="1">
                                 <Label.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>
@@ -108,7 +105,7 @@
                                     </TransformGroup>
                                 </Label.RenderTransform>
                             </Label>
-                            <Label x:Name="lblHeadding_Copy2" Content="Report &#xD;&#xA; Issue" HorizontalAlignment="Left" Margin="33,523,0,0" VerticalAlignment="Bottom" Height="69" Width="120" FontSize="20" FontFamily="Tahoma" Foreground="White" RenderTransformOrigin="0.5,0.5" HorizontalContentAlignment="Center">
+                            <Label x:Name="lblHeadding_Copy2" Content="Report &#xD;&#xA; Issue" HorizontalAlignment="Left" Margin="33,0,0,0" VerticalAlignment="Bottom" Height="69" Width="120" FontSize="20" FontFamily="Tahoma" Foreground="White" RenderTransformOrigin="0.5,0.5" HorizontalContentAlignment="Center" Grid.Row="1">
                                 <Label.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>
@@ -118,7 +115,7 @@
                                     </TransformGroup>
                                 </Label.RenderTransform>
                             </Label>
-                            <Label x:Name="lblHeadding_Copy3" Content="Local Events and&#xD;&#xA; Announcements" HorizontalAlignment="Left" Margin="223,523,0,0" VerticalAlignment="Bottom" Height="69" Width="188" FontSize="20" FontFamily="Tahoma" Foreground="White" RenderTransformOrigin="0.5,0.5" HorizontalContentAlignment="Center">
+                            <Label x:Name="lblHeadding_Copy3" Content="Local Events and&#xD;&#xA; Announcements" HorizontalAlignment="Center" Margin="0,209,0,0" VerticalAlignment="Bottom" Height="69" Width="188" FontSize="20" FontFamily="Tahoma" Foreground="White" RenderTransformOrigin="0.5,0.5" HorizontalContentAlignment="Center" Grid.Row="1">
                                 <Label.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>
@@ -128,7 +125,7 @@
                                     </TransformGroup>
                                 </Label.RenderTransform>
                             </Label>
-                            <Label x:Name="lblHeadding_Copy4" Content="Service Request &#xD;&#xA;       Status" HorizontalAlignment="Left" Margin="442,523,0,0" VerticalAlignment="Bottom" Height="69" Width="188" FontSize="20" FontFamily="Tahoma" Foreground="White" RenderTransformOrigin="0.5,0.5" HorizontalContentAlignment="Center">
+                            <Label x:Name="lblHeadding_Copy4" Content="Service Request &#xD;&#xA;       Status" HorizontalAlignment="Right" Margin="0,0,3,0" VerticalAlignment="Bottom" Height="69" Width="188" FontSize="20" FontFamily="Tahoma" Foreground="White" RenderTransformOrigin="0.5,0.5" HorizontalContentAlignment="Center" Grid.Row="1">
                                 <Label.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>
@@ -139,7 +136,7 @@
                                 </Label.RenderTransform>
                             </Label>
 
-                            <Image Stretch="Fill" Margin="677,0,0,0" Source="/Images/Images/side_image.png"/>
+                            <Image Stretch="Fill" Margin="10,0,0,0" Source="/Images/Images/side_image.png" Grid.Column="1" Grid.RowSpan="2"/>
 
                         </Grid>
 
@@ -148,7 +145,9 @@
                 </Border>
 
             </Grid>
-        </Border>
 
+        </Border>
+        <Frame x:Name="MainFrame" 
+NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

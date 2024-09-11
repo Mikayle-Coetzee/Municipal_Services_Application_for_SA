@@ -1,5 +1,71 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+
+    xmlns:classes="clr-namespace:PROG7312_ST10023767.Classes">
+    <!--Dark plain button style-->
+
+    <Style x:Key="NavButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="ContentPresenter.HorizontalAlignment" Value="Center"/>
+        <Setter Property="ContentPresenter.VerticalAlignment" Value="Center"/>
+        <Setter Property="FontFamily" Value="pack://application:,,,/FontAwesome.Sharp;component/Fonts/#FontAwesome"/>
+    </Style>
+
+    <Style x:Key="PlainButtonDark" TargetType="Button">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="{x:Null}"/>
+        <Setter Property="Foreground" Value="{DynamicResource whiteSolidColorBrush}"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontFamily" Value="Montserrat"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Width="150" Height="30"
+                                      CornerRadius="20"
+                                      Background="{TemplateBinding Background}"
+                                      HorizontalAlignment="Center" 
+                                      VerticalAlignment="Top">
+                        <ContentPresenter VerticalAlignment="Center"
+                                         HorizontalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <!--Button Style on hover-->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Margin" Value="0,0,0,5"/>
+                <Setter Property="Background" Value="{x:Null}"/>
+                <Setter Property="Foreground" Value="{DynamicResource whiteSolidColorBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!--#endregion-->
+    <!--Icon in Button Light-->
+    <Style x:Key="iconInIconButtonLight" TargetType="fa:IconImage">
+        <Setter Property="Foreground" Value="{Binding Path=Foreground, 
+            RelativeSource={RelativeSource AncestorType=Button}}"/>
+        <Setter Property="Width" Value="16"/>
+        <Setter Property="Height" Value="16"/>
+        <Style.Triggers>
+            <!--Button Style on hover-->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource redSolidColorBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
     
     <Style x:Key="MainWindowRedButton" TargetType="Button">
         <Setter Property="BorderThickness" Value="0"/>
@@ -157,4 +223,33 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="CustomImageButton" TargetType="Button">
+        <Setter Property="Height" Value="95"/>
+        <Setter Property="Width" Value="250"/>
+        <Setter Property="BorderBrush" Value="{x:Null}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Bottom"/>
+        <Setter Property="Foreground" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Image x:Name="ButtonImage" Source="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}" Stretch="Fill"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <!-- Hover effect -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Source" TargetName="ButtonImage" Value="{Binding Path=(classes:ButtonHelper.TagHover), RelativeSource={RelativeSource AncestorType=Button}}"/>
+                        </Trigger>
+                        <!-- Click effect -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Source" TargetName="ButtonImage" Value="{Binding Path=(classes:ButtonHelper.TagClick), RelativeSource={RelativeSource AncestorType=Button}}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>
