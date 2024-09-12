@@ -14,15 +14,32 @@ namespace PROG7312_ST10023767.Classes
 {
     public class MediaService
     {
+        /// <summary>
+        /// Holds a list of media attached paths 
+        /// </summary>
         private List<string> attachedMediaPaths;
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Index representing the current media being displayed
+        /// </summary>
         private int currentIndex;
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Constructor to initialize MediaService with the attached media paths
+        /// </summary>
+        /// <param name="attachedMediaPaths"></param>
         public MediaService(List<string> attachedMediaPaths)
         {
             this.attachedMediaPaths = attachedMediaPaths;
             this.currentIndex = 0;
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Opens a file dialog for the user to select media files
+        /// </summary>
         public void AttachMedia()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -40,6 +57,17 @@ namespace PROG7312_ST10023767.Classes
             }
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Displays the attached media in the provided container with navigation options
+        /// </summary>
+        /// <param name="mediaContainer"></param>
+        /// <param name="mediaDisplay"></param>
+        /// <param name="btnNext"></param>
+        /// <param name="btnPrevious"></param>
+        /// <param name="lblReUploadMedia"></param>
+        /// <param name="reUploadIcon"></param>
+        /// <param name="btnReuploadFile"></param>
         public void DisplayUploadedMedia(StackPanel mediaContainer, ContentControl mediaDisplay, Button btnNext, Button btnPrevious, Label lblReUploadMedia, Image reUploadIcon, Button btnReuploadFile)
         {
             if (attachedMediaPaths == null || !attachedMediaPaths.Any())
@@ -65,6 +93,12 @@ namespace PROG7312_ST10023767.Classes
             btnReuploadFile.Visibility = Visibility.Visible;
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Loads and displays the media at the specified index
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="mediaDisplay"></param>
         public void LoadMedia(int index, ContentControl mediaDisplay)
         {
             if (attachedMediaPaths == null || !attachedMediaPaths.Any() || index < 0 || index >= attachedMediaPaths.Count)
@@ -75,53 +109,15 @@ namespace PROG7312_ST10023767.Classes
 
             if (extension == ".jpg" || extension == ".jpeg" || extension == ".png")
             {
-                BitmapImage bitmap = new BitmapImage(new Uri(mediaPath, UriKind.Absolute));
-                Image img = new Image
-                {
-                    Source = bitmap,
-                    Width = mediaDisplay.Width,
-                    Height = mediaDisplay.Height,
-                    Stretch = Stretch.Fill
-                };
-                mediaDisplay.Content = img;
+                mediaDisplay.Content = CreateImageElement(mediaPath,mediaDisplay);
             }
             else if (extension == ".mp4")
             {
-                MediaElement mediaVideo = new MediaElement
-                {
-                    Width = mediaDisplay.Width,
-                    Height = mediaDisplay.Height,
-                    Source = new Uri(mediaPath, UriKind.Absolute),
-                    LoadedBehavior = MediaState.Manual,
-                    UnloadedBehavior = MediaState.Close,
-                    Stretch = Stretch.Fill
-                };
-
-                mediaDisplay.Content = mediaVideo;
-                mediaVideo.Play();
+                mediaDisplay.Content = CreateVideoElement(mediaPath, mediaDisplay);
             }
             else if (extension == ".pdf" || extension == ".docx")
             {
-                TextBlock documentLink = new TextBlock
-                {
-                    Text = "Open Document: " + Path.GetFileName(mediaPath),
-                    FontStyle = FontStyles.Italic,
-                    Foreground = Brushes.Blue,
-                    Cursor = Cursors.Hand,
-                    TextDecorations = TextDecorations.Underline,
-                    TextWrapping = TextWrapping.Wrap
-                };
-
-                documentLink.MouseLeftButtonUp += (s, e) =>
-                {
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = mediaPath,
-                        UseShellExecute = true
-                    });
-                };
-
-                mediaDisplay.Content = documentLink;
+                mediaDisplay.Content = CreateDocumentLink(mediaPath);
             }
             else
             {
@@ -135,6 +131,12 @@ namespace PROG7312_ST10023767.Classes
             }
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Navigates through media items based on direction 
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <param name="mediaDisplay"></param>
         public void NavigateMedia(int direction, ContentControl mediaDisplay)
         {
             currentIndex += direction;
@@ -142,37 +144,75 @@ namespace PROG7312_ST10023767.Classes
             LoadMedia(currentIndex, mediaDisplay);
         }
 
-
-        public static void DisplayMedia(StackPanel bubbleContent, string mediaPath)
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Creates an image element
+        /// </summary>
+        /// <param name="mediaPath"></param>
+        /// <returns></returns>
+        private Image CreateImageElement(string mediaPath, ContentControl mediaDisplay)
         {
-            string extension = Path.GetExtension(mediaPath).ToLower();
-            if (extension == ".jpg" || extension == ".jpeg" || extension == ".png")
+            BitmapImage bitmap = new BitmapImage(new Uri(mediaPath, UriKind.Absolute));
+            Image img = new Image
             {
-                Image mediaImage = new Image
-                {
-                    Width = 150,
-                    Height = 150,
-                    Source = new BitmapImage(new Uri(mediaPath)),
-                    Stretch = Stretch.Fill,
-                    Margin = new Thickness(0, 0, 0, 5)
-                };
-                bubbleContent.Children.Add(mediaImage);
-            }
-            else if (extension == ".mp4")
+                Source = bitmap,
+                Width = mediaDisplay.Width,
+                Height = mediaDisplay.Height,
+                Stretch = Stretch.Fill
+            };
+
+            return img;
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Creates a video element
+        /// </summary>
+        /// <param name="mediaPath"></param>
+        /// <returns></returns>
+        private MediaElement CreateVideoElement(string mediaPath, ContentControl mediaDisplay)
+        {
+            MediaElement mediaVideo = new MediaElement
             {
-                MediaElement mediaVideo = new MediaElement
+                Width = mediaDisplay.Width,
+                Height = mediaDisplay.Height,
+                Source = new Uri(mediaPath, UriKind.Absolute),
+                LoadedBehavior = MediaState.Manual,
+                UnloadedBehavior = MediaState.Close,
+                Stretch = Stretch.Fill
+            };
+            mediaVideo.Play();
+            return mediaVideo;
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Creates a document link element
+        /// </summary>
+        /// <param name="mediaPath"></param>
+        /// <returns></returns>
+        private TextBlock CreateDocumentLink(string mediaPath)
+        {
+            TextBlock documentLink = new TextBlock
+            {
+                Text = "Open Document: " + Path.GetFileName(mediaPath),
+                FontStyle = FontStyles.Italic,
+                Foreground = Brushes.Blue,
+                Cursor = Cursors.Hand,
+                TextDecorations = TextDecorations.Underline,
+                TextWrapping = TextWrapping.Wrap
+            };
+
+            documentLink.MouseLeftButtonUp += (s, e) =>
+            {
+                Process.Start(new ProcessStartInfo
                 {
-                    Width = 200,
-                    Height = 150,
-                    Source = new Uri(mediaPath),
-                    LoadedBehavior = MediaState.Manual,
-                    UnloadedBehavior = MediaState.Close,
-                    Margin = new Thickness(0, 0, 0, 5),
-                    Stretch = Stretch.Fill,
-                };
-                mediaVideo.Play();
-                bubbleContent.Children.Add(mediaVideo);
-            }
+                    FileName = mediaPath,
+                    UseShellExecute = true
+                });
+            };
+
+            return documentLink;
         }
     }
-}
+}//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//

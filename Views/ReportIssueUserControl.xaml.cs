@@ -25,26 +25,61 @@ namespace PROG7312_ST10023767.Views
     /// </summary>
     public partial class ReportIssueUserControl : UserControl
     {
+        /// <summary>
+        /// Manages the creation and storage of issues
+        /// </summary>
         private IssueManager issueManager;
+
+        /// <summary>
+        /// Manages the chat-based user interface for interacting with the issue report
+        /// </summary>
         private ChatService chatService;
+
+        /// <summary>
+        /// Holds the paths of the media files attached to the issue
+        /// </summary>
         private List<string> attachedMediaPaths = new List<string>();
+
+        /// <summary>
+        /// Manages the media operations such as attachment and display
+        /// </summary>
         private MediaService mediaManager;
 
+        /// <summary>
+        /// Tracks the index of the current media item for navigation
+        /// </summary>
         private int currentIndex = 0;
 
+        /// <summary>
+        /// Tracks the progress value for the progress bar
+        /// </summary>
         int progressValue = 1;
+
+        /// <summary>
+        /// Flags for checking if location, description, and media have been validated
+        /// </summary>
         bool isLocationValid = false, isDescriptionValid = false, isMediaUploaded = false;
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Initializes a new instance of ReportIssueUserControl
+        /// </summary>
+        /// <param name="issueManager"></param>
         public ReportIssueUserControl(IssueManager issueManager)
         {
             InitializeComponent();
-            this.issueManager = issueManager;            
+            this.issueManager = issueManager;
             this.chatService = new ChatService(ChatHistoryPanel, issueManager, attachedMediaPaths);
             this.mediaManager = new MediaService(attachedMediaPaths);
-            
+
             btnSubmit.IsEnabled = false;
             ShowWelcomeMessage();
         }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Displays a welcome message when the user opens the report submission form
+        /// </summary>
         private async void ShowWelcomeMessage()
         {
             await Task.Delay(1500);
@@ -59,25 +94,39 @@ namespace PROG7312_ST10023767.Views
                 isInput: false);
         }
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Retrieves and returns the trimmed text from the RichTextBox used for the issue description
+        /// </summary>
+        /// <returns></returns>
         public string GetRichTextBoxText()
         {
             TextRange textRange = new TextRange(txtDescription.Document.ContentStart, txtDescription.Document.ContentEnd);
             return textRange.Text.Trim();  // Trim unnecessary whitespace
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Handles the logic for submitting the issue when the submit button is clicked
+        /// Validates input fields, attaches media, and sends the report
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
             if (!ValidateFields()) return;
 
-            var issue = new IssueClass(txtLocation.Text, (cmbCategory.SelectedItem as ComboBoxItem)?.Content.ToString(), GetRichTextBoxText());
+            var issue = new IssueClass(txtLocation.Text, (cmbCategory.SelectedItem as ComboBoxItem)?.Content.ToString(), 
+                GetRichTextBoxText());
             foreach (var mediaPath in attachedMediaPaths)
             {
                 issue.AddAttachment(mediaPath);
             }
 
             issueManager.AddIssue(issue);
-            string reportMessage = $"Location: {txtLocation.Text}\nCategory: {(cmbCategory.SelectedItem as ComboBoxItem)?.Content.ToString()}\nDescription: {GetRichTextBoxText()}\nTime: {DateTime.Now}";
+            string reportMessage = $"Location: {txtLocation.Text}\nCategory: " +
+                $"{(cmbCategory.SelectedItem as ComboBoxItem)?.Content.ToString()}\nDescription: " +
+                $"{GetRichTextBoxText()}\nTime: {DateTime.Now}";
 
             chatService.AddChatBubble(reportMessage, isMedia: attachedMediaPaths.Any(), isUser: true, isInput: false);
 
@@ -85,6 +134,12 @@ namespace PROG7312_ST10023767.Views
             MessageBox.Show("Thank you for submitting a report.");
             await AutoResponse(issue.Category);
         }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Validates if all required fields are filled
+        /// </summary>
+        /// <returns></returns>
         private bool ValidateFields()
         {
             string location = txtLocation.Text;
@@ -100,6 +155,10 @@ namespace PROG7312_ST10023767.Views
             return true;
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Clears all input fields after the report has been submitted
+        /// </summary>
         private void ClearFields()
         {
             txtLocation.Clear();
@@ -110,25 +169,33 @@ namespace PROG7312_ST10023767.Views
             ResetValidationFlags();
             UpdateProgressBar(1);
         }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Updates the progress bar value
+        /// </summary>
+        /// <param name="value"></param>
         private void UpdateProgressBar(int value)
         {
             progressBar.Value = value;
             progressValue = value;
         }
-        private void ClearTextInputs()
-        {
-            txtLocation.Clear();
-            txtDescription.Document.Blocks.Clear();
-            cmbCategory.SelectedIndex = 0;
-            lblMotivation.Content = "You're off to a great start! A category has been selected.";
-        }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Resets the media UI to its initial state
+        /// </summary>
         private void ResetMediaUI()
         {
             attachedMediaPaths.Clear();
-            SetVisibility(Visibility.Collapsed, reUploadIcon, lblReUploadMedia, btnClearFile, mediaContainer, btnNext, btnPrevious);
+            SetVisibility(Visibility.Collapsed, reUploadIcon, lblReUploadMedia, btnClearFile, mediaContainer, 
+                btnNext, btnPrevious);
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Resets the validation flags for location, description, and media
+        /// </summary>
         private void ResetValidationFlags()
         {
             isLocationValid = false;
@@ -136,6 +203,12 @@ namespace PROG7312_ST10023767.Views
             isMediaUploaded = false;
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Sets the visibility of multiple UI elements
+        /// </summary>
+        /// <param name="visibility"></param>
+        /// <param name="elements"></param>
         private void SetVisibility(Visibility visibility, params UIElement[] elements)
         {
             foreach (var element in elements)
@@ -144,7 +217,11 @@ namespace PROG7312_ST10023767.Views
             }
         }
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Sets the selected category in the ComboBox
+        /// </summary>
+        /// <param name="category"></param>
         public void SetCategory(string category)
         {
             foreach (ComboBoxItem item in cmbCategory.Items)
@@ -157,11 +234,18 @@ namespace PROG7312_ST10023767.Views
             }
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Displays an automatic response after submitting a report
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
         private async Task AutoResponse(string category)
         {
             await Task.Delay(1000);
 
-            var responseBubble = chatService.AddChatBubble($"Your report on {category} has been received. Processing it now. Estimated time to assistance: 5 minutes.", isMedia: false, isUser: false, isInput: false);
+            var responseBubble = chatService.AddChatBubble($"Your report on {category} has been received. " +
+                $"Processing it now. Estimated time to assistance: 5 minutes.", isMedia: false, isUser: false, isInput: false);
             var progressBarInBubble = new ProgressBar
             {
                 Width = 250,
@@ -183,21 +267,39 @@ namespace PROG7312_ST10023767.Views
                 await Task.Delay(3000);
             }
 
-            chatService.AddChatBubble($"Your report on {category} has been successfully submitted. We'll contact you soon.", isMedia: false, isUser: false, isInput: false);
+            chatService.AddChatBubble($"Your report on {category} has been successfully submitted. We'll contact you soon.", 
+                isMedia: false, isUser: false, isInput: false);
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Handles the back button click event and hides the current UserControl
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Navigating to Main Menu...");
             this.Visibility = Visibility.Hidden;
-
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Handles the "Back to Reports" button click event and collapses the current UserControl
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnBackToReports_Click(object sender, RoutedEventArgs e)
         {
             this.Visibility = Visibility.Collapsed;
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Sends a command based on user input to either help, view, start new conversation, or search
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnSend_Click(object sender, RoutedEventArgs e)
         {
             string command = txtMessage.Text.ToLower();
@@ -205,11 +307,13 @@ namespace PROG7312_ST10023767.Views
             {
                 case "1":
                 case "help":
-                    chatService.AddChatBubble("You can submit a report by filling in the details and clicking submit.", isMedia: false, isUser: false, isInput: false);
+                    chatService.AddChatBubble("You can submit a report by filling in the details and clicking submit.", 
+                        isMedia: false, isUser: false, isInput: false);
                     break;
                 case "2":
                 case "view":
-                    chatService.AddChatBubble("Here are your submitted reports:", isMedia: false, isUser: false, isInput: false);
+                    chatService.AddChatBubble("Here are your submitted reports:",
+                        isMedia: false, isUser: false, isInput: false);
                     chatService.DisplayAllReports();
                     break;
                 case "3":
@@ -222,33 +326,54 @@ namespace PROG7312_ST10023767.Views
                     ShowSearchPopup();
                     break;
                 default:
-                    chatService.AddChatBubble("Command not recognized. Please enter a valid option.", isMedia: false, isUser: false, isInput: false);
+                    chatService.AddChatBubble("Command not recognized. Please enter a valid option.", 
+                        isMedia: false, isUser: false, isInput: false);
                     break;
             }
 
             txtMessage.Clear();
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Displays a search input prompt to allow the user to search for a report
+        /// </summary>
         private void ShowSearchPopup()
         {
-            chatService.AddChatBubble("Please enter the location and select a category to search.", isMedia: false, isUser: false, isInput: true);
+            chatService.AddChatBubble("Please enter the location and select a category to search.", 
+                isMedia: false, isUser: false, isInput: true);
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Handles text changes in the location field and updates the progress bar accordingly
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txtLocation_TextChanged(object sender, TextChangedEventArgs e)
         {
-            HandleTextChange(txtLocation.Text, ref isLocationValid, 30, "Great! You've entered the location. Keep going!", "Oops! The location is missing. Please enter it.");
+            HandleTextChange(txtLocation.Text, ref isLocationValid, 30, 
+                "Great! You've entered the location. Keep going!", "Oops! The location is missing. Please enter it.");
         }
 
-        private void cmbCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-          
-        }
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Handles text changes in the description field and updates the progress bar accordingly
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txtDescription_TextChanged(object sender, TextChangedEventArgs e)
         {
-            HandleTextChange(GetRichTextBoxText(), ref isDescriptionValid, 30, "Awesome! You've described the issue. Almost there!", "Please describe the issue.");
+            HandleTextChange(GetRichTextBoxText(), ref isDescriptionValid, 30,
+                "Awesome! You've described the issue. Almost there!", "Please describe the issue.");
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Handles the logic for clearing attached files and updating the UI
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnClearFile_Click(object sender, RoutedEventArgs e)
         {
             attachedMediaPaths.Clear();
@@ -261,7 +386,17 @@ namespace PROG7312_ST10023767.Views
             ResetMediaUI();
         }
 
-        private void HandleTextChange(string text, ref bool flag, int progress, string successMessage, string failMessage)
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Handles the logic for text change, updates progress bar, and modifies validation flags
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="flag"></param>
+        /// <param name="progress"></param>
+        /// <param name="successMessage"></param>
+        /// <param name="failMessage"></param>
+        private void HandleTextChange(string text, ref bool flag, int progress, string successMessage,
+            string failMessage)
         {
             if (!string.IsNullOrEmpty(text))
             {
@@ -284,12 +419,22 @@ namespace PROG7312_ST10023767.Views
 
             CheckSubmitButtonVisibility();
         }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Enables or disables the submit button based on progress values
+        /// </summary>
         private void CheckSubmitButtonVisibility()
         {
             btnSubmit.IsEnabled = (progressValue == 61 && !isMediaUploaded) || (progressValue == 91);
         }
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Handles the file attachment logic and updates the media manager to display attached media
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAttachFile_Click(object sender, RoutedEventArgs e)
         {
             mediaManager.AttachMedia();
@@ -301,7 +446,9 @@ namespace PROG7312_ST10023767.Views
                 lblMotivation.Content = "Fantastic! Your report is ready. Click submit to complete!";
             }
 
-            mediaManager.DisplayUploadedMedia(mediaContainer, new ContentControl(), btnNext, btnPrevious, lblReUploadMedia, reUploadIcon, btnClearFile);
+            mediaManager.DisplayUploadedMedia(mediaContainer, new ContentControl(), btnNext, btnPrevious,
+                lblReUploadMedia, reUploadIcon, btnClearFile);
         }
     }
-}
+}//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//
+

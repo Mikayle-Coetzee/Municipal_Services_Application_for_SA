@@ -7,8 +7,7 @@
              xmlns:classes="clr-namespace:PROG7312_ST10023767.Classes"
              mc:Ignorable="d" 
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
-             d:DesignHeight="700" d:DesignWidth="1200"
-             >
+             d:DesignHeight="700" d:DesignWidth="1200">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -64,73 +63,89 @@
                             <Grid.Background>
                                 <ImageBrush ImageSource="/Images/Backgrounds/report_background.png"/>
                             </Grid.Background>
-                            <Label x:Name="lblHeading" Content="Report an issue" HorizontalAlignment="Left" Margin="33,23,0,0" 
-                                   VerticalAlignment="Top" Height="109" Width="489" FontSize="60" FontFamily="Tahoma" 
+
+                            <Label x:Name="lblHeading" Content="Report an issue" 
+                                   HorizontalAlignment="Left" Margin="33,23,0,0" 
+                                   VerticalAlignment="Top" Height="109" Width="489"
+                                   FontSize="60" FontFamily="Tahoma" 
                                    FontWeight="Bold" Foreground="White"/>
-                            <Label x:Name="lblHeading_Copy" Content="We will help you fix the issue&#xA;as soon as possible" 
+
+                            <Label x:Name="lblHeading_Copy" 
+                                   Content="We will help you fix the issue&#xA;as soon as possible" 
                                    HorizontalAlignment="Left" Margin="33,137,0,0" VerticalAlignment="Top" Height="98" 
                                    Width="489" FontSize="25" FontFamily="Tahoma" Foreground="White"/>
-                            <ScrollViewer Grid.Column="1" Grid.ColumnSpan="2" Margin="10,10,10,10" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+
+                            <ScrollViewer Grid.Column="1" Grid.ColumnSpan="2" 
+                                          Margin="10,10,10,10" VerticalScrollBarVisibility="Auto"
+                                          HorizontalScrollBarVisibility="Auto">
+
                                 <Grid Width="612" Height="566" >
                                     <Button x:Name="btnReportUtilities" 
-    Style="{StaticResource CustomImageButton}" 
-        Tag="/Images/Buttons/report_utilities.png" 
-        classes:ButtonHelper.TagHover="/Images/Buttons/report_utilities_hover.png"
-        classes:ButtonHelper.TagClick="/Images/Buttons/report_utilities_click.png"
-        Margin="40,10,0,0" 
-        Click="btnReport_Click" VerticalAlignment="Top" />
+                                            Style="{StaticResource CustomImageButton}" 
+                                            Tag="/Images/Buttons/report_utilities.png" 
+                                            classes:ButtonHelper.TagHover="/Images/Buttons/report_utilities_hover.png"
+                                            classes:ButtonHelper.TagClick="/Images/Buttons/report_utilities_click.png"
+                                            Margin="40,10,0,0" 
+                                            Click="btnReport_Click" VerticalAlignment="Top" />
+
                                     <Button x:Name="btnReportSanitation" 
-    Style="{StaticResource CustomImageButton}" 
-    Tag="/Images/Buttons/report_sanitation.png" 
-    classes:ButtonHelper.TagHover="/Images/Buttons/report_sanitation_hover.png"
-    classes:ButtonHelper.TagClick="/Images/Buttons/report_sanitation_click.png"
-    Margin="0,10,40,0" 
-    Click="btnReport_Click" VerticalAlignment="Top" HorizontalAlignment="Right" />
+                                            Style="{StaticResource CustomImageButton}" 
+                                            Tag="/Images/Buttons/report_sanitation.png" 
+                                            classes:ButtonHelper.TagHover="/Images/Buttons/report_sanitation_hover.png"
+                                            classes:ButtonHelper.TagClick="/Images/Buttons/report_sanitation_click.png"
+                                            Margin="0,10,40,0" 
+                                            Click="btnReport_Click" VerticalAlignment="Top" HorizontalAlignment="Right" />
+
                                     <Button x:Name="btnReportPotholes" 
-    Style="{StaticResource CustomImageButton}" 
-    Tag="/Images/Buttons/report_potholes.png" 
-    classes:ButtonHelper.TagHover="/Images/Buttons/report_potholes_hover.png"
-    classes:ButtonHelper.TagClick="/Images/Buttons/report_potholes_click.png"
-    Margin="40,135,0,0" 
-    Click="btnReport_Click" VerticalAlignment="Top" />
+                                            Style="{StaticResource CustomImageButton}" 
+                                            Tag="/Images/Buttons/report_potholes.png" 
+                                            classes:ButtonHelper.TagHover="/Images/Buttons/report_potholes_hover.png"
+                                            classes:ButtonHelper.TagClick="/Images/Buttons/report_potholes_click.png"
+                                            Margin="40,135,0,0" 
+                                            Click="btnReport_Click" VerticalAlignment="Top" />
+
                                     <Button x:Name="btnReportTraffic" 
-    Style="{StaticResource CustomImageButton}" 
-    Tag="/Images/Buttons/report_traffic.png" 
-    classes:ButtonHelper.TagHover="/Images/Buttons/report_traffic_hover.png"
-    classes:ButtonHelper.TagClick="/Images/Buttons/report_traffic_click.png"
-    Margin="0,135,40,0" 
-    Click="btnReport_Click" VerticalAlignment="Top" HorizontalAlignment="Right" />
-                                    
+                                            Style="{StaticResource CustomImageButton}" 
+                                            Tag="/Images/Buttons/report_traffic.png" 
+                                            classes:ButtonHelper.TagHover="/Images/Buttons/report_traffic_hover.png"
+                                            classes:ButtonHelper.TagClick="/Images/Buttons/report_traffic_click.png"
+                                            Margin="0,135,40,0" 
+                                            Click="btnReport_Click" VerticalAlignment="Top" HorizontalAlignment="Right" />
+
                                     <Button x:Name="btnReportOtherIssue" 
-    Style="{StaticResource CustomImageButton}" 
-    Tag="/Images/Buttons/report_other_issue.png" 
-    classes:ButtonHelper.TagHover="/Images/Buttons/report_other_issue_hover.png"
-    classes:ButtonHelper.TagClick="/Images/Buttons/report_other_issue_click.png"
-    Margin="40,266,0,0" 
-Click="btnReport_Click" VerticalAlignment="Top" />
+                                            Style="{StaticResource CustomImageButton}" 
+                                            Tag="/Images/Buttons/report_other_issue.png" 
+                                            classes:ButtonHelper.TagHover="/Images/Buttons/report_other_issue_hover.png"
+                                            classes:ButtonHelper.TagClick="/Images/Buttons/report_other_issue_click.png"
+                                            Margin="40,266,0,0" 
+                                            Click="btnReport_Click" VerticalAlignment="Top" />
+
                                     <Button x:Name="btnReportRoadSigns" 
-Style="{StaticResource CustomImageButton}" 
-Tag="/Images/Buttons/report_road_signs.png" 
-classes:ButtonHelper.TagHover="/Images/Buttons/report_road_signs_hover.png"
-classes:ButtonHelper.TagClick="/Images/Buttons/report_road_signs_click.png"
-Margin="0,266,40,0" 
-Click="btnReport_Click" VerticalAlignment="Top" HorizontalAlignment="Right" />
+                                            Style="{StaticResource CustomImageButton}" 
+                                            Tag="/Images/Buttons/report_road_signs.png" 
+                                            classes:ButtonHelper.TagHover="/Images/Buttons/report_road_signs_hover.png"
+                                            classes:ButtonHelper.TagClick="/Images/Buttons/report_road_signs_click.png"
+                                            Margin="0,266,40,0" 
+                                            Click="btnReport_Click" VerticalAlignment="Top" HorizontalAlignment="Right" />
+
                                     <Button x:Name="btnReportTrafficLights" 
-    Style="{StaticResource CustomImageButton}" 
-    Tag="/Images/Buttons/report_traffic_lights.png" 
-    classes:ButtonHelper.TagHover="/Images/Buttons/report_traffic_lights_hover.png"
-    classes:ButtonHelper.TagClick="/Images/Buttons/report_traffic_lights_click.png"
-    Margin="40,397,0,0" 
-    Click="btnReport_Click" VerticalAlignment="Top" />
+                                            Style="{StaticResource CustomImageButton}" 
+                                            Tag="/Images/Buttons/report_traffic_lights.png" 
+                                            classes:ButtonHelper.TagHover="/Images/Buttons/report_traffic_lights_hover.png"
+                                            classes:ButtonHelper.TagClick="/Images/Buttons/report_traffic_lights_click.png"
+                                            Margin="40,397,0,0" 
+                                            Click="btnReport_Click" VerticalAlignment="Top" />
+
                                     <Button x:Name="btnReportCarCrash" 
-    Style="{StaticResource CustomImageButton}" 
-    Tag="/Images/Buttons/report_car_crash.png" 
-    classes:ButtonHelper.TagHover="/Images/Buttons/report_car_crash_hover.png"
-    classes:ButtonHelper.TagClick="/Images/Buttons/report_car_crash_click.png"
-    Margin="0,397,40,0" 
-    Click="btnReport_Click" VerticalAlignment="Top" HorizontalAlignment="Right" />
+                                            Style="{StaticResource CustomImageButton}" 
+                                            Tag="/Images/Buttons/report_car_crash.png" 
+                                            classes:ButtonHelper.TagHover="/Images/Buttons/report_car_crash_hover.png"
+                                            classes:ButtonHelper.TagClick="/Images/Buttons/report_car_crash_click.png"
+                                            Margin="0,397,40,0" 
+                                            Click="btnReport_Click" VerticalAlignment="Top" HorizontalAlignment="Right" />
                                 </Grid>
                             </ScrollViewer>
+
                             <Button x:Name="btnBackToMain" 
                                 Style="{StaticResource CustomImageButton}" 
                                 Tag="/Images/Buttons/back_to_main.png" 
@@ -142,28 +157,30 @@ Click="btnReport_Click" VerticalAlignment="Top" HorizontalAlignment="Right" />
                         </Grid>
                     </Grid>
                 </Border>
-
             </Grid>
         </Border>
         <Frame x:Name="ReportFrame" 
-NavigationUIVisibility="Hidden" />
-        <Button x:Name="btnBack" 
-            Margin="0,20,43,0" 
-            Style="{StaticResource PlainButtonDark}"
-            HorizontalContentAlignment="Center" 
-            VerticalContentAlignment="Center" 
-            ToolTip="Go Back To Main Menue" 
-            Click="btnBack_Click" Height="30" 
-            RenderTransformOrigin="0.5,0.5" Width="155" HorizontalAlignment="Right">
-            <StackPanel Orientation="Horizontal" Height="18" >
-                <TextBlock Text="Back to Main Menu " Width="130" Height="14" 
-                             />
-                <fa:IconImage Icon="GripLines"
-                    Style="{StaticResource iconInIconButtonLight}"
-                    Height="18" Width="20" Foreground="{DynamicResource ResourceKey=greenSolidColorBrush}"/>
+               NavigationUIVisibility="Hidden" />
 
+        <Button x:Name="btnBack" 
+                Margin="0,20,43,0" 
+                Style="{StaticResource PlainButtonDark}"
+                HorizontalContentAlignment="Center" 
+                VerticalContentAlignment="Center" 
+                ToolTip="Go Back To Main Menue" 
+                Click="btnBack_Click" Height="30" 
+                RenderTransformOrigin="0.5,0.5" 
+                Width="155" HorizontalAlignment="Right">
+
+            <StackPanel Orientation="Horizontal" Height="18" >
+                <TextBlock Text="Back to Main Menu " 
+                               Width="130" Height="14" />
+
+                <fa:IconImage Icon="GripLines"
+                                  Style="{StaticResource iconInIconButtonLight}"
+                                  Height="18" Width="20" 
+                                  Foreground="{DynamicResource ResourceKey=greenSolidColorBrush}"/>
             </StackPanel>
         </Button>
     </Grid>
-
 </UserControl>

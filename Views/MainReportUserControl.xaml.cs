@@ -21,13 +21,28 @@ namespace PROG7312_ST10023767.Views
     /// </summary>
     public partial class MainReportUserControl : UserControl
     {
+        /// <summary>
+        /// Manages the issues reported by the user
+        /// </summary>
         private IssueManager issueManager;
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Default Constructor 
+        /// </summary>
+        /// <param name="issueManager"></param>
         public MainReportUserControl(IssueManager issueManager)
         {
             InitializeComponent();
             this.issueManager = issueManager;
         }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Handles the button click event for reporting an issue.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnReport_Click(object sender, RoutedEventArgs e)
         {
             string category = "";
@@ -61,27 +76,34 @@ namespace PROG7312_ST10023767.Views
                     break;
             }
 
-
-            // Navigate to the ReportIssueUserControl view
+            
+            // Navigate to the ReportIssueUserControl and set the selected category
             ReportIssueUserControl reportIssueUserControl = new ReportIssueUserControl(issueManager);
-
-            // Set the selected category in the ReportIssueUserControl's ComboBox
             reportIssueUserControl.SetCategory(category);
-
-            // Navigate to the ReportIssueUserControl in the ReportFrame
             ReportFrame.Navigate(reportIssueUserControl);
         }
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        ///  Handles the back button click event and hides the current UserControl
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnBackToMain_Click(object sender, RoutedEventArgs e)
         {
             this.Visibility = Visibility.Hidden;
 
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Handles the click event for the "Back" button, hiding the current UserControl
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
             this.Visibility = Visibility.Hidden;
         }
     }
-}
+}//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//

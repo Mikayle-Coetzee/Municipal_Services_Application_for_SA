@@ -12,22 +12,51 @@ namespace PROG7312_ST10023767.Classes
 {
     public class ChatService
     {
-        private StackPanel chatHistoryPanel;
-        private IssueManager issueManager;
-        private List<string> attachedMediaPaths;
+        /// <summary>
+        /// Panel to hold the chat history
+        /// </summary>
+        private readonly StackPanel chatHistoryPanel;
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Manager for handling issue reports
+        /// </summary>
+        private readonly IssueManager issueManager;
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// List of media paths attached to the current message
+        /// </summary>
+        private readonly List<string> attachedMediaPaths;
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        ///  Constructor to initialize the ChatService
+        /// </summary>
+        /// <param name="chatHistoryPanel"></param>
+        /// <param name="issueManager"></param>
+        /// <param name="attachedMediaPaths"></param>
         public ChatService(StackPanel chatHistoryPanel, IssueManager issueManager, List<string> attachedMediaPaths)
         {
             this.chatHistoryPanel = chatHistoryPanel;
             this.issueManager = issueManager;
             this.attachedMediaPaths = attachedMediaPaths;
-
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// This method creates and adds a chat bubble to the chat history panel
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="isMedia"></param>
+        /// <param name="isUser"></param>
+        /// <param name="isInput"></param>
+        /// <returns></returns>
         public Border AddChatBubble(string message, bool isMedia, bool isUser, bool isInput)
         {
-            Border chatBubble = new Border
+            var chatBubble = new Border
             {
-                Background = isUser ? (Brush)Application.Current.FindResource("greenSolidColorBrush") : (Brush)Application.Current.FindResource("offWhiteSolidColorBrush"),
+                Background = (Brush)Application.Current.FindResource(isUser ? "greenSolidColorBrush" : "offWhiteSolidColorBrush"),
                 CornerRadius = new CornerRadius(15),
                 Padding = new Thickness(10),
                 Margin = new Thickness(5),
@@ -35,144 +64,179 @@ namespace PROG7312_ST10023767.Classes
                 HorizontalAlignment = isUser ? HorizontalAlignment.Right : HorizontalAlignment.Left
             };
 
-            StackPanel bubbleContent = new StackPanel();
+            var bubbleContent = new StackPanel();
+            if (isMedia && attachedMediaPaths?.Count > 0)
+                attachedMediaPaths.ForEach(mediaPath => DisplayAttachedMedia(bubbleContent, mediaPath));
 
-            // Handle media attachments
-            if (isMedia && attachedMediaPaths != null && attachedMediaPaths.Count > 0)
-            {
-                foreach (var mediaPath in attachedMediaPaths)
-                {
-                    DisplayAttachedMedia(bubbleContent, mediaPath);
-                }
-            }
-
-            // If the user has submitted input
             if (isUser)
-            {
-                // Split the message to display different fields (e.g., Location, Category, Description)
-                string[] messageParts = message.Split('\n');
-
-                if (messageParts.Length > 0)
-                {
-                    TextBlock locationText = new TextBlock
-                    {
-                        Text = messageParts[0], // Location
-                        FontWeight = FontWeights.Bold,
-                        Foreground = (Brush)Application.Current.FindResource("darkestSolidColorBrush")
-                    };
-                    bubbleContent.Children.Add(locationText);
-                }
-
-                if (messageParts.Length > 1)
-                {
-                    TextBlock issueType = new TextBlock
-                    {
-                        Text = messageParts[1], // Category
-                        FontWeight = FontWeights.Bold,
-                        Foreground = (Brush)Application.Current.FindResource("darkestSolidColorBrush")
-                    };
-                    bubbleContent.Children.Add(issueType);
-                }
-
-                if (messageParts.Length > 2)
-                {
-                    TextBlock descriptionText = new TextBlock
-                    {
-                        Text = messageParts[2], // Description
-                        TextWrapping = TextWrapping.Wrap,
-                        Margin = new Thickness(0, 5, 0, 5)
-                    };
-                    bubbleContent.Children.Add(descriptionText);
-                }
-
-                if (messageParts.Length > 3)
-                {
-                    // Timestamp at the bottom
-                    TextBlock timestamp = new TextBlock
-                    {
-                        Text = messageParts[3], // Time
-                        FontSize = 10,
-                        Foreground = (Brush)Application.Current.FindResource("darkSolidColorBrush"),
-                        HorizontalAlignment = HorizontalAlignment.Right
-                    };
-                    bubbleContent.Children.Add(timestamp);
-                }
-            }
-            else if (!isUser && isInput)
-            {
-                // Display input fields (TextBox and ComboBox) and search functionality
-                TextBlock messageText = new TextBlock
-                {
-                    Text = message,
-                    TextWrapping = TextWrapping.Wrap,
-                    Margin = new Thickness(0, 5, 0, 5)
-                };
-                bubbleContent.Children.Add(messageText);
-
-                // TextBox for location input
-                TextBox tbxLocation = new TextBox
-                {
-                    Margin = new Thickness(0, 5, 0, 5)
-                };
-                bubbleContent.Children.Add(tbxLocation);
-
-                // ComboBox for category selection
-                ComboBox cmbCategory = new ComboBox
-                {
-                    Margin = new Thickness(0, 5, 0, 5)
-                };
-
-                // Populate ComboBox with enum values
-                foreach (var category in Enum.GetValues(typeof(ReportCategory)))
-                {
-                    cmbCategory.Items.Add(category);
-                }
-
-                // Add ComboBox to the UI
-                bubbleContent.Children.Add(cmbCategory);
-
-
-                // Search button
-                Button btnSearch = new Button
-                {
-                    Content = "Search",
-                    Margin = new Thickness(0, 5, 0, 5)
-                };
-                btnSearch.Click += (s, e) =>
-                {
-                    string location = tbxLocation.Text;
-                    string category = cmbCategory.SelectedValue?.ToString();
-                    if (!string.IsNullOrEmpty(location) && !string.IsNullOrEmpty(category))
-                    {
-                        DisplaySearchedReport(location, category); // This method should be implemented elsewhere in your application
-                    }
-                    else
-                    {
-                        MessageBox.Show("Please enter a location and select a category.");
-                    }
-                };
-                bubbleContent.Children.Add(btnSearch);
-            }
+                AddUserMessage(message, bubbleContent);
+            else if (isInput)
+                AddInputFields(message, bubbleContent);
             else
-            {
-                // Display simple message for system-generated bubbles
-                TextBlock descriptionText = new TextBlock
-                {
-                    Text = message, // Simple system message
-                    TextWrapping = TextWrapping.Wrap,
-                    Margin = new Thickness(0, 5, 0, 5)
-                };
-                bubbleContent.Children.Add(descriptionText);
-            }
+                AddSystemMessage(message, bubbleContent);
 
-            // Add the content to the chat bubble
             chatBubble.Child = bubbleContent;
-
-            // Add the chat bubble to the ChatHistoryPanel
             chatHistoryPanel.Children.Add(chatBubble);
 
             return chatBubble;
         }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Adds user message in the chat bubble
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="bubbleContent"></param>
+        private void AddUserMessage(string message, StackPanel bubbleContent)
+        {
+            var messageParts = message.Split('\n');
+            var fields = new[] { "Location", "Category", "Description", "Time" };
+
+            for (int i = 0; i < messageParts.Length && i < fields.Length; i++)
+            {
+                bubbleContent.Children.Add(new TextBlock
+                {
+                    Text = messageParts[i],
+                    FontWeight = i < 2 ? FontWeights.Bold : FontWeights.Normal,
+                    Foreground = (Brush)Application.Current.FindResource("darkestSolidColorBrush"),
+                    Margin = new Thickness(0, 5, 0, 5),
+                    TextWrapping = TextWrapping.Wrap
+                });
+            }
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Adds system message in the chat bubble
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="bubbleContent"></param>
+        private void AddSystemMessage(string message, StackPanel bubbleContent)
+        {
+            bubbleContent.Children.Add(new TextBlock
+            {
+                Text = message,
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(0, 5, 0, 5)
+            });
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Adds input fields and search functionality
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="bubbleContent"></param>
+        private void AddInputFields(string message, StackPanel bubbleContent)
+        {
+            bubbleContent.Children.Add(new TextBlock
+            {
+                Text = message,
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(0, 5, 0, 5)
+            });
+
+            var tbxLocation = new TextBox { Margin = new Thickness(0, 5, 0, 5) };
+            bubbleContent.Children.Add(tbxLocation);
+
+            var cmbCategory = new ComboBox { Margin = new Thickness(0, 5, 0, 5) };
+            Enum.GetValues(typeof(ReportCategory)).Cast<ReportCategory>().ToList().ForEach(c => cmbCategory.Items.Add(c));
+            bubbleContent.Children.Add(cmbCategory);
+
+            var btnSearch = new Button
+            {
+                Content = "Search",
+                Margin = new Thickness(0, 5, 0, 5)
+            };
+            btnSearch.Click += (s, e) =>
+            {
+                var location = tbxLocation.Text;
+                var category = cmbCategory.SelectedValue?.ToString();
+                if (!string.IsNullOrEmpty(location) && !string.IsNullOrEmpty(category))
+                    DisplaySearchedReport(location, category);
+                else
+                    MessageBox.Show("Please enter a location and select a category.");
+            };
+            bubbleContent.Children.Add(btnSearch);
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Creates an image element
+        /// </summary>
+        /// <param name="mediaPath"></param>
+        /// <returns></returns>
+        private Image CreateImageElement(string mediaPath)
+        {
+            return new Image
+            {
+                Width = 150,
+                Height = 150,
+                Source = new BitmapImage(new Uri(mediaPath)),
+                Stretch = Stretch.UniformToFill,
+                Margin = new Thickness(0, 0, 0, 5)
+            };
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Creates a video element
+        /// </summary>
+        /// <param name="mediaPath"></param>
+        /// <returns></returns>
+        private MediaElement CreateVideoElement(string mediaPath)
+        {
+            var mediaVideo = new MediaElement
+            {
+                Width = 200,
+                Height = 150,
+                Source = new Uri(mediaPath),
+                LoadedBehavior = MediaState.Manual,
+                UnloadedBehavior = MediaState.Close,
+                Margin = new Thickness(0, 0, 0, 5)
+            };
+            mediaVideo.Play();
+            return mediaVideo;
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Creates a document link element
+        /// </summary>
+        /// <param name="mediaPath"></param>
+        /// <returns></returns>
+        private TextBlock CreateDocumentLink(string mediaPath)
+        {
+            var documentLink = new TextBlock
+            {
+                Text = "Open Document: " + System.IO.Path.GetFileName(mediaPath),
+                FontStyle = FontStyles.Italic,
+                Foreground = Brushes.Blue,
+                Margin = new Thickness(0, 0, 0, 5),
+                Cursor = Cursors.Hand,
+                TextDecorations = TextDecorations.Underline
+            };
+
+            documentLink.MouseLeftButtonUp += (s, e) =>
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = mediaPath,
+                    UseShellExecute = true
+                });
+            };
+
+            return documentLink;
+        }
+
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Displays a searched report if found
+        /// </summary>
+        /// <param name="reportLocation"></param>
+        /// <param name="reportCategory"></param>
+
         private void DisplaySearchedReport(string reportLocation, string reportCategory)
         {
             bool found = false;
@@ -182,11 +246,10 @@ namespace PROG7312_ST10023767.Classes
             {
                 if (issue.Category == reportCategory && issue.Location == reportLocation)
                 {
-                    // Construct a report message from the IssueClass properties
                     string reportMessage = $"Location: {issue.Location}\nCategory: {issue.Category}\nDescription: {issue.Description}\nTime: {issue.Timestamp}";
 
                     // Add each report as a chat bubble with media if present
-                    Border chatBubble = AddChatBubble(reportMessage, isUser: false, isMedia: issue.Attachments.Any(),isInput:false);
+                    Border chatBubble = AddChatBubble(reportMessage, isUser: false, isMedia: issue.Attachments.Any(), isInput: false);
 
                     // If the issue has attachments, display them
                     if (issue.Attachments.Any())
@@ -196,13 +259,11 @@ namespace PROG7312_ST10023767.Classes
                             Orientation = Orientation.Vertical
                         };
 
-                        // Display each attachment using MediaService
                         foreach (var mediaPath in issue.Attachments)
                         {
-                            MediaService.DisplayMedia(mediaContainer, mediaPath);
+                            DisplayAttachedMedia(mediaContainer, mediaPath);
                         }
 
-                        // Append the media container to the chat bubble
                         (chatBubble.Child as StackPanel)?.Children.Add(mediaContainer);
                     }
 
@@ -217,62 +278,34 @@ namespace PROG7312_ST10023767.Classes
             }
         }
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Displays attached media
+        /// </summary>
+        /// <param name="bubbleContent"></param>
+        /// <param name="mediaPath"></param>
         private void DisplayAttachedMedia(StackPanel bubbleContent, string mediaPath)
         {
             string extension = System.IO.Path.GetExtension(mediaPath).ToLower();
 
             if (extension == ".jpg" || extension == ".jpeg" || extension == ".png")
             {
-                Image mediaImage = new Image
-                {
-                    Width = 150,
-                    Height = 150,
-                    Source = new BitmapImage(new Uri(mediaPath)),
-                    Stretch = Stretch.UniformToFill,
-                    Margin = new Thickness(0, 0, 0, 5)
-                };
-                bubbleContent.Children.Add(mediaImage);
+                bubbleContent.Children.Add(CreateImageElement(mediaPath));
             }
             else if (extension == ".mp4")
             {
-                MediaElement mediaVideo = new MediaElement
-                {
-                    Width = 200,
-                    Height = 150,
-                    Source = new Uri(mediaPath),
-                    LoadedBehavior = MediaState.Manual,
-                    UnloadedBehavior = MediaState.Close,
-                    Margin = new Thickness(0, 0, 0, 5)
-                };
-                mediaVideo.Play();
-                bubbleContent.Children.Add(mediaVideo);
+                bubbleContent.Children.Add(CreateVideoElement(mediaPath));
             }
             else if (extension == ".pdf" || extension == ".docx")
             {
-                TextBlock documentLink = new TextBlock
-                {
-                    Text = "Open Document: " + System.IO.Path.GetFileName(mediaPath),
-                    FontStyle = FontStyles.Italic,
-                    Foreground = Brushes.Blue,
-                    Margin = new Thickness(0, 0, 0, 5),
-                    Cursor = Cursors.Hand,
-                    TextDecorations = TextDecorations.Underline
-                };
-
-                documentLink.MouseLeftButtonUp += (s, e) =>
-                {
-                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                    {
-                        FileName = mediaPath,
-                        UseShellExecute = true
-                    });
-                };
-
-                bubbleContent.Children.Add(documentLink);
+                bubbleContent.Children.Add(CreateDocumentLink(mediaPath));
             }
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Displays all reports from the issue manager
+        /// </summary>
         public void DisplayAllReports()
         {
             // Fetch all reports from IssueManager
@@ -280,7 +313,6 @@ namespace PROG7312_ST10023767.Classes
 
             foreach (var issue in issues)
             {
-                // Construct a report message from the IssueClass properties
                 string reportMessage = $"Location: {issue.Location}\nCategory: {issue.Category}\nDescription: {issue.Description}\nTime: {issue.Timestamp}";
 
                 // Add each report as a chat bubble with media if present
@@ -289,24 +321,19 @@ namespace PROG7312_ST10023767.Classes
                 // If the issue has attachments, display them
                 if (issue.Attachments.Any())
                 {
-                    // Create a StackPanel to hold the attachments
                     StackPanel mediaContainer = new StackPanel
                     {
                         Orientation = Orientation.Vertical
                     };
 
-                    // Display each attachment
                     foreach (var mediaPath in issue.Attachments)
                     {
                         DisplayAttachedMedia(mediaContainer, mediaPath);
                     }
 
-                    // Append the media container to the chat bubble
                     (chatBubble.Child as StackPanel)?.Children.Add(mediaContainer);
                 }
             }
         }
-
-
     }
-}
+}//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//

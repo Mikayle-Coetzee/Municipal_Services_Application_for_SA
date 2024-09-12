@@ -94,9 +94,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\ButtonHelper.cs" />
     <Compile Include="Classes\ChatService.cs" />
-    <Compile Include="Classes\InputValidationService.cs" />
     <Compile Include="Classes\MediaService.cs" />
-    <Compile Include="Classes\ProgressBarManager.cs" />
     <Compile Include="Views\MainReportUserControl.xaml.cs">
       <DependentUpon>MainReportUserControl.xaml</DependentUpon>
     </Compile>
