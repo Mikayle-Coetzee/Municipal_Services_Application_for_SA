@@ -108,11 +108,13 @@
                                     Style="{StaticResource CustomImageButtonEvent}" 
                                     Margin="0,0,0,69" Grid.Row="1" 
                                     HorizontalAlignment="Center" 
+                                    IsEnabled="False"
 />
                             <Button x:Name="btnServiceRequestStatus" 
                                     Style="{StaticResource CustomImageButtonStatus}" 
                                     Grid.Row="1" HorizontalAlignment="Right" 
-                                    Margin="0,0,37,74">
+                                    Margin="0,0,37,74"
+                                    IsEnabled="False">
                             </Button>
 
                             <Label x:Name="lblHeadding_Copy1" 

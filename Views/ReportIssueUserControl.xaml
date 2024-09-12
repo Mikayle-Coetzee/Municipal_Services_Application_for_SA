@@ -99,7 +99,7 @@
                                     <TextBlock 
                                         Width="115" 
                                         Height="14">
-                                        <Run Text="Back to"/>
+                                        <Run Text="Go To"/>
                                         <Run Language="en-za" 
                                              Text="All Reports"/>
                                         <Run Text=" "/>

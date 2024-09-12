@@ -31,16 +31,23 @@ namespace PROG7312_ST10023767
 
         }
 
+        /// <summary>
+        /// This was intended to navigate to the MainReportUserControl, allowing users to select a category by clicking a button.
+        /// But, according to the POE requirements, users must be redirected to the report submission page instead...so this 
+        /// directs the user to the report issue submission page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnReportIssues_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the MainReportUserControl view
-            MainReportUserControl mainReport = new MainReportUserControl(issueManager);
+            // Navigate to the ReportIssueUserControl view
+            ReportIssueUserControl reportIssue = new ReportIssueUserControl(issueManager);
 
-            // Set the visibility of the mainReport section to visible
-            mainReport.Visibility = Visibility.Visible;
+            // Set the visibility of the reportIssue section to visible
+            reportIssue.Visibility = Visibility.Visible;
 
-            // Navigate to the mainReport using the MainFrame
-            MainFrame.Navigate(content: mainReport);
+            // Navigate to the reportIssue using the MainFrame
+            MainFrame.Navigate(content: reportIssue);
         }
     }
 }//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//

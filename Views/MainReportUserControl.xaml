@@ -70,8 +70,8 @@
                                    FontSize="60" FontFamily="Tahoma" 
                                    FontWeight="Bold" Foreground="White"/>
 
-                            <Label x:Name="lblHeading_Copy" 
-                                   Content="We will help you fix the issue&#xA;as soon as possible" 
+                            <Label x:Name="lblInformation" 
+                                   Content="Please click on one of the issues&#xA;to report" 
                                    HorizontalAlignment="Left" Margin="33,137,0,0" VerticalAlignment="Top" Height="98" 
                                    Width="489" FontSize="25" FontFamily="Tahoma" Foreground="White"/>
 

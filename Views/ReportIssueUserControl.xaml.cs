@@ -280,18 +280,25 @@ namespace PROG7312_ST10023767.Views
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Navigating to Main Menu...");
-            this.Visibility = Visibility.Hidden;
+            this.Visibility = Visibility.Collapsed;
         }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
-        /// Handles the "Back to Reports" button click event and collapses the current UserControl
+        /// Directs the user to the main report page
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnBackToReports_Click(object sender, RoutedEventArgs e)
         {
-            this.Visibility = Visibility.Collapsed;
+            var mainWindow = Window.GetWindow(this) as MainWindow;
+
+            if (mainWindow != null)
+            {
+                var mainReportControl = new MainReportUserControl(issueManager);
+
+                mainWindow.MainFrame.Content = mainReportControl;
+            }
         }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
