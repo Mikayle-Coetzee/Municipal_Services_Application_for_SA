@@ -36,7 +36,7 @@ Ensure you have the following:
    ![image](https://github.com/user-attachments/assets/47cf44a1-7002-43f8-9c68-d5046cb77035)
 
 3. **Report Issues**: Select the "Report Issues" option to proceed.
-   ![image](https://github.com/user-attachments/assets/b0321b5e-acf0-4dfe-8de0-7a5caa155ccc)
+   - ![image](https://github.com/user-attachments/assets/b0321b5e-acf0-4dfe-8de0-7a5caa155ccc)
 
    - **Location Input**: Enter the location of the issue.
    ![image](https://github.com/user-attachments/assets/b0936349-f5e5-436e-bd09-75045a851501)
@@ -54,12 +54,45 @@ Ensure you have the following:
 
    - **Submit**: Once all fields are completed, the submit button will be enabled, click the "Submit" button to finalize your report.
 5. **Feedback**: A message box will appear to confirm the successful submission or inform the user if any errors occur.
-6. **In-app chat messaging function**: On the left side of the window, the submitted reports will display and allow the following message:
-   - **1/help**: will display a support message
-   - **2/view**: will display all the submitted reports 
-   - **3/new**: will start a new message 
-   - **4/search**: will display the report with the same location and category entered
+   ![image](https://github.com/user-attachments/assets/2023a965-bdaa-4435-a069-8f045f87910e)
+   ![image](https://github.com/user-attachments/assets/5083773a-4802-476b-acbb-0ae270e990e6)
 
+   Test data for image upload:
+   ![image](https://github.com/user-attachments/assets/9ae853d1-bdf1-48e2-aced-8a7b762fb96c)
+   ![image](https://github.com/user-attachments/assets/dc9a68e4-38e6-4ed4-a8b9-3db541cc85a9)
+
+   Test data for video:
+   ![image](https://github.com/user-attachments/assets/0ad9a905-0360-435d-a50c-d73333ec6de9)
+   ![image](https://github.com/user-attachments/assets/99f8ea94-764e-4220-9d06-6d18d052c6a7)
+
+   Test data for documents:
+   ![image](https://github.com/user-attachments/assets/c9b2349e-945b-4d1d-9d2c-fdf72d09948b)
+   ![image](https://github.com/user-attachments/assets/750e28b6-0e64-46d7-956b-cc70328ca582)
+   When the link is clicked:
+   ![image](https://github.com/user-attachments/assets/7a9acc6b-a5b2-4032-b0b4-18bbeaeaa3b8)
+
+7. **In-app chat messaging function**: On the left side of the window, the submitted reports will display and allow the following message:
+   - **1/help**: will display a support message
+     ![image](https://github.com/user-attachments/assets/777d328e-7c8f-47e7-be8a-9cebb8da5fe5)
+
+   - **2/view**: will display all the submitted reports
+     ![image](https://github.com/user-attachments/assets/cc682d73-25bc-4a45-af5c-61a9cf5fd5ec)
+     ![image](https://github.com/user-attachments/assets/ada94180-3d8f-40a1-bed8-6c2b07936f44)
+     ![image](https://github.com/user-attachments/assets/a0ab9715-e1a1-4e33-b685-1ffebcd131a4)
+   
+   - **3/new**: will start a new message
+     ![image](https://github.com/user-attachments/assets/71acafbe-c2ff-4b48-84d6-63c4959ff04a)
+
+   - **4/search**: will display the report with the same location and category entered
+     ![image](https://github.com/user-attachments/assets/0cd1a3bf-30d4-491f-8d40-da69e547721f)
+     ![image](https://github.com/user-attachments/assets/d567f7cd-fd0a-4994-ac99-46fe8342eb99)
+     ![image](https://github.com/user-attachments/assets/4e9f2298-fd11-4b9a-95b5-89f535b0e73e)
+     ![image](https://github.com/user-attachments/assets/09d97ab0-a87f-4e2c-87f5-907eb6aaa1e9)
+
+   - **Progress Bar Completed**: When the progress bar is completed, it will trun green and display a message to the user.
+     ![image](https://github.com/user-attachments/assets/8fb5c475-b59f-4b93-9096-3793308689f7)
+     ![image](https://github.com/user-attachments/assets/20b37450-f3d8-401c-a4d3-9cb520db874c)
+ 
 ### Key Functions
 - **Form Navigation**: Use navigation buttons (e.g., "Back to Main Menu") to move between different sections of the application.
 - **Data Handling**: All reported issues will be stored in a local list, using appropriate data structures for efficient management.
