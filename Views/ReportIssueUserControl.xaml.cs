@@ -84,7 +84,7 @@ namespace PROG7312_ST10023767.Views
         {
             await Task.Delay(1500);
             chatService.AddChatBubble(
-                "Hello! To submit a report, fill in the details and click submit. Alternatively, enter:\n" +
+                "Hey, there! Welcome to SA Reports. To submit a report, fill in the details and click submit. Alternatively, enter:\n" +
                 "1. Help (for support)\n" +
                 "2. View (to view submitted reports)\n" +
                 "3. New (to start a new conversation)\n" +

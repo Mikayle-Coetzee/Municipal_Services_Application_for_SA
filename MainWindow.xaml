@@ -108,7 +108,7 @@
                                     Style="{StaticResource CustomImageButtonEvent}" 
                                     Margin="0,0,0,69" Grid.Row="1" 
                                     HorizontalAlignment="Center" 
-                                    IsEnabled="False"
+                                    IsEnabled="True" Click="btnLocalEvents_Click"
 />
                             <Button x:Name="btnServiceRequestStatus" 
                                     Style="{StaticResource CustomImageButtonStatus}" 

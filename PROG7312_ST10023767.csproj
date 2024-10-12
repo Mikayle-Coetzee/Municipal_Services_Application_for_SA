@@ -94,7 +94,14 @@
     </ApplicationDefinition>
     <Compile Include="Classes\ButtonHelper.cs" />
     <Compile Include="Classes\ChatService.cs" />
+    <Compile Include="Classes\EventClass.cs" />
     <Compile Include="Classes\MediaService.cs" />
+    <Compile Include="Views\CategoryFilterWindow.xaml.cs">
+      <DependentUpon>CategoryFilterWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EventsUserControl.xaml.cs">
+      <DependentUpon>EventsUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainReportUserControl.xaml.cs">
       <DependentUpon>MainReportUserControl.xaml</DependentUpon>
     </Compile>
@@ -131,6 +138,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\CategoryFilterWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EventsUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainReportUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -154,6 +169,14 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Images\Part2\art.png" />
+    <Resource Include="Images\Part2\music.png" />
+    <Resource Include="Images\Part2\networking.png" />
+    <Resource Include="Images\Part2\other.png" />
+    <Resource Include="Images\Part2\sports.png" />
+    <Resource Include="Images\Part2\theater.png" />
+    <Resource Include="Images\Part2\announcement.png" />
+    <Resource Include="Images\Part2\event.png" />
     <Resource Include="Images\Buttons\back_to_main_hover.png" />
     <Resource Include="Images\Buttons\back_to_main.png" />
     <Resource Include="Images\Buttons\report_traffic_lights.png" />

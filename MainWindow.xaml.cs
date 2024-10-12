@@ -49,5 +49,17 @@ namespace PROG7312_ST10023767
             // Navigate to the reportIssue using the MainFrame
             MainFrame.Navigate(content: reportIssue);
         }
+
+        private void btnLocalEvents_Click(object sender, RoutedEventArgs e)
+        {
+            // Navigate to the EventsUserControl view
+            EventsUserControl events = new EventsUserControl();
+
+            // Set the visibility of the events section to visible
+            events.Visibility = Visibility.Visible;
+
+            // Navigate to the events using the MainFrame
+            MainFrame.Navigate(content: events);
+        }
     }
 }//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//
