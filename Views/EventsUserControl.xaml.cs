@@ -26,7 +26,7 @@ namespace PROG7312_ST10023767.Views
     {
         // Dictionary to store events sorted by location
         private Dictionary<string, List<EventClass>> locationEvents = new Dictionary<string, List<EventClass>>();
-        private List<string> mediaAttachments = new List<string>();
+        private List<MediaFileClass> mediaAttachments = new List<MediaFileClass>();
 
         public EventsUserControl()
         {
@@ -61,55 +61,95 @@ namespace PROG7312_ST10023767.Views
 
             EventsList.Items.Clear();
 
-             if (locationEvents.ContainsKey(selectedLocation))
+            if (locationEvents.ContainsKey(selectedLocation))
             {
                 foreach (var ev in locationEvents[selectedLocation])
-                {                    
-                    Image typeImage = new Image { Width = 50, Height = 50, Stretch = Stretch.Fill };
-                    Image categoryImage = new Image { Width = 50, Height = 50, Stretch = Stretch.Fill };
+                {
 
-                    LoadImage(GetImagePath(ev.Type), typeImage);
-                    LoadImage(GetImagePathCategory(ev.Category), categoryImage);
+                    StackPanel eventPanel = new StackPanel { Margin = new Thickness(5), Background = new SolidColorBrush(Color.FromRgb(255, 215, 215)) };
 
-                    EventsList.Items.Add(typeImage);
-                    EventsList.Items.Add(categoryImage);
+                     Grid horizontalGrid = new Grid();
+                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }); // Spacer column
+                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
-                    TextBlock eventBlock = new TextBlock
+                     Image eventTypeImage = new Image { Width = 30, Height = 30, Stretch = Stretch.Fill };
+                    LoadImage(GetImagePath(ev.Type), eventTypeImage);
+                    Grid.SetColumn(eventTypeImage, 0);
+                    horizontalGrid.Children.Add(eventTypeImage);
+
+                     TextBlock eventInfo = new TextBlock
                     {
-                        Text = $"Title: {ev.Title}\nDate: {ev.Date}\nTime: {ev.Time}\nLocation: {ev.Location}\nDescription: {ev.Description}",
+                        Text = $"Starts {ev.Time}: {ev.Date}",
+                        Margin = new Thickness(5, 6, 0, 5),
                         TextWrapping = TextWrapping.Wrap,
-                        Margin = new Thickness(0, 0, 0, 10)
+                        Width = 500
                     };
+                    Grid.SetColumn(eventInfo, 1);
+                    horizontalGrid.Children.Add(eventInfo);
 
-                     EventsList.Items.Add(eventBlock);
+                     Image categoryImage = new Image { Width = 30, Height = 30, Stretch = Stretch.Fill };
+                    LoadImage(GetImagePathCategory(ev.Category), categoryImage);
+                    Grid.SetColumn(categoryImage, 2);
+                    horizontalGrid.Children.Add(categoryImage);
+
+                    eventPanel.Children.Add(horizontalGrid);
+
+                     TextBlock eventTitle = new TextBlock
+                    {
+                        Text = ev.Title,
+                        Margin = new Thickness(2, 5, 0, 5),
+                        FontWeight = FontWeights.Bold
+                    };
+                    eventPanel.Children.Add(eventTitle);
+
+                    TextBlock eventDescription = new TextBlock
+                    {
+                        Text = ev.Description,
+                        Margin = new Thickness(2, 5, 0, 5),
+                        TextWrapping = TextWrapping.Wrap
+                    };
+                    eventPanel.Children.Add(eventDescription);
+
+                    TextBlock eventLocation = new TextBlock
+                    {
+                        Text = $"Venue: {ev.Location}",
+                        Margin = new Thickness(2, 5, 0, 5),
+                        FontWeight = FontWeights.Bold,
+                        FontSize = 10
+                    };
+                    eventPanel.Children.Add(eventLocation);
 
                      if (ev.MediaFiles != null && ev.MediaFiles.Count > 0)
                     {
-                         TextBlock mediaBlock = new TextBlock
+                        TextBlock mediaBlock = new TextBlock
                         {
                             Text = "Media Files:",
                             FontWeight = FontWeights.Bold,
                             Margin = new Thickness(0, 10, 0, 5)
                         };
 
+                        eventPanel.Children.Add(mediaBlock);
 
-                         EventsList.Items.Add(mediaBlock);
-
-                         foreach (var media in ev.MediaFiles)
+                        foreach (var media in ev.MediaFiles)
                         {
-                             string fileName = System.IO.Path.GetFileName(media);
                             TextBlock mediaItem = new TextBlock
                             {
-                                Text = fileName,
-                                Margin = new Thickness(20, 0, 0, 5), 
-                                Tag = media 
+                                Text = media.FileName,
+                                Margin = new Thickness(20, 0, 0, 5),
+                                Tag = media.FileContent  
                             };
 
-                            mediaItem.MouseDown += MediaItem_MouseDown;
 
-                            EventsList.Items.Add(mediaItem);
+                            mediaItem.MouseDown += MediaItem_MouseDown;
+                            eventPanel.Children.Add(mediaItem);
+
                         }
                     }
+
+                    EventsList.Items.Add(eventPanel);
+
+
                 }
             }
         }
@@ -117,17 +157,17 @@ namespace PROG7312_ST10023767.Views
 
         private void LoadImage(string imagePath, Image imageControl)
         {
-            if (imagePath == null) return; 
+            if (imagePath == null) return;
 
 
             BitmapImage bitmap = new BitmapImage();
             bitmap.BeginInit();
-            bitmap.UriSource = new Uri(imagePath, UriKind.RelativeOrAbsolute); 
-            bitmap.CacheOption = BitmapCacheOption.OnLoad; 
+            bitmap.UriSource = new Uri(imagePath, UriKind.RelativeOrAbsolute);
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
             bitmap.EndInit();
 
             imageControl.Source = bitmap;
-            
+
         }
 
 
@@ -201,34 +241,39 @@ namespace PROG7312_ST10023767.Views
             UpdateEventsList();
         }
 
-      
+
         private void MediaItem_MouseDown(object sender, MouseButtonEventArgs e)
         {
             TextBlock mediaItem = sender as TextBlock;
-            string mediaPath = mediaItem.Tag.ToString(); 
+            byte[] mediaContent = mediaItem.Tag as byte[];
 
-            if (File.Exists(mediaPath))
+            if (mediaContent != null)
             {
+                string tempFilePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), mediaItem.Text);
+
                 try
                 {
-                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(mediaPath) { UseShellExecute = true });
+                    File.WriteAllBytes(tempFilePath, mediaContent);
+
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(tempFilePath) { UseShellExecute = true });
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error opening file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Error opening media: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             else
             {
-                MessageBox.Show("File does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("No media content available.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
         private void AddMedia_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                Multiselect = true, 
+                Multiselect = true,
                 Filter = "Media Files|*.jpg;*.jpeg;*.png;*.gif;*.mp4;*.avi;*.mov;*.doc;*.docx;*.pdf",
                 Title = "Select Media Files"
             };
@@ -237,32 +282,77 @@ namespace PROG7312_ST10023767.Views
             {
                 foreach (string filename in openFileDialog.FileNames)
                 {
-                    mediaAttachments.Add(filename);
-                    MediaList.Items.Add(System.IO.Path.GetFileName(filename)); 
+                    byte[] fileContent = File.ReadAllBytes(filename);
+
+                     string mediaType = GetMediaType(filename);
+
+                     MediaFileClass mediaFile = new MediaFileClass(System.IO.Path.GetFileName(filename), fileContent, mediaType);
+                    mediaAttachments.Add(mediaFile);
+
+                     MediaList.Items.Add(System.IO.Path.GetFileName(filename));
                 }
             }
         }
+
+        private BitmapImage ByteArrayToImage(byte[] byteArray)
+        {
+            using (var stream = new MemoryStream(byteArray))
+            {
+                BitmapImage image = new BitmapImage();
+                image.BeginInit();
+                image.StreamSource = stream;
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.EndInit();
+                return image;
+            }
+        }
+
+
+         private string GetMediaType(string filename)
+        {
+            string extension = System.IO.Path.GetExtension(filename).ToLower();
+            if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".gif")
+                return "Image";
+            if (extension == ".mp4" || extension == ".avi" || extension == ".mov")
+                return "Video";
+            if (extension == ".doc" || extension == ".docx" || extension == ".pdf")
+                return "Document";
+
+            return "Unknown";
+        }
+
 
         private void RemoveMedia_Click(object sender, RoutedEventArgs e)
         {
             if (MediaList.SelectedItem != null)
             {
                 string selectedMedia = MediaList.SelectedItem.ToString();
-                mediaAttachments.RemoveAll(m => System.IO.Path.GetFileName(m) == selectedMedia);  
+                mediaAttachments.RemoveAll(m => System.IO.Path.GetFileName(m.FileName) == selectedMedia);
                 MediaList.Items.Remove(selectedMedia);
             }
         }
 
         private void SubmitEventButton_Click(object sender, RoutedEventArgs e)
         {
-            // Gather event data
-            string title = EventTitle.Text;
+             string title = EventTitle.Text;
             string date = EventDate.SelectedDate?.ToString("d MMM yyyy") ?? "";
-            string time = EventTime.Text;
             string location = EventLocation.Text;
             string description = EventDescription.Text;
             string type = (cmbType.SelectedItem as ComboBoxItem)?.Content.ToString();
             string category = (cmbCategory.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+
+            string selectedHour = (cmbHour.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string selectedMinute = (cmbMinute.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string selectedAmPm = (cmbAmPm.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+            if (string.IsNullOrEmpty(selectedHour) || string.IsNullOrEmpty(selectedMinute) || string.IsNullOrEmpty(selectedAmPm))
+            {
+                MessageBox.Show("Please select a valid time.");
+                return;
+            }
+
+            string time = $"{selectedHour}:{selectedMinute} {selectedAmPm}";
 
             if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(date) || string.IsNullOrWhiteSpace(time) || string.IsNullOrWhiteSpace(location))
             {
@@ -284,21 +374,24 @@ namespace PROG7312_ST10023767.Views
             }
 
             EventClass newEvent = new EventClass(
-                title, 
-                date, 
-                time, 
-                location, 
-                description, 
-                new List<string>(mediaAttachments),
+                title,
+                date,
+                time,
+                location,
+                description,
+                new List<MediaFileClass>(mediaAttachments),
                 type,
                 category
                 );
             locationEvents[location].Add(newEvent);
 
-            // Reset form
-            EventTitle.Text = "";
+             EventTitle.Text = "";
             EventDate.SelectedDate = null;
-            EventTime.Text = "";
+
+            cmbHour.SelectedIndex = 0;
+            cmbMinute.SelectedIndex = 0;
+            cmbAmPm.SelectedIndex = 0;
+
             EventLocation.Text = "";
             EventDescription.Text = "";
             MediaList.Items.Clear();
@@ -324,7 +417,7 @@ namespace PROG7312_ST10023767.Views
                 eventsToDisplay = eventsToDisplay.ToList();
             }
             else
-            if(selectedFilter == "Events")
+            if (selectedFilter == "Events")
             {
                 eventsToDisplay = eventsToDisplay.Where(item => item.Type == "Event").ToList();
             }
@@ -359,25 +452,62 @@ namespace PROG7312_ST10023767.Views
 
                 foreach (var ev in eventsToDisplay)
                 {
-                    Image typeImage = new Image { Width = 50, Height = 50, Stretch = Stretch.Fill };
-                    Image categoryImage = new Image { Width = 50, Height = 50, Stretch = Stretch.Fill };
 
-                    LoadImage(GetImagePath(ev.Type), typeImage);
-                    LoadImage(GetImagePathCategory(ev.Category), categoryImage);
+                    StackPanel eventPanel = new StackPanel { Margin = new Thickness(5), Background = new SolidColorBrush(Color.FromRgb(255, 215, 215)) };
 
-                    EventsList.Items.Add(typeImage);
-                    EventsList.Items.Add(categoryImage);
+                     Grid horizontalGrid = new Grid();
+                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }); // Spacer column
+                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
-                    TextBlock eventBlock = new TextBlock
+                     Image eventTypeImage = new Image { Width = 30, Height = 30, Stretch = Stretch.Fill };
+                    LoadImage(GetImagePath(ev.Type), eventTypeImage);
+                    Grid.SetColumn(eventTypeImage, 0);
+                    horizontalGrid.Children.Add(eventTypeImage);
+
+                     TextBlock eventInfo = new TextBlock
                     {
-                        Text = $"Title: {ev.Title}\nDate: {ev.Date}\nTime: {ev.Time}\nLocation: {ev.Location}\nDescription: {ev.Description}",
+                        Text = $"Starts {ev.Time}: {ev.Date}",
+                        Margin = new Thickness(5, 6, 0, 5),
                         TextWrapping = TextWrapping.Wrap,
-                        Margin = new Thickness(0, 0, 0, 10)
+                        Width = 500
                     };
+                    Grid.SetColumn(eventInfo, 1);
+                    horizontalGrid.Children.Add(eventInfo);
 
-                    EventsList.Items.Add(eventBlock);
+                     Image categoryImage = new Image { Width = 30, Height = 30, Stretch = Stretch.Fill };
+                    LoadImage(GetImagePathCategory(ev.Category), categoryImage);
+                    Grid.SetColumn(categoryImage, 2);
+                    horizontalGrid.Children.Add(categoryImage);
 
-                    if (ev.MediaFiles != null && ev.MediaFiles.Count > 0)
+                    eventPanel.Children.Add(horizontalGrid);
+
+                     TextBlock eventTitle = new TextBlock
+                    {
+                        Text = ev.Title,
+                        Margin = new Thickness(2, 5, 0, 5),
+                        FontWeight = FontWeights.Bold
+                    };
+                    eventPanel.Children.Add(eventTitle);
+
+                    TextBlock eventDescription = new TextBlock
+                    {
+                        Text = ev.Description,
+                        Margin = new Thickness(2, 5, 0, 5),
+                        TextWrapping = TextWrapping.Wrap
+                    };
+                    eventPanel.Children.Add(eventDescription);
+
+                    TextBlock eventLocation = new TextBlock
+                    {
+                        Text = $"Venue: {ev.Location}",
+                        Margin = new Thickness(2, 5, 0, 5),
+                        FontWeight = FontWeights.Bold,
+                        FontSize = 10
+                    };
+                    eventPanel.Children.Add(eventLocation);
+
+                     if (ev.MediaFiles != null && ev.MediaFiles.Count > 0)
                     {
                         TextBlock mediaBlock = new TextBlock
                         {
@@ -386,21 +516,29 @@ namespace PROG7312_ST10023767.Views
                             Margin = new Thickness(0, 10, 0, 5)
                         };
 
-                        EventsList.Items.Add(mediaBlock);
+                        eventPanel.Children.Add(mediaBlock);
 
                         foreach (var media in ev.MediaFiles)
                         {
                             TextBlock mediaItem = new TextBlock
                             {
-                                Text = System.IO.Path.GetFileName(media),
+                                Text = media.FileName,
                                 Margin = new Thickness(20, 0, 0, 5),
-                                Tag = media
+                                Tag = media.FileContent   
                             };
 
+
                             mediaItem.MouseDown += MediaItem_MouseDown;
-                            EventsList.Items.Add(mediaItem);
+                            eventPanel.Children.Add(mediaItem);
+
                         }
                     }
+
+                    EventsList.Items.Add(eventPanel);
+
+
+
+
                 }
             }
         }
