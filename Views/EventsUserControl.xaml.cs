@@ -776,7 +776,7 @@ namespace PROG7312_ST10023767.Views
             if (!string.IsNullOrEmpty(searchQuery))
             {
                 // Track the user's search
-                TrackUserSearch("LetsSayJustOneUserForNow", searchQuery);  // Replace with actual user ID logic
+                TrackUserSearch("currentUserId", searchQuery);  // Replace with actual user ID logic
             }
 
 
@@ -835,7 +835,7 @@ namespace PROG7312_ST10023767.Views
                 userSearchHistory[userId] = new List<string>();
             }
 
-            userSearchHistory[userId].Add(searchQuery);
+            userSearchHistory[userId].Add(searchQuery.ToLower());
         }
 
         private List<EventClass> RecommendEventsBasedOnSearch(string userId)
@@ -858,15 +858,15 @@ namespace PROG7312_ST10023767.Views
             foreach (var searchTerm in frequentSearches)
             {
                 var matchingEvents = locationEvents.Values.SelectMany(evList => evList)
-                                        .Where(ev => ev.Location.Contains(searchTerm) ||
-                                                     ev.Title.Contains(searchTerm) ||
-                                                     ev.Category.Contains(searchTerm) ||
-                                                     ev.Venue.Contains(searchTerm) ||
-                                                     ev.EndDate.Contains(searchTerm) ||
-                                                     ev.StartDate.Contains(searchTerm) ||
-                                                     ev.StartTime.Contains(searchTerm) ||
-                                                     ev.EndTime.Contains(searchTerm) ||
-                                                     ev.Description.Contains(searchTerm))
+                                        .Where(ev => ev.Location.ToLower().Contains(searchTerm) ||
+                                                     ev.Title.ToLower().Contains(searchTerm) ||
+                                                     ev.Category.ToLower().Contains(searchTerm) ||
+                                                     ev.Venue.ToLower().Contains(searchTerm) ||
+                                                     ev.EndDate.ToLower().Contains(searchTerm) ||
+                                                     ev.StartDate.ToLower().Contains(searchTerm) ||
+                                                     ev.StartTime.ToLower().Contains(searchTerm) ||
+                                                     ev.EndTime.ToLower().Contains(searchTerm) ||
+                                                     ev.Description.ToLower().Contains(searchTerm))
                                                                 .ToList();
 
                 recommendedEvents.AddRange(matchingEvents);
