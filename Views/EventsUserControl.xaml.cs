@@ -33,6 +33,9 @@ namespace PROG7312_ST10023767.Views
             InitializeComponent();
             LoadLocations();
             UpdateEventsList();
+
+            SetDateToNow(EventDate); 
+            SetDateToNow(EndDate);
         }
 
         private void LoadLocations()
@@ -51,6 +54,16 @@ namespace PROG7312_ST10023767.Views
             }
         }
 
+
+            public void SetDateToNow(DatePicker datePicker)
+            {
+                if (datePicker != null)
+                {
+                    datePicker.SelectedDate = DateTime.Now; 
+                }
+            }
+        
+
         private void LocationButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
@@ -67,6 +80,53 @@ namespace PROG7312_ST10023767.Views
                 foreach (var ev in locationEvents[selectedLocation])
                 {
                     bool isEvent = ev.Type == "Event";
+                    string status;
+                    
+
+                    Border statusBorder = new Border
+                    {
+                        CornerRadius = new CornerRadius(15),
+                        Height = 5,
+                        Margin = new Thickness(7, 0, 7, 0)
+                    };
+
+                    DateTime currentDateTime = DateTime.Now;
+
+                    DateTime startDateTime;
+                    DateTime endDateTime;
+                    if (DateTime.TryParse(ev.StartDate, out startDateTime) &&
+                        DateTime.TryParse(ev.EndDate, out endDateTime))
+                    {
+                        endDateTime = endDateTime.Date.AddDays(1).AddTicks(-1);
+
+                        if (currentDateTime >= startDateTime && currentDateTime <= endDateTime)
+                        {
+                            // Status is busy
+                            status = "busy";
+                            statusBorder.Background = (Brush)Application.Current.FindResource("busySolidColorBrush");
+                        }
+                        else if (currentDateTime > endDateTime) // Past end date
+                        {
+                            // Status is past
+                            status = "past";
+                            statusBorder.Background = (Brush)Application.Current.FindResource("pastSolidColorBrush");
+                        }
+                        else
+                        {
+                            // Status is upcoming
+                            status = "upcoming";
+                            statusBorder.Background = (Brush)Application.Current.FindResource("upcomingSolidColorBrush");
+                        }
+                    }
+                    else
+                    {
+
+                        status = "unknown";
+                        statusBorder.Background = (Brush)Application.Current.FindResource("defaultSolidColorBrush");
+                        Console.WriteLine($"Failed to parse dates for event: {ev.Title}, StartDate: {ev.StartDate}, EndDate: {ev.EndDate}");
+                    }
+
+
 
                     // Create a Border for rounded corners
                     Border eventBorder = new Border
@@ -77,28 +137,32 @@ namespace PROG7312_ST10023767.Views
                     };
 
                      StackPanel eventPanel = new StackPanel();
+                    eventPanel.Children.Add(statusBorder);
 
                     Grid horizontalGrid = new Grid();
-                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
                     horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });  
-                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
 
-                    Image eventTypeImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill };
+                    Image eventTypeImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill , Margin = new Thickness(5)};
                     LoadImage(GetImagePath(ev.Type), eventTypeImage);
                     Grid.SetColumn(eventTypeImage, 0);
                     horizontalGrid.Children.Add(eventTypeImage);
 
                     TextBlock eventInfo = new TextBlock
                     {
-                        Text = $"Starts {ev.Time}: {ev.Date}",
-                        Margin = new Thickness(5, 6, 0, 5),
+                        Text = $"{ev.StartTime}: {ev.StartDate} - {ev.EndTime}: {ev.EndDate}",
+                        Margin = new Thickness(0,15,0,5),
                         TextWrapping = TextWrapping.Wrap,
-                        Width = 500
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        TextAlignment = TextAlignment.Center,
+                        MinWidth = 800,
+                        Width = 800
                     };
                     Grid.SetColumn(eventInfo, 1);
                     horizontalGrid.Children.Add(eventInfo);
 
-                    Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill };
+                    Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill , Margin = new Thickness(5) };
                     LoadImage(GetImagePathCategory(ev.Category), categoryImage);
                     Grid.SetColumn(categoryImage, 2);
                     horizontalGrid.Children.Add(categoryImage);
@@ -107,28 +171,27 @@ namespace PROG7312_ST10023767.Views
 
                     TextBlock eventTitle = new TextBlock
                     {
-                        Text = ev.Title,
-                        Margin = new Thickness(2, 5, 0, 5),
+                        Text = "Title: " + ev.Title,
+                        Margin = new Thickness(5, 5, 0, 5),
                         FontWeight = FontWeights.Bold
                     };
                     eventPanel.Children.Add(eventTitle);
 
                     TextBlock eventDescription = new TextBlock
                     {
-                        Text = ev.Description,
-                        Margin = new Thickness(2, 5, 0, 5),
+                        Text = "Description: " +  ev.Description,
+                        Margin = new Thickness(5, 5, 0, 5),
                         TextWrapping = TextWrapping.Wrap
                     };
                     eventPanel.Children.Add(eventDescription);
 
-                    TextBlock eventLocation = new TextBlock
+                    TextBlock eventVenue = new TextBlock
                     {
-                        Text = $"Venue: {ev.Location}",
-                        Margin = new Thickness(2, 5, 0, 5),
-                        FontWeight = FontWeights.Bold,
-                        FontSize = 10
+                        Text = $"Venue: {ev.Venue}",
+                        Margin = new Thickness(5, 5, 0, 5),
+                        FontWeight = FontWeights.Bold
                     };
-                    eventPanel.Children.Add(eventLocation);
+                    eventPanel.Children.Add(eventVenue);
 
                     if (ev.MediaFiles != null && ev.MediaFiles.Count > 0)
                     {
@@ -380,6 +443,8 @@ namespace PROG7312_ST10023767.Views
             string description = EventDescription.Text;
             string type = (cmbType.SelectedItem as ComboBoxItem)?.Content.ToString();
             string category = (cmbCategory.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string endDate = EndDate.SelectedDate?.ToString("d MMM yyyy") ?? "";
+            string venue = EventVenue.Text;
 
 
             string selectedHour = (cmbHour.SelectedItem as ComboBoxItem)?.Content.ToString();
@@ -394,6 +459,19 @@ namespace PROG7312_ST10023767.Views
 
             string time = $"{selectedHour}:{selectedMinute} {selectedAmPm}";
 
+
+            string selectedHourEnd = (cmbHourEnd.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string selectedMinuteEnd = (cmbMinuteEnd.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string selectedAmPmEnd = (cmbAmPmEnd.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+            if (string.IsNullOrEmpty(selectedHourEnd) || string.IsNullOrEmpty(selectedMinuteEnd) || string.IsNullOrEmpty(selectedAmPmEnd))
+            {
+                MessageBox.Show("Please select a valid time.");
+                return;
+            }
+
+            string timeEnd = $"{selectedHourEnd}:{selectedMinuteEnd} {selectedAmPmEnd}";
+
             if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(date) || string.IsNullOrWhiteSpace(time) || string.IsNullOrWhiteSpace(location))
             {
                 MessageBox.Show("Please fill in all the fields.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -402,6 +480,8 @@ namespace PROG7312_ST10023767.Views
 
             if (!locationEvents.ContainsKey(location))
             {
+                LocationWrapPanel.Visibility = Visibility.Visible;
+
                 locationEvents[location] = new List<EventClass>();
                 Button locationButton = new Button
                 {
@@ -429,26 +509,37 @@ namespace PROG7312_ST10023767.Views
                 description,
                 mediaAttachments.ToArray().ToList(),
                 type,
-                category
+                category,
+                endDate,
+                venue,
+                timeEnd
+
                 );
             locationEvents[location].Add(newEvent);
 
-             EventTitle.Text = "";
-            EventDate.SelectedDate = null;
+            ClearAllFields();
 
+            MessageBox.Show("Event submitted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void ClearAllFields()
+        {
+            EventTitle.Text = "";
+            SetDateToNow(EventDate);
+            SetDateToNow(EndDate);
             cmbHour.SelectedIndex = 0;
             cmbMinute.SelectedIndex = 0;
             cmbAmPm.SelectedIndex = 0;
-
+            cmbHourEnd.SelectedIndex = 0;
+            cmbMinuteEnd.SelectedIndex = 0;
+            cmbAmPmEnd.SelectedIndex = 0;
+            EventVenue.Text = "";
             EventLocation.Text = "";
             EventDescription.Text = "";
             MediaList.Items.Clear();
             mediaAttachments.Clear();
             cmbCategory.SelectedIndex = 0;
             cmbType.SelectedIndex = 0;
-
-
-            MessageBox.Show("Event submitted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
 
@@ -472,6 +563,10 @@ namespace PROG7312_ST10023767.Views
             List<EventClass> eventsToDisplay = selectedLocation != null && locationEvents.ContainsKey(selectedLocation)
                 ? locationEvents[selectedLocation]
                 : locationEvents.Values.SelectMany(evList => evList).ToList(); // Get all events if no specific location is selected.
+
+
+            DateTime currentDateTime = DateTime.Now;
+
 
             if (selectedFilter == "All")
             {
@@ -497,6 +592,18 @@ namespace PROG7312_ST10023767.Views
                     eventsToDisplay = eventsToDisplay.Where(item => item.Category == selectedCategory).ToList();
                 }
             }
+            else if (selectedFilter == "Upcoming")
+            {
+                eventsToDisplay = eventsToDisplay.Where(item => currentDateTime < DateTime.Parse(item.StartDate)).ToList();
+            }
+            else if (selectedFilter == "Past")
+            {
+                eventsToDisplay = eventsToDisplay.Where(item => currentDateTime > DateTime.Parse(item.EndDate)).ToList();
+            }
+            else if (selectedFilter == "Busy")
+            {
+                eventsToDisplay = eventsToDisplay.Where(item => currentDateTime >= DateTime.Parse(item.StartDate) && currentDateTime <= DateTime.Parse(item.EndDate).Date.AddDays(1).AddTicks(-1)).ToList();
+            }
 
             UpdateEventsList(eventsToDisplay);
         }
@@ -514,6 +621,54 @@ namespace PROG7312_ST10023767.Views
                 foreach (var ev in eventsToDisplay)
                 {
                     bool isEvent = ev.Type == "Event";
+                    string status;
+                    DateTime currentDateTime = DateTime.Now;
+
+                    DateTime startDateTime;
+                    DateTime endDateTime;
+
+                    Border statusBorder = new Border
+                    {
+                        CornerRadius = new CornerRadius(15),
+                        Height = 5,
+                        Margin = new Thickness(7, 0, 7, 0)
+                    };
+
+                    if (DateTime.TryParse(ev.StartDate, out startDateTime) &&
+                        DateTime.TryParse(ev.EndDate, out endDateTime))
+                    {
+                        endDateTime = endDateTime.Date.AddDays(1).AddTicks(-1);  
+
+                        if (currentDateTime >= startDateTime && currentDateTime <= endDateTime)  
+                        {
+                            // Status is busy
+                            status = "busy";
+                            statusBorder.Background = (Brush)Application.Current.FindResource("busySolidColorBrush");
+                        }
+                        else if (currentDateTime > endDateTime) // Past end date
+                        {
+                            // Status is past
+                            status = "past";
+                            statusBorder.Background = (Brush)Application.Current.FindResource("pastSolidColorBrush");
+                        }
+                        else
+                        {
+                            // Status is upcoming
+                            status = "upcoming";
+                            statusBorder.Background = (Brush)Application.Current.FindResource("upcomingSolidColorBrush");
+                        }
+                    }
+                    else
+                    {
+            
+                        status = "unknown";  
+                        statusBorder.Background = (Brush)Application.Current.FindResource("defaultSolidColorBrush");
+                        Console.WriteLine($"Failed to parse dates for event: {ev.Title}, StartDate: {ev.StartDate}, EndDate: {ev.EndDate}");
+                    }
+
+                    Console.WriteLine($"Status for event '{ev.Title}': {status}");
+
+
 
                     // Create a Border for rounded corners
                     Border eventBorder = new Border
@@ -526,27 +681,32 @@ namespace PROG7312_ST10023767.Views
                     // Create a StackPanel inside the Border
                     StackPanel eventPanel = new StackPanel();
 
-                    Grid horizontalGrid = new Grid();
-                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition());
-                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }); // Spacer column
-                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                    eventPanel.Children.Add(statusBorder);
 
-                    Image eventTypeImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill };
+                    Grid horizontalGrid = new Grid();
+                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
+                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
+
+                    Image eventTypeImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
                     LoadImage(GetImagePath(ev.Type), eventTypeImage);
                     Grid.SetColumn(eventTypeImage, 0);
                     horizontalGrid.Children.Add(eventTypeImage);
 
                     TextBlock eventInfo = new TextBlock
                     {
-                        Text = $"Starts {ev.Time}: {ev.Date}",
-                        Margin = new Thickness(5, 6, 0, 5),
+                        Text = $"{ev.StartTime}: {ev.StartDate} - {ev.EndTime}: {ev.EndDate}",
+                        Margin = new Thickness(0, 15, 0, 5),
                         TextWrapping = TextWrapping.Wrap,
-                        Width = 500
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        TextAlignment = TextAlignment.Center,
+                        MinWidth = 800,
+                        Width = 800
                     };
                     Grid.SetColumn(eventInfo, 1);
                     horizontalGrid.Children.Add(eventInfo);
 
-                    Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill };
+                    Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
                     LoadImage(GetImagePathCategory(ev.Category), categoryImage);
                     Grid.SetColumn(categoryImage, 2);
                     horizontalGrid.Children.Add(categoryImage);
@@ -555,28 +715,35 @@ namespace PROG7312_ST10023767.Views
 
                     TextBlock eventTitle = new TextBlock
                     {
-                        Text = ev.Title,
-                        Margin = new Thickness(2, 5, 0, 5),
+                        Text = "Title: " + ev.Title,
+                        Margin = new Thickness(5, 5, 0, 5),
                         FontWeight = FontWeights.Bold
                     };
                     eventPanel.Children.Add(eventTitle);
 
                     TextBlock eventDescription = new TextBlock
                     {
-                        Text = ev.Description,
-                        Margin = new Thickness(2, 5, 0, 5),
+                        Text = "Description: " + ev.Description,
+                        Margin = new Thickness(5, 5, 0, 5),
                         TextWrapping = TextWrapping.Wrap
                     };
                     eventPanel.Children.Add(eventDescription);
 
-                    TextBlock eventLocation = new TextBlock
+                    TextBlock eventVenue = new TextBlock
                     {
-                        Text = $"Venue: {ev.Location}",
-                        Margin = new Thickness(2, 5, 0, 5),
-                        FontWeight = FontWeights.Bold,
-                        FontSize = 10
+                        Text = $"Venue: {ev.Venue}",
+                        Margin = new Thickness(5, 5, 0, 5),
+                        FontWeight = FontWeights.Bold
                     };
-                    eventPanel.Children.Add(eventLocation);
+                    eventPanel.Children.Add(eventVenue);
+
+                    TextBlock eventArea = new TextBlock
+                    {
+                        Text = $"City/Area: {ev.Location}",
+                        Margin = new Thickness(5, 5, 0, 5),
+                        FontWeight = FontWeights.Bold
+                    };
+                    eventPanel.Children.Add(eventArea);
 
                     if (ev.MediaFiles != null && ev.MediaFiles.Count > 0)
                     {
@@ -651,6 +818,18 @@ namespace PROG7312_ST10023767.Views
         {
             string searchText = txbSearch.Text;
 
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Post Canceled");
+            ClearAllFields();
+        }
+
+        private void btnShowReccomended_Click(object sender, RoutedEventArgs e)
+        {
+            // Analyse user search patterns and preferences. 
+            //Use an appropriate algorithm or data structure to suggest related or recommended events.
         }
     }
 }

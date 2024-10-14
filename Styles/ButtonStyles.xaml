@@ -107,6 +107,98 @@
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Padding" Value="10"/>
     </Style>
+
+
+    <Style x:Key="RoundedButtonStyleMiddle" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{DynamicResource greenSolidColorBrush}"
+                      CornerRadius="10" 
+                      BorderThickness="0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <!-- FontAwesome Icon -->
+                            <fa:IconImage Icon="File" Width="16" Height="16" Margin="5" VerticalAlignment="Center" Foreground="{DynamicResource darkestSolidColorBrush}"/>
+                            <!-- Button Content -->
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <!-- Additional properties for the button -->
+        <Setter Property="Foreground" Value="{DynamicResource darkestSolidColorBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="10"/>
+    </Style>
+    <Style x:Key="RoundedButtonStylePost" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{DynamicResource greenSolidColorBrush}"
+                   CornerRadius="10" 
+                   BorderThickness="0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <!-- FontAwesome Icon -->
+                            <fa:IconImage Icon="Check" Width="16" Height="16" Margin="5" VerticalAlignment="Center" Foreground="{DynamicResource darkestSolidColorBrush}"/>
+                            <!-- Button Content -->
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <!-- Additional properties for the button -->
+        <Setter Property="Foreground" Value="{DynamicResource darkestSolidColorBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="10"/>
+    </Style>
+
+    <Style x:Key="RoundedButtonStyleDelete" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{DynamicResource redSolidColorBrush}"
+                   CornerRadius="10" 
+                   BorderThickness="0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <!-- FontAwesome Icon -->
+                            <fa:IconImage Icon="Trash" Width="16" Height="16" Margin="5" VerticalAlignment="Center" Foreground="{DynamicResource darkestSolidColorBrush}"/>
+                            <!-- Button Content -->
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <!-- Additional properties for the button -->
+        <Setter Property="Foreground" Value="{DynamicResource darkestSolidColorBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="10"/>
+    </Style>
+
+    <Style x:Key="RoundedButtonStyleCancle" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{DynamicResource redSolidColorBrush}"
+                  CornerRadius="10" 
+                  BorderThickness="0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <!-- FontAwesome Icon -->
+                            <fa:IconImage Icon="Cancel" Width="16" Height="16" Margin="5" VerticalAlignment="Center" Foreground="{DynamicResource darkestSolidColorBrush}"/>
+                            <!-- Button Content -->
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <!-- Additional properties for the button -->
+        <Setter Property="Foreground" Value="{DynamicResource darkestSolidColorBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="10"/>
+    </Style>
     <!--・♫ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ♫・-->
     <Style x:Key="iconInIconButtonLight" TargetType="fa:IconImage">
         <Setter Property="Foreground" Value="{Binding Path=Foreground, 

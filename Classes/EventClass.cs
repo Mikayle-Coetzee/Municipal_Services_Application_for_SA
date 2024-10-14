@@ -9,9 +9,15 @@ namespace PROG7312_ST10023767.Classes
     public class EventClass
     {
         public string Title { get; set; }
-        public string Date { get; set; }
-        public string Time { get; set; }
+        public string StartDate { get; set; }
+        public string StartTime { get; set; }
+
+        public string EndTime { get; set; }
+        public string EndDate { get; set; }
+
         public string Location { get; set; }
+        public string Venue { get; set; }
+
         public string Description { get; set; }
 
         public List<MediaFileClass> MediaFiles { get; set; }
@@ -19,17 +25,20 @@ namespace PROG7312_ST10023767.Classes
         public string Type { get; set; }
         public string Category { get; set; }
 
-        public EventClass(string title, string date, string time, string location, string description,
-            List<MediaFileClass> mediaFiles, string type, string category)
+        public EventClass(string title, string startDate, string time, string location, string description,
+            List<MediaFileClass> mediaFiles, string type, string category, string endDate, string venue, string endTime)
         {
             Title = title;
-            Date = date;
-            Time = time;
+            StartDate = startDate;
+            StartTime = time;
             Location = location;
             Description = description;
             MediaFiles = mediaFiles;
             Type = type;
             Category = category;
+            EndDate = endDate;
+            Venue = venue;
+            EndTime = endTime;
         }
     }
 }

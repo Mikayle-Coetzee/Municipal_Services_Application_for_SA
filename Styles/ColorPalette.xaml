@@ -13,6 +13,11 @@
     <Color x:Key="darkRedColor">#913C48</Color>
     <Color x:Key="greenColor">#06D6A0</Color>
 
+
+    <Color x:Key="upcomingColor">#00FF19</Color>
+    <Color x:Key="busyColor">#FFEC45</Color>
+    <Color x:Key="pastColor">#E63946</Color>
+    
     <!--・♫ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ♫・-->
 
     <SolidColorBrush x:Key="darkestSolidColorBrush">#00414B</SolidColorBrush>
@@ -23,4 +28,8 @@
     <SolidColorBrush x:Key="redSolidColorBrush">#E63946</SolidColorBrush>
     <SolidColorBrush x:Key="greenSolidColorBrush">#06D6A0</SolidColorBrush>
     <SolidColorBrush x:Key="darkRedSolidColorBrush">#913C48</SolidColorBrush>
+
+    <SolidColorBrush x:Key="upcomingSolidColorBrush">#00FF19</SolidColorBrush>
+    <SolidColorBrush x:Key="busySolidColorBrush">#FFEC45</SolidColorBrush>
+    <SolidColorBrush x:Key="pastSolidColorBrush">#E63946</SolidColorBrush>
 </ResourceDictionary>
