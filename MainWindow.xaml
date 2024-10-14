@@ -7,6 +7,7 @@
         Title="South Africa" Height="700" Width="1200"
         WindowStartupLocation="CenterScreen" 
         UseLayoutRounding="False"
+        Icon="/Images/Part2/Other.png"
         MinHeight="500" MinWidth="750">
     <Grid>
         <Grid.RowDefinitions>

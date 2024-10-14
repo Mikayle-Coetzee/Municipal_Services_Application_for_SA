@@ -24,6 +24,7 @@ namespace PROG7312_ST10023767.Views
         public CategoryFilterWindow()
         {
             InitializeComponent();
+
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
@@ -39,6 +40,32 @@ namespace PROG7312_ST10023767.Views
                 MessageBox.Show("Please select a category.");
             }
         }
+
+        public void PopulateCategories(HashSet<string> uniqueCategories)
+        {
+            cmbCategory.Items.Clear();
+
+            foreach (var category in uniqueCategories)
+            {
+                cmbCategory.Items.Add(new ComboBoxItem
+                {
+                    Content = category
+                });
+                btnOK.IsEnabled = true;
+
+            }
+
+            if (uniqueCategories.Count == 0)
+            {
+                cmbCategory.Items.Add(new ComboBoxItem
+                {
+                    Content = "No Categories Yet"
+                });
+                btnOK.IsEnabled = false;
+            }
+            cmbCategory.SelectedIndex = 0;
+        }
+
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {

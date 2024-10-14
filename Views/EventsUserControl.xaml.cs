@@ -30,6 +30,8 @@ namespace PROG7312_ST10023767.Views
         private Stack<MediaFileClass> mediaAttachments = new Stack<MediaFileClass>();
         private Dictionary<string, List<string>> userSearchHistory = new Dictionary<string, List<string>>();
 
+        private HashSet<string> uniqueCategories = new HashSet<string>();
+
         public EventsUserControl()
         {
             InitializeComponent();
@@ -73,7 +75,7 @@ namespace PROG7312_ST10023767.Views
 
             cmbFilter.SelectedIndex = 0;
 
-            LocationTextBlock.Text = $"Events & Announcement in Selected {selectedLocation}";
+            LocationTextBlock.Text = $"Events & Announcement in {selectedLocation}";
 
             EventsList.Items.Clear();
 
@@ -170,6 +172,7 @@ namespace PROG7312_ST10023767.Views
                 return null;
             }
         }
+
         private void ViewAllEvents_Click(object sender, RoutedEventArgs e)
         {
             UpdateEventsList();
@@ -319,6 +322,10 @@ namespace PROG7312_ST10023767.Views
 
             string time = $"{selectedHour}:{selectedMinute} {selectedAmPm}";
 
+            if (!string.IsNullOrEmpty(category))
+            {
+                uniqueCategories.Add(category);
+            }
 
             string selectedHourEnd = (cmbHourEnd.SelectedItem as ComboBoxItem)?.Content.ToString();
             string selectedMinuteEnd = (cmbMinuteEnd.SelectedItem as ComboBoxItem)?.Content.ToString();
@@ -449,6 +456,7 @@ namespace PROG7312_ST10023767.Views
             else if (selectedFilter == "Category")
             {
                 CategoryFilterWindow categoryWindow = new CategoryFilterWindow();
+                categoryWindow.PopulateCategories(uniqueCategories);
 
                 if (categoryWindow.ShowDialog() == true)
                 {
@@ -463,7 +471,7 @@ namespace PROG7312_ST10023767.Views
             }
             else if (selectedFilter == "Past")
             {
-                eventsToDisplay = eventsToDisplay.Where(item => currentDateTime > DateTime.Parse(item.EndDate)).ToList();
+                eventsToDisplay = eventsToDisplay.Where(item => currentDateTime > DateTime.Parse(item.EndDate) && currentDateTime > DateTime.Parse(item.StartDate) && currentDateTime >= DateTime.Parse(item.EndDate).Date.AddDays(1).AddTicks(-1)).ToList() ;
             }
             else if (selectedFilter == "Busy")
             {
@@ -768,7 +776,7 @@ namespace PROG7312_ST10023767.Views
             if (!string.IsNullOrEmpty(searchQuery))
             {
                 // Track the user's search
-                TrackUserSearch("currentUserId", searchQuery);  // Replace with actual user ID logic
+                TrackUserSearch("LetsSayJustOneUserForNow", searchQuery);  // Replace with actual user ID logic
             }
 
 
@@ -810,6 +818,8 @@ namespace PROG7312_ST10023767.Views
 
         private void btnShowReccomended_Click(object sender, RoutedEventArgs e)
         {
+            LocationTextBlock.Text = $"Recommendations";
+
             if (RecommendEventsBasedOnSearch("currentUserId").Count == 0)
             {
                 NoPostsMessageBox("No Recommended Posts Yet", "Unfortunatley we cant run our algoritm to recommend you something if we have no data to work off of, please search something to build your search history");
@@ -832,25 +842,21 @@ namespace PROG7312_ST10023767.Views
         {
             if (!userSearchHistory.ContainsKey(userId) || userSearchHistory[userId].Count == 0)
             {
-                return new List<EventClass>();  // Return an empty list if there's no search history
+                return new List<EventClass>();  
             }
 
-            // Get all past searches for this user
             List<string> pastSearches = userSearchHistory[userId];
 
-            // Analyze the most frequently searched terms (categories, locations, etc.)
             var frequentSearches = pastSearches.GroupBy(search => search)
                                                .OrderByDescending(group => group.Count())
                                                .Select(group => group.Key)
-                                               .Take(3) // Get top 3 frequently searched terms
+                                               .Take(3) 
                                                .ToList();
 
-            // Filter events based on frequently searched terms
             List<EventClass> recommendedEvents = new List<EventClass>();
 
             foreach (var searchTerm in frequentSearches)
             {
-                // Find matching events based on location, category, or type (expand as needed)
                 var matchingEvents = locationEvents.Values.SelectMany(evList => evList)
                                         .Where(ev => ev.Location.Contains(searchTerm) ||
                                                      ev.Title.Contains(searchTerm) ||
@@ -867,6 +873,11 @@ namespace PROG7312_ST10023767.Views
             }
 
             return recommendedEvents;
+        }
+
+        private void txbSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

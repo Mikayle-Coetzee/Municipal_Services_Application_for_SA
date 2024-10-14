@@ -87,8 +87,8 @@
                                     <Button x:Name="btnShowReccomended" 
 Content="Recommended" Margin="5" VerticalAlignment="Top" FontSize="14" 
 FontWeight="Bold"  Style="{StaticResource RoundedButtonStyleMain}" Click="btnShowReccomended_Click"/>
-                                    
-                                <Button x:Name="btnAddEvent" 
+
+                                    <Button x:Name="btnAddEvent" 
                 Content="Create Post" Margin="5" VerticalAlignment="Top" FontSize="14" 
                 FontWeight="Bold"
                 Click="btnAddEvent_Click"  Style="{StaticResource RoundedButtonStyleMain}"/>
@@ -99,31 +99,45 @@ FontWeight="Bold"  Style="{StaticResource RoundedButtonStyleMain}" Click="btnSho
                             <StackPanel Grid.Column="1" Margin="10,10,10,10">
                                 <Grid >
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="326*"/>
-                                        <ColumnDefinition Width="131*"/>
-                                        <ColumnDefinition Width="70*"/>
+                                        <ColumnDefinition Width="242*"/>
+                                        <ColumnDefinition Width="157*"/>
+                                        <ColumnDefinition Width="61*"/>
                                         <ColumnDefinition Width="Auto" MinWidth="111.4"/>
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock x:Name="LocationTextBlock" Text="Events &amp; Announcement " FontSize="16" FontWeight="Bold" TextWrapping="Wrap"  Foreground="{DynamicResource greenSolidColorBrush}" VerticalAlignment="Center" Margin="10,0,2,0" Height="20" TextDecorations="Underline" />
 
 
-                                    <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Height="24" Width="122">
+                                    <Grid Grid.Column="1" VerticalAlignment="Center" Height="24" Margin="10,0,10,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="93*"/>
+                                            <ColumnDefinition Width="19*"/>
+                                        </Grid.ColumnDefinitions>
 
-                                        <TextBox x:Name="txbSearch" TextWrapping="Wrap" Background="{x:Null}" 
-                                                BorderBrush="{DynamicResource greenSolidColorBrush}" 
-                                                Foreground="White" SelectionTextBrush="Gainsboro"
-                                                BorderThickness="1,1,1,1" FontSize="16" Margin="2,0,0,0" Width="100" Height="24" />
-
+                                        <Border Background="{x:Null}" 
+                                        BorderBrush="{DynamicResource greenSolidColorBrush}" 
+                                        BorderThickness="1" 
+                                        CornerRadius="10" Margin="0,0,1,0">
+                                            <TextBox x:Name="txbSearch" 
+                                             TextWrapping="Wrap" 
+                                             Background="Transparent" 
+                                             Foreground="White" 
+                                             SelectionTextBrush="Gainsboro"
+                                             FontSize="14"  
+                                             Height="24" 
+                                             TextChanged="txbSearch_TextChanged" 
+                                             Padding="5,0,0,0" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" VerticalContentAlignment="Center" />
+                                            <!-- Optional padding for better text spacing -->
+                                        </Border>
                                         <Button x:Name="btnSearch" 
-                                                Style="{StaticResource PlainButtonDark}"
-                                                ToolTip="Enter something and search" Width="20" Click="btnSearch_Click" >
+                                                Style="{StaticResource PlainButtonDark}" 
+                                                ToolTip="Enter something and search" Width="20" Click="btnSearch_Click" BorderBrush="{x:Null}" VerticalAlignment="Center" Grid.Column="1" Height="24" >
                                             <fa:IconImage Icon="Search"
                                                            Style="{StaticResource iconInIconButtonLight}"
-                                                           Height="19" Width="20" 
-                                                           Foreground="{DynamicResource ResourceKey=greenSolidColorBrush}"/>
+                                                          
+                                                           Foreground="{DynamicResource ResourceKey=greenSolidColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Top" Height="23"/>
                                         </Button>
-                                    </StackPanel>
+                                    </Grid>
 
                                     <TextBlock Text="Filter by" FontSize="13" TextWrapping="Wrap" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2" Height="17" Width="46"/>
 
@@ -186,13 +200,14 @@ FontWeight="Bold"  Style="{StaticResource RoundedButtonStyleMain}" Click="btnSho
                                     </Grid>
                                     <ScrollViewer VerticalScrollBarVisibility="Visible">
                                         <StackPanel>
-                                            <Grid  Margin="10,0,0,0" >
+                                            <StackPanel Orientation="Horizontal"  Margin="10,0,0,0" >
+
                                                 <TextBlock Text="Title "  FontWeight="Bold" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                                <TextBox x:Name="EventTitle" TextWrapping="Wrap" Background="{x:Null}" 
+                                                <TextBox x:Name="EventTitle" Background="{x:Null}" 
                                                         BorderBrush="{DynamicResource greenSolidColorBrush}" 
-                                                        Foreground="White" SelectionTextBrush="Gainsboro"
-                                                        BorderThickness="1,1,1,1" FontSize="16" Margin="68,0,10,10"/>
-                                            </Grid>
+                                                        Foreground="White" SelectionTextBrush="Gainsboro" TextWrapping="Wrap"  
+                                                        BorderThickness="1,1,1,1" FontSize="16" Margin="40,0,10,10" Width="263"/>
+                                            </StackPanel>
 
                                             <Grid Margin="10,0,0,0" Width="342" >
                                                 <Grid.ColumnDefinitions>
@@ -312,7 +327,8 @@ FontWeight="Bold"  Style="{StaticResource RoundedButtonStyleMain}" Click="btnSho
                                                 <TextBlock Text="City/Area " FontWeight="Bold" Foreground="White" />
                                                 <TextBox x:Name="EventLocation" Width="267" Margin="10,0,0,10" Background="{x:Null}" 
                                                         BorderBrush="{DynamicResource greenSolidColorBrush}" 
-                                                        Foreground="White" SelectionTextBrush="Gainsboro"
+                                                        TextWrapping="Wrap"
+                                                         Foreground="White" SelectionTextBrush="Gainsboro"
                                                         BorderThickness="1,1,1,1" FontSize="16"/>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal"  Margin="10,0,0,0" >
@@ -320,7 +336,8 @@ FontWeight="Bold"  Style="{StaticResource RoundedButtonStyleMain}" Click="btnSho
                                                 <TextBox x:Name="EventVenue" Width="267" Margin="32,0,0,10" Background="{x:Null}" 
                                                     BorderBrush="{DynamicResource greenSolidColorBrush}" 
                                                     Foreground="White" SelectionTextBrush="Gainsboro"
-                                                    BorderThickness="1,1,1,1" FontSize="16"/>
+                                                    TextWrapping="Wrap"
+                                                         BorderThickness="1,1,1,1" FontSize="16"/>
                                             </StackPanel>
                                             <TextBlock Text="Description" FontWeight="Bold" Foreground="White"  Margin="10,0,0,5" />
                                             <TextBox x:Name="EventDescription" Width="330" Height="100" Background="{x:Null}" 
