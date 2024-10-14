@@ -279,7 +279,6 @@ namespace PROG7312_ST10023767.Views
         /// <param name="e"></param>
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Navigating to Main Menu...");
             this.Visibility = Visibility.Collapsed;
         }
 
@@ -456,6 +455,7 @@ namespace PROG7312_ST10023767.Views
             mediaManager.DisplayUploadedMedia(mediaContainer, new ContentControl(), btnNext, btnPrevious,
                 lblReUploadMedia, reUploadIcon, btnClearFile);
         }
+
     }
 }//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//
 

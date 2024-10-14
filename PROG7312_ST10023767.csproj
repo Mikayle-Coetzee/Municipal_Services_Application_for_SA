@@ -181,6 +181,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Images\Backgrounds\event_background.png" />
     <Resource Include="Images\Part2\art.png" />
     <Resource Include="Images\Part2\music.png" />
     <Resource Include="Images\Part2\networking.png" />

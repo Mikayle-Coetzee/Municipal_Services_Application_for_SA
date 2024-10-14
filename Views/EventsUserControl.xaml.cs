@@ -1,7 +1,7 @@
 ﻿using PROG7312_ST10023767.Classes;
 using System;
 using System.Collections.Generic;
-using System.IO; // Add this to work with file paths
+using System.IO; 
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,8 +25,8 @@ namespace PROG7312_ST10023767.Views
     public partial class EventsUserControl : UserControl
     {
         // Dictionary to store events sorted by location
-        private Dictionary<string, List<EventClass>> locationEvents = new Dictionary<string, List<EventClass>>();
-        private List<MediaFileClass> mediaAttachments = new List<MediaFileClass>();
+        private SortedDictionary<string, List<EventClass>> locationEvents = new SortedDictionary<string, List<EventClass>>();
+        private Stack<MediaFileClass> mediaAttachments = new Stack<MediaFileClass>();
 
         public EventsUserControl()
         {
@@ -42,8 +42,9 @@ namespace PROG7312_ST10023767.Views
                 Button locationButton = new Button
                 {
                     Content = location,
-                    Width = 100,
-                    Margin = new Thickness(5)
+                    Margin = new Thickness(5),
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Top
                 };
                 locationButton.Click += LocationButton_Click;
                 LocationWrapPanel.Children.Add(locationButton);
@@ -287,9 +288,8 @@ namespace PROG7312_ST10023767.Views
                      string mediaType = GetMediaType(filename);
 
                      MediaFileClass mediaFile = new MediaFileClass(System.IO.Path.GetFileName(filename), fileContent, mediaType);
-                    mediaAttachments.Add(mediaFile);
-
-                     MediaList.Items.Add(System.IO.Path.GetFileName(filename));
+                    mediaAttachments.Push(mediaFile);
+                    MediaList.Items.Add(System.IO.Path.GetFileName(filename));
                 }
             }
         }
@@ -322,13 +322,43 @@ namespace PROG7312_ST10023767.Views
         }
 
 
+
         private void RemoveMedia_Click(object sender, RoutedEventArgs e)
         {
             if (MediaList.SelectedItem != null)
             {
                 string selectedMedia = MediaList.SelectedItem.ToString();
-                mediaAttachments.RemoveAll(m => System.IO.Path.GetFileName(m.FileName) == selectedMedia);
-                MediaList.Items.Remove(selectedMedia);
+
+                // Use a temporary stack to hold items while popping
+                Stack<MediaFileClass> tempStack = new Stack<MediaFileClass>();
+
+                bool itemFound = false;
+
+                while (mediaAttachments.Count > 0)
+                {
+                    var media = mediaAttachments.Pop();
+                    if (media.FileName != selectedMedia)
+                    {
+                        tempStack.Push(media); // If not the selected item, push it to the temp stack
+                    }
+                    else
+                    {
+                        itemFound = true; // The item was found and removed
+                        MediaList.Items.Remove(selectedMedia);
+                        break;
+                    }
+                }
+
+                // Restore the items back to the original stack
+                while (tempStack.Count > 0)
+                {
+                    mediaAttachments.Push(tempStack.Pop());
+                }
+
+                if (!itemFound)
+                {
+                    MessageBox.Show("Media item not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
@@ -379,7 +409,7 @@ namespace PROG7312_ST10023767.Views
                 time,
                 location,
                 description,
-                new List<MediaFileClass>(mediaAttachments),
+                mediaAttachments.ToArray().ToList(),
                 type,
                 category
                 );
@@ -543,5 +573,39 @@ namespace PROG7312_ST10023767.Views
             }
         }
 
+        private void viewByArea_Click(object sender, RoutedEventArgs e)
+        {
+            if (venueButtonsPanel.Visibility == Visibility.Visible)
+            {
+                venueButtonsPanel.Visibility = Visibility.Collapsed;
+            }else
+            {
+                venueButtonsPanel.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void btnAddEvent_Click(object sender, RoutedEventArgs e)
+        {
+            if (createPostPanel.Visibility == Visibility.Visible)
+            {
+                createPostPanel.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                createPostPanel.Visibility = Visibility.Visible;
+            }
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        ///  Handles the back button click event and hides the current UserControl
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            this.Visibility = Visibility.Hidden;
+
+        }
     }
 }
