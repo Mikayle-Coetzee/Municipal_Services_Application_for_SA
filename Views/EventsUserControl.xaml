@@ -51,9 +51,9 @@
                         <Grid Grid.Row="1">
 
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0.5*" />
+                                <ColumnDefinition Width="200*" />
                                 <!-- Left: Locations -->
-                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="606*" />
                                 <!-- Middle: Events -->
                                 <ColumnDefinition Width="Auto" />
                                 <!-- Right: Add Event -->
@@ -63,22 +63,39 @@
                                 <ImageBrush ImageSource="/Images/Backgrounds/event_background.png"/>
                             </Grid.Background>
 
-                            <StackPanel Grid.Column="0" Margin="10,10,10,10" Background="{DynamicResource darkestSolidColorBrush}">
-                                <Button x:Name="viewByArea" Background="{DynamicResource greenSolidColorBrush}"  Content="View Posts By Area" Margin="5" VerticalAlignment="Top" FontSize="14" FontWeight="Bold"  Foreground="{DynamicResource darkestSolidColorBrush}" Click="viewByArea_Click"  />
+                            <Border Grid.Column="0" Margin="10,10,10,10" Background="{DynamicResource darkestSolidColorBrush}" CornerRadius="15">
+                                <StackPanel Margin="10">
+                                    <Button x:Name="viewByArea"  
+                                            
+                Content="All Areas" Margin="5" VerticalAlignment="Top" FontSize="14" 
+              
+                Click="viewByArea_Click"                                                 Style="{StaticResource RoundedButtonStyleMain}" FontWeight="Bold" 
+ />
 
-                                <StackPanel x:Name="venueButtonsPanel"  Background="{DynamicResource darkSolidColorBrush}" Visibility="Collapsed"  >
 
-                                    <Button Content="View All" Margin="5" Click="ViewAllEvents_Click" VerticalAlignment="Top" />
-                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                        <WrapPanel x:Name="LocationWrapPanel" Orientation="Vertical" >
-                                        </WrapPanel>
-                                    </ScrollViewer>
 
+                                    <Border x:Name="venueButtonsPanel" Visibility="Visible" Background="{DynamicResource darkSolidColorBrush}" CornerRadius="10">
+
+                                        <StackPanel>
+                                            <Button Content="View All" 
+                                                Style="{StaticResource RoundedButtonStyle}" 
+                                                Margin="5" 
+                                                VerticalAlignment="Top" 
+                                                 Click="ViewAllEvents_Click"/>
+
+                                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                                <WrapPanel x:Name="LocationWrapPanel" Orientation="Vertical" SizeChanged="LocationWrapPanel_SizeChanged">
+                                                </WrapPanel>
+                                            </ScrollViewer>
+                                        </StackPanel>
+                                    </Border>
+                                    <Button x:Name="btnAddEvent" 
+                Content="Create Post" Margin="5" VerticalAlignment="Top" FontSize="14" 
+                FontWeight="Bold"
+                Click="btnAddEvent_Click"  Style="{StaticResource RoundedButtonStyleMain}"/>
                                 </StackPanel>
+                            </Border>
 
-                                <Button x:Name="btnAddEvent" Background="{DynamicResource greenSolidColorBrush}"  Content="Create New Post" Margin="5" VerticalAlignment="Top" FontSize="14" FontWeight="Bold"  Foreground="{DynamicResource darkestSolidColorBrush}" Click="btnAddEvent_Click" />
-
-                            </StackPanel>
 
                             <StackPanel Grid.Column="1" Margin="10,10,10,10">
                                 <Grid >
@@ -101,7 +118,7 @@
 
                                         <Button x:Name="btnSearch" 
                                                 Style="{StaticResource PlainButtonDark}"
-                                                ToolTip="Enter something and search" Width="20" >
+                                                ToolTip="Enter something and search" Width="20" Click="btnSearch_Click" >
                                             <fa:IconImage Icon="Search"
                                                            Style="{StaticResource iconInIconButtonLight}"
                                                            Height="19" Width="20" 
@@ -129,182 +146,188 @@
 
                             </StackPanel>
 
-                            <StackPanel x:Name="createPostPanel" Grid.Column="2" Margin="10,10,10,10" Background="{DynamicResource darkestSolidColorBrush}" Visibility="Visible">
-                                <TextBlock Text="Create New Post" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,0,0,20"  Foreground="{DynamicResource greenSolidColorBrush}" />
+                            <Border x:Name="createPostPanel" Visibility="Visible" CornerRadius="15" Margin="10,10,10,10" Grid.Column="2" Background="{DynamicResource darkestSolidColorBrush}">
 
-                                <Grid x:Name="typeAndCategoryPanel" Margin="0,0,0,10">
+                                <StackPanel  Grid.Column="2" Margin="10,10,10,10" >
+                                    <TextBlock Text="Create New Post" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,0,0,20"  Foreground="{DynamicResource greenSolidColorBrush}" />
 
-                                    <StackPanel Orientation="Horizontal" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                                    <Grid x:Name="typeAndCategoryPanel" Margin="0,0,0,10">
 
-                                        <TextBlock Text="Type "  FontWeight="Bold" Foreground="White" VerticalAlignment="Top" Margin="0,3,10,0"/>
-                                        <ComboBox x:Name="cmbType" Width="100"  Style="{DynamicResource ComboBoxFlatStyle}"
+                                        <StackPanel Orientation="Horizontal" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" >
+
+                                            <TextBlock Text="Type "  FontWeight="Bold" Foreground="White" VerticalAlignment="Top" Margin="0,3,10,0"/>
+                                            <ComboBox x:Name="cmbType" Width="100"  Style="{DynamicResource ComboBoxFlatStyle}"
                                                      Background="{x:Null}"
                                                                VerticalAlignment="Top" 
                                                                ScrollViewer.CanContentScroll="False" 
                                                                VerticalContentAlignment="Center">
-                                            <ComboBoxItem Content="Event" IsSelected="True"/>
-                                            <ComboBoxItem Content="Announcement" />
-                                        </ComboBox>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="10,0,10,10" HorizontalAlignment="Right" VerticalAlignment="Top" >
-                                        <TextBlock Text="Category:" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" />
+                                                <ComboBoxItem Content="Event" IsSelected="True"/>
+                                                <ComboBoxItem Content="Announcement" />
+                                            </ComboBox>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="10,0,10,10" HorizontalAlignment="Right" VerticalAlignment="Top" >
+                                            <TextBlock Text="Category:" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" />
 
-                                        <ComboBox x:Name="cmbCategory" Width="100" 
+                                            <ComboBox x:Name="cmbCategory" Width="100" 
                                                      VerticalAlignment="Center" 
                                                    Style="{DynamicResource ComboBoxFlatStyle}"
                                                     Background="{x:Null}"
                                                       ScrollViewer.CanContentScroll="False" 
                                                       VerticalContentAlignment="Center">
-                                            <ComboBoxItem Content="Music" IsSelected="True"/>
-                                            <ComboBoxItem Content="Art" />
-                                            <ComboBoxItem Content="Theater" />
-                                            <ComboBoxItem Content="Sports" />
-                                            <ComboBoxItem Content="Networking" />
-                                            <ComboBoxItem Content="Other" />
-                                        </ComboBox>
-                                    </StackPanel>
-                                </Grid>
-                                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                    <StackPanel>
-                                        <Grid  Margin="10,0,0,0" >
-                                            <TextBlock Text="Title "  FontWeight="Bold" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                            <TextBox x:Name="EventTitle" TextWrapping="Wrap" Background="{x:Null}" 
+                                                <ComboBoxItem Content="Music" IsSelected="True"/>
+                                                <ComboBoxItem Content="Art" />
+                                                <ComboBoxItem Content="Theater" />
+                                                <ComboBoxItem Content="Sports" />
+                                                <ComboBoxItem Content="Networking" />
+                                                <ComboBoxItem Content="Other" />
+                                            </ComboBox>
+                                        </StackPanel>
+                                    </Grid>
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <StackPanel>
+                                            <Grid  Margin="10,0,0,0" >
+                                                <TextBlock Text="Title "  FontWeight="Bold" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                                <TextBox x:Name="EventTitle" TextWrapping="Wrap" Background="{x:Null}" 
                                                         BorderBrush="{DynamicResource greenSolidColorBrush}" 
                                                         Foreground="White" SelectionTextBrush="Gainsboro"
                                                         BorderThickness="1,1,1,1" FontSize="16" Margin="68,0,10,10"/>
-                                        </Grid>
+                                            </Grid>
 
-                                        <Grid Margin="10,0,0,0" Width="342" >
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition Width="Auto" MinWidth="108.64" />
-                                                <ColumnDefinition Width="Auto" MinWidth="53.64" />
-                                                <ColumnDefinition Width="Auto" MinWidth="98" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Text="Start Date" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Height="16"  Grid.Column="0" Width="57" Margin="0,4,0,0"/>
-                                            <DatePicker x:Name="EventDate" Margin="5,0,2,10" Grid.Column="1" SelectedDate="2024-01-01"  />
-                                            <TextBlock Text="End Date" FontWeight="Bold" Foreground="White" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,4,0,0" Height="16" Width="51"   />
-                                            <DatePicker x:Name="EndDate"  Grid.Column="3"  Margin="5,0,10,10" SelectedDate="2024-01-01" />
-                                        </Grid>
+                                            <Grid Margin="10,0,0,0" Width="342" >
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="Auto" MinWidth="108.64" />
+                                                    <ColumnDefinition Width="Auto" MinWidth="53.64" />
+                                                    <ColumnDefinition Width="Auto" MinWidth="98" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="Start Date" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Height="16"  Grid.Column="0" Width="57" Margin="0,4,0,0"/>
+                                                <DatePicker x:Name="EventDate" Margin="5,0,2,10" Grid.Column="1" SelectedDate="2024-01-01"  />
+                                                <TextBlock Text="End Date" FontWeight="Bold" Foreground="White" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,4,0,0" Height="16" Width="51"   />
+                                                <DatePicker x:Name="EndDate"  Grid.Column="3"  Margin="5,0,10,10" SelectedDate="2024-01-01" />
+                                            </Grid>
 
-                                        <StackPanel Orientation="Horizontal"  Margin="10,0,0,0" >
-                                            <TextBlock Text="Start Time " FontWeight="Bold" Foreground="White"/>
-                                            <StackPanel Orientation="Horizontal" Margin="6,0,0,10">
-                                                <!-- Hour ComboBox -->
-                                                <ComboBox x:Name="cmbHour" Width="50" VerticalAlignment="Center" Margin="0,0,5,0" Style="{DynamicResource ComboBoxFlatStyle}"
+                                            <StackPanel Orientation="Horizontal"  Margin="10,0,0,0" >
+                                                <TextBlock Text="Start Time " FontWeight="Bold" Foreground="White"/>
+                                                <StackPanel Orientation="Horizontal" Margin="6,0,0,10">
+                                                    <!-- Hour ComboBox -->
+                                                    <ComboBox x:Name="cmbHour" Width="50" VerticalAlignment="Center" Margin="0,0,5,0" Style="{DynamicResource ComboBoxFlatStyle}"
                                                              Background="{x:Null}">
-                                                    <ComboBoxItem Content="12" IsSelected="True" />
-                                                    <ComboBoxItem Content="1" />
-                                                    <ComboBoxItem Content="2" />
-                                                    <ComboBoxItem Content="3" />
-                                                    <ComboBoxItem Content="4" />
-                                                    <ComboBoxItem Content="5" />
-                                                    <ComboBoxItem Content="6" />
-                                                    <ComboBoxItem Content="7" />
-                                                    <ComboBoxItem Content="8" />
-                                                    <ComboBoxItem Content="9" />
-                                                    <ComboBoxItem Content="10" />
-                                                    <ComboBoxItem Content="11" />
-                                                </ComboBox>
+                                                        <ComboBoxItem Content="12" IsSelected="True" />
+                                                        <ComboBoxItem Content="1" />
+                                                        <ComboBoxItem Content="2" />
+                                                        <ComboBoxItem Content="3" />
+                                                        <ComboBoxItem Content="4" />
+                                                        <ComboBoxItem Content="5" />
+                                                        <ComboBoxItem Content="6" />
+                                                        <ComboBoxItem Content="7" />
+                                                        <ComboBoxItem Content="8" />
+                                                        <ComboBoxItem Content="9" />
+                                                        <ComboBoxItem Content="10" />
+                                                        <ComboBoxItem Content="11" />
+                                                    </ComboBox>
 
-                                                <!-- Minute ComboBox -->
-                                                <ComboBox x:Name="cmbMinute" Width="50" VerticalAlignment="Center" Margin="0,0,5,0" Style="{DynamicResource ComboBoxFlatStyle}"
+                                                    <!-- Minute ComboBox -->
+                                                    <ComboBox x:Name="cmbMinute" Width="50" VerticalAlignment="Center" Margin="0,0,5,0" Style="{DynamicResource ComboBoxFlatStyle}"
                                                                 Background="{x:Null}">
-                                                    <ComboBoxItem Content="00" IsSelected="True" />
-                                                    <ComboBoxItem Content="05" />
-                                                    <ComboBoxItem Content="10" />
-                                                    <ComboBoxItem Content="15" />
-                                                    <ComboBoxItem Content="20" />
-                                                    <ComboBoxItem Content="25" />
-                                                    <ComboBoxItem Content="30" />
-                                                    <ComboBoxItem Content="35" />
-                                                    <ComboBoxItem Content="40" />
-                                                    <ComboBoxItem Content="45" />
-                                                    <ComboBoxItem Content="50" />
-                                                    <ComboBoxItem Content="55" />
-                                                </ComboBox>
+                                                        <ComboBoxItem Content="00" IsSelected="True" />
+                                                        <ComboBoxItem Content="05" />
+                                                        <ComboBoxItem Content="10" />
+                                                        <ComboBoxItem Content="15" />
+                                                        <ComboBoxItem Content="20" />
+                                                        <ComboBoxItem Content="25" />
+                                                        <ComboBoxItem Content="30" />
+                                                        <ComboBoxItem Content="35" />
+                                                        <ComboBoxItem Content="40" />
+                                                        <ComboBoxItem Content="45" />
+                                                        <ComboBoxItem Content="50" />
+                                                        <ComboBoxItem Content="55" />
+                                                    </ComboBox>
 
-                                                <!-- AM/PM ComboBox -->
-                                                <ComboBox x:Name="cmbAmPm" Width="60" VerticalAlignment="Center" Style="{DynamicResource ComboBoxFlatStyle}"
+                                                    <!-- AM/PM ComboBox -->
+                                                    <ComboBox x:Name="cmbAmPm" Width="60" VerticalAlignment="Center" Style="{DynamicResource ComboBoxFlatStyle}"
                                                         Background="{x:Null}">
-                                                    <ComboBoxItem Content="AM" IsSelected="True"  />
-                                                    <ComboBoxItem Content="PM" />
-                                                </ComboBox>
+                                                        <ComboBoxItem Content="AM" IsSelected="True"  />
+                                                        <ComboBoxItem Content="PM" />
+                                                    </ComboBox>
+                                                </StackPanel>
                                             </StackPanel>
-                                        </StackPanel>
 
-                                        <StackPanel Orientation="Horizontal"  Margin="10,0,0,0" >
-                                            <TextBlock Text="Duration" FontWeight="Bold" Foreground="White" />
-                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                                <!-- Hour ComboBox -->
-                                                <ComboBox x:Name="cmbHourDuration" Width="50" VerticalAlignment="Center" Margin="17,0,5,0" Style="{DynamicResource ComboBoxFlatStyle}"
+                                            <StackPanel Orientation="Horizontal"  Margin="10,0,0,0" >
+                                                <TextBlock Text="Duration" FontWeight="Bold" Foreground="White" />
+                                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                                    <!-- Hour ComboBox -->
+                                                    <ComboBox x:Name="cmbHourDuration" Width="50" VerticalAlignment="Center" Margin="17,0,5,0" Style="{DynamicResource ComboBoxFlatStyle}"
                                                     Background="{x:Null}">
-                                                    <ComboBoxItem Content="1" IsSelected="True" />
-                                                    <ComboBoxItem Content="2" />
-                                                    <ComboBoxItem Content="3" />
-                                                    <ComboBoxItem Content="4" />
-                                                    <ComboBoxItem Content="5" />
-                                                    <ComboBoxItem Content="6" />
-                                                    <ComboBoxItem Content="7" />
-                                                    <ComboBoxItem Content="8" />
-                                                    <ComboBoxItem Content="9" />
-                                                    <ComboBoxItem Content="10" />
-                                                    <ComboBoxItem Content="11" />
-                                                    <ComboBoxItem Content="12" />
-                                                </ComboBox>
+                                                        <ComboBoxItem Content="1" IsSelected="True" />
+                                                        <ComboBoxItem Content="2" />
+                                                        <ComboBoxItem Content="3" />
+                                                        <ComboBoxItem Content="4" />
+                                                        <ComboBoxItem Content="5" />
+                                                        <ComboBoxItem Content="6" />
+                                                        <ComboBoxItem Content="7" />
+                                                        <ComboBoxItem Content="8" />
+                                                        <ComboBoxItem Content="9" />
+                                                        <ComboBoxItem Content="10" />
+                                                        <ComboBoxItem Content="11" />
+                                                        <ComboBoxItem Content="12" />
+                                                    </ComboBox>
 
-                                                <!-- Minute ComboBox -->
-                                                <ComboBox x:Name="cmbMinuteDuration" Width="50" VerticalAlignment="Center" Margin="0,0,5,0" Style="{DynamicResource ComboBoxFlatStyle}"
+                                                    <!-- Minute ComboBox -->
+                                                    <ComboBox x:Name="cmbMinuteDuration" Width="50" VerticalAlignment="Center" Margin="0,0,5,0" Style="{DynamicResource ComboBoxFlatStyle}"
                                                     Background="{x:Null}">
-                                                    <ComboBoxItem Content="00" IsSelected="True" />
-                                                    <ComboBoxItem Content="05" />
-                                                    <ComboBoxItem Content="10" />
-                                                    <ComboBoxItem Content="15" />
-                                                    <ComboBoxItem Content="20" />
-                                                    <ComboBoxItem Content="25" />
-                                                    <ComboBoxItem Content="30" />
-                                                    <ComboBoxItem Content="35" />
-                                                    <ComboBoxItem Content="40" />
-                                                    <ComboBoxItem Content="45" />
-                                                    <ComboBoxItem Content="50" />
-                                                    <ComboBoxItem Content="55" />
-                                                </ComboBox>
+                                                        <ComboBoxItem Content="00" IsSelected="True" />
+                                                        <ComboBoxItem Content="05" />
+                                                        <ComboBoxItem Content="10" />
+                                                        <ComboBoxItem Content="15" />
+                                                        <ComboBoxItem Content="20" />
+                                                        <ComboBoxItem Content="25" />
+                                                        <ComboBoxItem Content="30" />
+                                                        <ComboBoxItem Content="35" />
+                                                        <ComboBoxItem Content="40" />
+                                                        <ComboBoxItem Content="45" />
+                                                        <ComboBoxItem Content="50" />
+                                                        <ComboBoxItem Content="55" />
+                                                    </ComboBox>
+                                                </StackPanel>
                                             </StackPanel>
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal"  Margin="10,0,0,0" >
-                                            <TextBlock Text="City/Area " FontWeight="Bold" Foreground="White" />
-                                            <TextBox x:Name="EventLocation" Width="267" Margin="10,0,0,10" Background="{x:Null}" 
+                                            <StackPanel Orientation="Horizontal"  Margin="10,0,0,0" >
+                                                <TextBlock Text="City/Area " FontWeight="Bold" Foreground="White" />
+                                                <TextBox x:Name="EventLocation" Width="267" Margin="10,0,0,10" Background="{x:Null}" 
                                                         BorderBrush="{DynamicResource greenSolidColorBrush}" 
                                                         Foreground="White" SelectionTextBrush="Gainsboro"
                                                         BorderThickness="1,1,1,1" FontSize="16"/>
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal"  Margin="10,0,0,0" >
-                                            <TextBlock Text="Venue" FontWeight="Bold" Foreground="White" />
-                                            <TextBox x:Name="EventVenue" Width="267" Margin="32,0,0,10" Background="{x:Null}" 
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal"  Margin="10,0,0,0" >
+                                                <TextBlock Text="Venue" FontWeight="Bold" Foreground="White" />
+                                                <TextBox x:Name="EventVenue" Width="267" Margin="32,0,0,10" Background="{x:Null}" 
                                                     BorderBrush="{DynamicResource greenSolidColorBrush}" 
                                                     Foreground="White" SelectionTextBrush="Gainsboro"
                                                     BorderThickness="1,1,1,1" FontSize="16"/>
-                                        </StackPanel>
-                                        <TextBlock Text="Description" FontWeight="Bold" Foreground="White"  Margin="10,0,0,5" />
-                                        <TextBox x:Name="EventDescription" Width="330" Height="100" Background="{x:Null}" 
+                                            </StackPanel>
+                                            <TextBlock Text="Description" FontWeight="Bold" Foreground="White"  Margin="10,0,0,5" />
+                                            <TextBox x:Name="EventDescription" Width="330" Height="100" Background="{x:Null}" 
                                                     BorderBrush="{DynamicResource greenSolidColorBrush}" 
                                                     Foreground="White" SelectionTextBrush="Gainsboro"
                                                     BorderThickness="1,1,1,1" FontSize="16" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
 
-                                        <TextBlock Text="Media Attachments" FontWeight="Bold" Foreground="White"  Margin="10,0,0,0" />
-                                        <Button x:Name="AddMediaButton" Content="Add Media" Width="200" Margin="0,0,0,10" Click="AddMedia_Click"/>
+                                            <TextBlock Text="Media Attachments" FontWeight="Bold" Foreground="White"  Margin="10,0,0,0" />
+                                            <Button x:Name="AddMediaButton" Content="Add Media" Width="200" Margin="0,0,0,10" Click="AddMedia_Click"/>
 
-                                        <ListBox x:Name="MediaList" Width="200" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+                                            <ListBox x:Name="MediaList" Width="200" d:ItemsSource="{d:SampleData ItemCount=2}"/>
 
-                                        <Button x:Name="RemoveMediaButton" Content="Remove Selected Media" Width="200" Margin="0,0,0,10" Click="RemoveMedia_Click"/>
+                                            <Button x:Name="RemoveMediaButton" Content="Remove Selected Media" Width="200" Margin="0,0,0,10" Click="RemoveMedia_Click"/>
 
-                                        <Button x:Name="SubmitEventButton" Content="Post" Width="200" Margin="10" Click="SubmitEventButton_Click"/>
+                                            <StackPanel Orientation="Horizontal">
+                                               <Button x:Name="SubmitEventButton" Content="Post" Width="100" Margin="10" Click="SubmitEventButton_Click"/>
 
-                                        <Button Content="Cancle" Width="200" Margin="10" Click="SubmitEventButton_Click"/>
-
-                                    </StackPanel>
-                                </ScrollViewer>
-                            </StackPanel>
+                                            <Button Content="Cancle" Width="100" Margin="10" Click="SubmitEventButton_Click"/>
+ 
+                                            </StackPanel>
+                                            
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </StackPanel>
+                            </Border>
                         </Grid>
                     </Grid>
                 </Border>
@@ -312,6 +335,7 @@
             </Grid>
 
         </Border>
+        
         <Button x:Name="btnBack" 
             Margin="0,20,43,0" 
             Style="{StaticResource PlainButtonDark}"

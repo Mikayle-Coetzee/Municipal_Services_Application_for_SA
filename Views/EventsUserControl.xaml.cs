@@ -66,20 +66,29 @@ namespace PROG7312_ST10023767.Views
             {
                 foreach (var ev in locationEvents[selectedLocation])
                 {
+                    bool isEvent = ev.Type == "Event";
 
-                    StackPanel eventPanel = new StackPanel { Margin = new Thickness(5), Background = new SolidColorBrush(Color.FromRgb(255, 215, 215)) };
+                    // Create a Border for rounded corners
+                    Border eventBorder = new Border
+                    {
+                        CornerRadius = new CornerRadius(15),  
+                        Margin = new Thickness(5),
+                        Background = (Brush)Application.Current.FindResource(isEvent ? "greenSolidColorBrush" : "offWhiteSolidColorBrush")
+                    };
 
-                     Grid horizontalGrid = new Grid();
+                     StackPanel eventPanel = new StackPanel();
+
+                    Grid horizontalGrid = new Grid();
                     horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition());
-                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }); // Spacer column
+                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });  
                     horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
-                     Image eventTypeImage = new Image { Width = 30, Height = 30, Stretch = Stretch.Fill };
+                    Image eventTypeImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill };
                     LoadImage(GetImagePath(ev.Type), eventTypeImage);
                     Grid.SetColumn(eventTypeImage, 0);
                     horizontalGrid.Children.Add(eventTypeImage);
 
-                     TextBlock eventInfo = new TextBlock
+                    TextBlock eventInfo = new TextBlock
                     {
                         Text = $"Starts {ev.Time}: {ev.Date}",
                         Margin = new Thickness(5, 6, 0, 5),
@@ -89,14 +98,14 @@ namespace PROG7312_ST10023767.Views
                     Grid.SetColumn(eventInfo, 1);
                     horizontalGrid.Children.Add(eventInfo);
 
-                     Image categoryImage = new Image { Width = 30, Height = 30, Stretch = Stretch.Fill };
+                    Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill };
                     LoadImage(GetImagePathCategory(ev.Category), categoryImage);
                     Grid.SetColumn(categoryImage, 2);
                     horizontalGrid.Children.Add(categoryImage);
 
                     eventPanel.Children.Add(horizontalGrid);
 
-                     TextBlock eventTitle = new TextBlock
+                    TextBlock eventTitle = new TextBlock
                     {
                         Text = ev.Title,
                         Margin = new Thickness(2, 5, 0, 5),
@@ -121,7 +130,7 @@ namespace PROG7312_ST10023767.Views
                     };
                     eventPanel.Children.Add(eventLocation);
 
-                     if (ev.MediaFiles != null && ev.MediaFiles.Count > 0)
+                    if (ev.MediaFiles != null && ev.MediaFiles.Count > 0)
                     {
                         TextBlock mediaBlock = new TextBlock
                         {
@@ -138,20 +147,21 @@ namespace PROG7312_ST10023767.Views
                             {
                                 Text = media.FileName,
                                 Margin = new Thickness(20, 0, 0, 5),
-                                Tag = media.FileContent  
+                                Tag = media.FileContent
                             };
-
 
                             mediaItem.MouseDown += MediaItem_MouseDown;
                             eventPanel.Children.Add(mediaItem);
-
                         }
                     }
 
-                    EventsList.Items.Add(eventPanel);
+                    // Add the StackPanel to the Border
+                    eventBorder.Child = eventPanel;
 
-
+                    // Finally, add the Border to the EventsList
+                    EventsList.Items.Add(eventBorder);
                 }
+
             }
         }
 
@@ -396,10 +406,18 @@ namespace PROG7312_ST10023767.Views
                 Button locationButton = new Button
                 {
                     Content = location,
-                    Width = 100,
-                    Margin = new Thickness(5)
+                    Margin = new Thickness(5),
+                    Style = (Style)FindResource("RoundedButtonStyle"),
+                    VerticalAlignment = VerticalAlignment.Top,
+                    HorizontalContentAlignment = HorizontalAlignment.Stretch // Aligns the content to the left
                 };
+
+                // Attach the Click event handler
                 locationButton.Click += LocationButton_Click;
+
+                // Set the width of the button dynamically based on the available space in the WrapPanel
+                locationButton.Width = LocationWrapPanel.ActualWidth - 10; // Adjust the margin or padding as needed
+
                 LocationWrapPanel.Children.Add(locationButton);
             }
 
@@ -431,6 +449,19 @@ namespace PROG7312_ST10023767.Views
 
 
             MessageBox.Show("Event submitted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+
+        private void LocationWrapPanel_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // Loop through each button in the WrapPanel and resize them
+            foreach (UIElement child in LocationWrapPanel.Children)
+            {
+                if (child is Button button)
+                {
+                    button.Width = LocationWrapPanel.ActualWidth - 10; // Adjust based on margin or padding
+                }
+            }
         }
 
         private void cmbFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -482,20 +513,30 @@ namespace PROG7312_ST10023767.Views
 
                 foreach (var ev in eventsToDisplay)
                 {
+                    bool isEvent = ev.Type == "Event";
 
-                    StackPanel eventPanel = new StackPanel { Margin = new Thickness(5), Background = new SolidColorBrush(Color.FromRgb(255, 215, 215)) };
+                    // Create a Border for rounded corners
+                    Border eventBorder = new Border
+                    {
+                        CornerRadius = new CornerRadius(15), // Set corner radius
+                        Margin = new Thickness(5),
+                        Background = (Brush)Application.Current.FindResource(isEvent ? "greenSolidColorBrush" : "offWhiteSolidColorBrush")
+                    };
 
-                     Grid horizontalGrid = new Grid();
+                    // Create a StackPanel inside the Border
+                    StackPanel eventPanel = new StackPanel();
+
+                    Grid horizontalGrid = new Grid();
                     horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition());
                     horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }); // Spacer column
                     horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
-                     Image eventTypeImage = new Image { Width = 30, Height = 30, Stretch = Stretch.Fill };
+                    Image eventTypeImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill };
                     LoadImage(GetImagePath(ev.Type), eventTypeImage);
                     Grid.SetColumn(eventTypeImage, 0);
                     horizontalGrid.Children.Add(eventTypeImage);
 
-                     TextBlock eventInfo = new TextBlock
+                    TextBlock eventInfo = new TextBlock
                     {
                         Text = $"Starts {ev.Time}: {ev.Date}",
                         Margin = new Thickness(5, 6, 0, 5),
@@ -505,14 +546,14 @@ namespace PROG7312_ST10023767.Views
                     Grid.SetColumn(eventInfo, 1);
                     horizontalGrid.Children.Add(eventInfo);
 
-                     Image categoryImage = new Image { Width = 30, Height = 30, Stretch = Stretch.Fill };
+                    Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill };
                     LoadImage(GetImagePathCategory(ev.Category), categoryImage);
                     Grid.SetColumn(categoryImage, 2);
                     horizontalGrid.Children.Add(categoryImage);
 
                     eventPanel.Children.Add(horizontalGrid);
 
-                     TextBlock eventTitle = new TextBlock
+                    TextBlock eventTitle = new TextBlock
                     {
                         Text = ev.Title,
                         Margin = new Thickness(2, 5, 0, 5),
@@ -537,7 +578,7 @@ namespace PROG7312_ST10023767.Views
                     };
                     eventPanel.Children.Add(eventLocation);
 
-                     if (ev.MediaFiles != null && ev.MediaFiles.Count > 0)
+                    if (ev.MediaFiles != null && ev.MediaFiles.Count > 0)
                     {
                         TextBlock mediaBlock = new TextBlock
                         {
@@ -554,21 +595,19 @@ namespace PROG7312_ST10023767.Views
                             {
                                 Text = media.FileName,
                                 Margin = new Thickness(20, 0, 0, 5),
-                                Tag = media.FileContent   
+                                Tag = media.FileContent
                             };
-
 
                             mediaItem.MouseDown += MediaItem_MouseDown;
                             eventPanel.Children.Add(mediaItem);
-
                         }
                     }
 
-                    EventsList.Items.Add(eventPanel);
+                    // Add the StackPanel to the Border
+                    eventBorder.Child = eventPanel;
 
-
-
-
+                    // Finally, add the Border to the EventsList
+                    EventsList.Items.Add(eventBorder);
                 }
             }
         }
@@ -605,6 +644,12 @@ namespace PROG7312_ST10023767.Views
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
             this.Visibility = Visibility.Hidden;
+
+        }
+
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            string searchText = txbSearch.Text;
 
         }
     }
