@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.Windows.Controls.Primitives;
+using System.Collections;
 
 namespace PROG7312_ST10023767.Views
 {
@@ -27,6 +28,7 @@ namespace PROG7312_ST10023767.Views
         // Dictionary to store events sorted by location
         private SortedDictionary<string, List<EventClass>> locationEvents = new SortedDictionary<string, List<EventClass>>();
         private Stack<MediaFileClass> mediaAttachments = new Stack<MediaFileClass>();
+        private Dictionary<string, List<string>> userSearchHistory = new Dictionary<string, List<string>>();
 
         public EventsUserControl()
         {
@@ -62,7 +64,7 @@ namespace PROG7312_ST10023767.Views
                     datePicker.SelectedDate = DateTime.Now; 
                 }
             }
-        
+
 
         private void LocationButton_Click(object sender, RoutedEventArgs e)
         {
@@ -77,154 +79,12 @@ namespace PROG7312_ST10023767.Views
 
             if (locationEvents.ContainsKey(selectedLocation))
             {
-                foreach (var ev in locationEvents[selectedLocation])
+                if (locationEvents[selectedLocation].Count == 0)
                 {
-                    bool isEvent = ev.Type == "Event";
-                    string status;
-                    
-
-                    Border statusBorder = new Border
-                    {
-                        CornerRadius = new CornerRadius(15),
-                        Height = 5,
-                        Margin = new Thickness(7, 0, 7, 0)
-                    };
-
-                    DateTime currentDateTime = DateTime.Now;
-
-                    DateTime startDateTime;
-                    DateTime endDateTime;
-                    if (DateTime.TryParse(ev.StartDate, out startDateTime) &&
-                        DateTime.TryParse(ev.EndDate, out endDateTime))
-                    {
-                        endDateTime = endDateTime.Date.AddDays(1).AddTicks(-1);
-
-                        if (currentDateTime >= startDateTime && currentDateTime <= endDateTime)
-                        {
-                            // Status is busy
-                            status = "busy";
-                            statusBorder.Background = (Brush)Application.Current.FindResource("busySolidColorBrush");
-                        }
-                        else if (currentDateTime > endDateTime) // Past end date
-                        {
-                            // Status is past
-                            status = "past";
-                            statusBorder.Background = (Brush)Application.Current.FindResource("pastSolidColorBrush");
-                        }
-                        else
-                        {
-                            // Status is upcoming
-                            status = "upcoming";
-                            statusBorder.Background = (Brush)Application.Current.FindResource("upcomingSolidColorBrush");
-                        }
-                    }
-                    else
-                    {
-
-                        status = "unknown";
-                        statusBorder.Background = (Brush)Application.Current.FindResource("defaultSolidColorBrush");
-                        Console.WriteLine($"Failed to parse dates for event: {ev.Title}, StartDate: {ev.StartDate}, EndDate: {ev.EndDate}");
-                    }
-
-
-
-                    // Create a Border for rounded corners
-                    Border eventBorder = new Border
-                    {
-                        CornerRadius = new CornerRadius(15),  
-                        Margin = new Thickness(5),
-                        Background = (Brush)Application.Current.FindResource(isEvent ? "greenSolidColorBrush" : "offWhiteSolidColorBrush")
-                    };
-
-                     StackPanel eventPanel = new StackPanel();
-                    eventPanel.Children.Add(statusBorder);
-
-                    Grid horizontalGrid = new Grid();
-                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
-                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });  
-                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
-
-                    Image eventTypeImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill , Margin = new Thickness(5)};
-                    LoadImage(GetImagePath(ev.Type), eventTypeImage);
-                    Grid.SetColumn(eventTypeImage, 0);
-                    horizontalGrid.Children.Add(eventTypeImage);
-
-                    TextBlock eventInfo = new TextBlock
-                    {
-                        Text = $"{ev.StartTime}: {ev.StartDate} - {ev.EndTime}: {ev.EndDate}",
-                        Margin = new Thickness(0,15,0,5),
-                        TextWrapping = TextWrapping.Wrap,
-                        HorizontalAlignment = HorizontalAlignment.Center,
-                        TextAlignment = TextAlignment.Center,
-                        MinWidth = 800,
-                        Width = 800
-                    };
-                    Grid.SetColumn(eventInfo, 1);
-                    horizontalGrid.Children.Add(eventInfo);
-
-                    Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill , Margin = new Thickness(5) };
-                    LoadImage(GetImagePathCategory(ev.Category), categoryImage);
-                    Grid.SetColumn(categoryImage, 2);
-                    horizontalGrid.Children.Add(categoryImage);
-
-                    eventPanel.Children.Add(horizontalGrid);
-
-                    TextBlock eventTitle = new TextBlock
-                    {
-                        Text = "Title: " + ev.Title,
-                        Margin = new Thickness(5, 5, 0, 5),
-                        FontWeight = FontWeights.Bold
-                    };
-                    eventPanel.Children.Add(eventTitle);
-
-                    TextBlock eventDescription = new TextBlock
-                    {
-                        Text = "Description: " +  ev.Description,
-                        Margin = new Thickness(5, 5, 0, 5),
-                        TextWrapping = TextWrapping.Wrap
-                    };
-                    eventPanel.Children.Add(eventDescription);
-
-                    TextBlock eventVenue = new TextBlock
-                    {
-                        Text = $"Venue: {ev.Venue}",
-                        Margin = new Thickness(5, 5, 0, 5),
-                        FontWeight = FontWeights.Bold
-                    };
-                    eventPanel.Children.Add(eventVenue);
-
-                    if (ev.MediaFiles != null && ev.MediaFiles.Count > 0)
-                    {
-                        TextBlock mediaBlock = new TextBlock
-                        {
-                            Text = "Media Files:",
-                            FontWeight = FontWeights.Bold,
-                            Margin = new Thickness(0, 10, 0, 5)
-                        };
-
-                        eventPanel.Children.Add(mediaBlock);
-
-                        foreach (var media in ev.MediaFiles)
-                        {
-                            TextBlock mediaItem = new TextBlock
-                            {
-                                Text = media.FileName,
-                                Margin = new Thickness(20, 0, 0, 5),
-                                Tag = media.FileContent
-                            };
-
-                            mediaItem.MouseDown += MediaItem_MouseDown;
-                            eventPanel.Children.Add(mediaItem);
-                        }
-                    }
-
-                    // Add the StackPanel to the Border
-                    eventBorder.Child = eventPanel;
-
-                    // Finally, add the Border to the EventsList
-                    EventsList.Items.Add(eventBorder);
+                    NoPostsMessageBox("No Posts Posted Yet", "Be a champ in your community by clicking on the 'Create Post' and posting first!");
+                    return;
                 }
-
+                UpdateEventsList(locationEvents[selectedLocation]);
             }
         }
 
@@ -480,6 +340,7 @@ namespace PROG7312_ST10023767.Views
 
             if (!locationEvents.ContainsKey(location))
             {
+                venueButtonsPanel.Visibility = Visibility.Visible;
                 LocationWrapPanel.Visibility = Visibility.Visible;
 
                 locationEvents[location] = new List<EventClass>();
@@ -495,8 +356,12 @@ namespace PROG7312_ST10023767.Views
                 // Attach the Click event handler
                 locationButton.Click += LocationButton_Click;
 
+
                 // Set the width of the button dynamically based on the available space in the WrapPanel
+                if(LocationWrapPanel.ActualWidth != 0)
+                {
                 locationButton.Width = LocationWrapPanel.ActualWidth - 10; // Adjust the margin or padding as needed
+                }
 
                 LocationWrapPanel.Children.Add(locationButton);
             }
@@ -605,6 +470,12 @@ namespace PROG7312_ST10023767.Views
                 eventsToDisplay = eventsToDisplay.Where(item => currentDateTime >= DateTime.Parse(item.StartDate) && currentDateTime <= DateTime.Parse(item.EndDate).Date.AddDays(1).AddTicks(-1)).ToList();
             }
 
+            if (eventsToDisplay.Count == 0)
+            {
+                NoPostsMessageBox("No Posts Matching That Filter Request", "Unfortunatley there is no posts that match your filtering requests, feel free to add more posts or apply a different filter.");
+                return;
+            }
+
             UpdateEventsList(eventsToDisplay);
         }
 
@@ -616,7 +487,13 @@ namespace PROG7312_ST10023767.Views
                 EventsList.Items.Clear();
                 LocationTextBlock.Text = filteredEvents == null ? "All Events & Announcements" : LocationTextBlock.Text;
 
-                var eventsToDisplay = filteredEvents ?? locationEvents.Values.SelectMany(evList => evList).ToList();
+                var eventsToDisplay = filteredEvents ?? locationEvents.Values.SelectMany(evList => evList).ToList().OrderBy(e => e.StartDate).ToList();
+
+                if (eventsToDisplay.Count == 0)
+                {
+                    NoPostsMessageBox("No Posts Posted Yet", "Be a champ in your community by posting first!");
+                    return;
+                }
 
                 foreach (var ev in eventsToDisplay)
                 {
@@ -637,9 +514,9 @@ namespace PROG7312_ST10023767.Views
                     if (DateTime.TryParse(ev.StartDate, out startDateTime) &&
                         DateTime.TryParse(ev.EndDate, out endDateTime))
                     {
-                        endDateTime = endDateTime.Date.AddDays(1).AddTicks(-1);  
+                        endDateTime = endDateTime.Date.AddDays(1).AddTicks(-1);
 
-                        if (currentDateTime >= startDateTime && currentDateTime <= endDateTime)  
+                        if (currentDateTime >= startDateTime && currentDateTime <= endDateTime)
                         {
                             // Status is busy
                             status = "busy";
@@ -660,8 +537,8 @@ namespace PROG7312_ST10023767.Views
                     }
                     else
                     {
-            
-                        status = "unknown";  
+
+                        status = "unknown";
                         statusBorder.Background = (Brush)Application.Current.FindResource("defaultSolidColorBrush");
                         Console.WriteLine($"Failed to parse dates for event: {ev.Title}, StartDate: {ev.StartDate}, EndDate: {ev.EndDate}");
                     }
@@ -717,7 +594,8 @@ namespace PROG7312_ST10023767.Views
                     {
                         Text = "Title: " + ev.Title,
                         Margin = new Thickness(5, 5, 0, 5),
-                        FontWeight = FontWeights.Bold
+                        FontWeight = FontWeights.Bold,
+                        TextWrapping = TextWrapping.Wrap
                     };
                     eventPanel.Children.Add(eventTitle);
 
@@ -733,7 +611,8 @@ namespace PROG7312_ST10023767.Views
                     {
                         Text = $"Venue: {ev.Venue}",
                         Margin = new Thickness(5, 5, 0, 5),
-                        FontWeight = FontWeights.Bold
+                        FontWeight = FontWeights.Bold,
+                        TextWrapping = TextWrapping.Wrap
                     };
                     eventPanel.Children.Add(eventVenue);
 
@@ -741,7 +620,8 @@ namespace PROG7312_ST10023767.Views
                     {
                         Text = $"City/Area: {ev.Location}",
                         Margin = new Thickness(5, 5, 0, 5),
-                        FontWeight = FontWeights.Bold
+                        FontWeight = FontWeights.Bold,
+                        TextWrapping = TextWrapping.Wrap
                     };
                     eventPanel.Children.Add(eventArea);
 
@@ -751,7 +631,8 @@ namespace PROG7312_ST10023767.Views
                         {
                             Text = "Media Files:",
                             FontWeight = FontWeights.Bold,
-                            Margin = new Thickness(0, 10, 0, 5)
+                            Margin = new Thickness(0, 10, 0, 5),
+                            TextWrapping = TextWrapping.Wrap
                         };
 
                         eventPanel.Children.Add(mediaBlock);
@@ -762,7 +643,8 @@ namespace PROG7312_ST10023767.Views
                             {
                                 Text = media.FileName,
                                 Margin = new Thickness(20, 0, 0, 5),
-                                Tag = media.FileContent
+                                Tag = media.FileContent,
+                                TextWrapping = TextWrapping.Wrap
                             };
 
                             mediaItem.MouseDown += MediaItem_MouseDown;
@@ -777,8 +659,73 @@ namespace PROG7312_ST10023767.Views
                     EventsList.Items.Add(eventBorder);
                 }
             }
+            
         }
 
+
+        private void NoPostsMessageBox(string Title, string Message)
+        {
+            if (EventsList != null)
+            {
+                EventsList.Items.Clear();
+                Border eventBorder = new Border
+                {
+                    CornerRadius = new CornerRadius(15), // Set corner radius
+                    Margin = new Thickness(5),
+                    Background = (Brush)Application.Current.FindResource("blueSolidColorBrush")
+                };
+
+                // Create a StackPanel inside the Border
+                StackPanel eventPanel = new StackPanel();
+
+                Grid horizontalGrid = new Grid();
+                horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
+                horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
+
+                Image eventTypeImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
+                LoadImage(GetImagePathCategory("Other"), eventTypeImage);
+                Grid.SetColumn(eventTypeImage, 0);
+                horizontalGrid.Children.Add(eventTypeImage);
+
+                TextBlock eventInfo = new TextBlock
+                {
+                    Text = Title,
+                    Margin = new Thickness(0, 15, 0, 5),
+                    TextWrapping = TextWrapping.Wrap,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    TextAlignment = TextAlignment.Center,
+                    MinWidth = 800,
+                    Width = 800
+                };
+                Grid.SetColumn(eventInfo, 1);
+                horizontalGrid.Children.Add(eventInfo);
+
+                Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
+                LoadImage(GetImagePathCategory("Other"), categoryImage);
+                Grid.SetColumn(categoryImage, 2);
+                horizontalGrid.Children.Add(categoryImage);
+
+                eventPanel.Children.Add(horizontalGrid);
+
+                TextBlock eventMessage = new TextBlock
+                {
+                    Text = Message,
+                    Margin = new Thickness(5, 5, 0, 5),
+                    FontWeight = FontWeights.Bold,
+                    TextWrapping = TextWrapping.Wrap
+                };
+                eventPanel.Children.Add(eventMessage);
+
+
+                // Add the StackPanel to the Border
+                eventBorder.Child = eventPanel;
+
+                // Finally, add the Border to the EventsList
+                EventsList.Items.Add(eventBorder);
+            }
+
+        }
         private void viewByArea_Click(object sender, RoutedEventArgs e)
         {
             if (venueButtonsPanel.Visibility == Visibility.Visible)
@@ -816,8 +763,43 @@ namespace PROG7312_ST10023767.Views
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            string searchText = txbSearch.Text;
+            string searchQuery = txbSearch.Text;
 
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                // Track the user's search
+                TrackUserSearch("currentUserId", searchQuery);  // Replace with actual user ID logic
+            }
+
+
+            string query = searchQuery.ToLower().Trim();
+
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                UpdateEventsList();
+                return;
+            }
+
+            List<EventClass> filteredEvents = locationEvents.Values
+                .SelectMany(evList => evList) 
+                .Where(ev => ev.Title.ToLower().Contains(query) ||
+                             ev.Location.ToLower().Contains(query) ||
+                             ev.Category.ToLower().Contains(query) ||
+                             ev.Venue.ToLower().Contains(query) ||
+                             ev.EndDate.ToLower().Contains(query) ||
+                             ev.StartDate.ToLower().Contains(query) ||
+                             ev.StartTime.ToLower().Contains(query) ||
+                             ev.EndTime.ToLower().Contains(query) ||
+                             ev.Description.ToLower().Contains(query))
+                .ToList();
+
+            if (filteredEvents.Count == 0)
+            {
+                NoPostsMessageBox("No Posts Matching That Search Request", "Unfortunatley there is no posts matching that search request, feel free to try something else!");
+                return;
+            }
+            // Display the filtered list of events
+            UpdateEventsList(filteredEvents);
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -828,8 +810,63 @@ namespace PROG7312_ST10023767.Views
 
         private void btnShowReccomended_Click(object sender, RoutedEventArgs e)
         {
-            // Analyse user search patterns and preferences. 
-            //Use an appropriate algorithm or data structure to suggest related or recommended events.
+            if (RecommendEventsBasedOnSearch("currentUserId").Count == 0)
+            {
+                NoPostsMessageBox("No Recommended Posts Yet", "Unfortunatley we cant run our algoritm to recommend you something if we have no data to work off of, please search something to build your search history");
+                return;
+            }
+            UpdateEventsList(RecommendEventsBasedOnSearch("currentUserId"));
+        }
+
+        private void TrackUserSearch(string userId, string searchQuery)
+        {
+            if (!userSearchHistory.ContainsKey(userId))
+            {
+                userSearchHistory[userId] = new List<string>();
+            }
+
+            userSearchHistory[userId].Add(searchQuery);
+        }
+
+        private List<EventClass> RecommendEventsBasedOnSearch(string userId)
+        {
+            if (!userSearchHistory.ContainsKey(userId) || userSearchHistory[userId].Count == 0)
+            {
+                return new List<EventClass>();  // Return an empty list if there's no search history
+            }
+
+            // Get all past searches for this user
+            List<string> pastSearches = userSearchHistory[userId];
+
+            // Analyze the most frequently searched terms (categories, locations, etc.)
+            var frequentSearches = pastSearches.GroupBy(search => search)
+                                               .OrderByDescending(group => group.Count())
+                                               .Select(group => group.Key)
+                                               .Take(3) // Get top 3 frequently searched terms
+                                               .ToList();
+
+            // Filter events based on frequently searched terms
+            List<EventClass> recommendedEvents = new List<EventClass>();
+
+            foreach (var searchTerm in frequentSearches)
+            {
+                // Find matching events based on location, category, or type (expand as needed)
+                var matchingEvents = locationEvents.Values.SelectMany(evList => evList)
+                                        .Where(ev => ev.Location.Contains(searchTerm) ||
+                                                     ev.Title.Contains(searchTerm) ||
+                                                     ev.Category.Contains(searchTerm) ||
+                                                     ev.Venue.Contains(searchTerm) ||
+                                                     ev.EndDate.Contains(searchTerm) ||
+                                                     ev.StartDate.Contains(searchTerm) ||
+                                                     ev.StartTime.Contains(searchTerm) ||
+                                                     ev.EndTime.Contains(searchTerm) ||
+                                                     ev.Description.Contains(searchTerm))
+                                                                .ToList();
+
+                recommendedEvents.AddRange(matchingEvents);
+            }
+
+            return recommendedEvents;
         }
     }
 }
