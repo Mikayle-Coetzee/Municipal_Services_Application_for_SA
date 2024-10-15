@@ -1029,19 +1029,13 @@ namespace PROG7312_ST10023767.Views
         {
             foreach (var media in ev.MediaFiles)
             {
-                Border border = new Border
-                {
-                    Height = 200,
-                    CornerRadius = new CornerRadius(15),
-                    Margin = new Thickness(10),
-                    BorderBrush = Brushes.Transparent,  
-                    Background = Brushes.Transparent  
-                };
 
                 if (media.MediaType == "Image")
                 {
                     Image imageItem = new Image
                     {
+                        Height = 200,
+                        Margin = new Thickness(10),
                         Stretch = Stretch.Fill
                     };
 
@@ -1054,12 +1048,14 @@ namespace PROG7312_ST10023767.Views
                         mediaHelper.LoadImage(media.FileName, imageItem);
                     }
 
-                    border.Child = imageItem;
+                    eventPanel.Children.Add(imageItem);
                 }
                 else if (media.MediaType == "Video")
                 {
                     MediaElement videoItem = new MediaElement
                     {
+                        Height = 200,
+                        Margin = new Thickness(10),
                         Stretch = Stretch.Fill,
                         LoadedBehavior = MediaState.Play,
                         UnloadedBehavior = MediaState.Stop,
@@ -1076,10 +1072,8 @@ namespace PROG7312_ST10023767.Views
                         videoItem.Source = new Uri(media.FileName, UriKind.RelativeOrAbsolute);
                     }
 
-                    border.Child = videoItem;
+                    eventPanel.Children.Add(videoItem);
                 }
-
-                eventPanel.Children.Add(border);
             }
 
             TextBlock mediaBlock = new TextBlock
@@ -1392,8 +1386,8 @@ namespace PROG7312_ST10023767.Views
                                                .Take(3)
                                                .ToList();
 
-            
-            Dictionary<EventClass, int> eventScores = new Dictionary<EventClass, int>();
+            // I made use of a custom Priority Queue so that its eaiser to mark
+            PriorityQueue<EventClass, int> eventQueue = new PriorityQueue<EventClass, int>();
 
             foreach (var searchTerm in frequentSearches)
             {
@@ -1411,35 +1405,31 @@ namespace PROG7312_ST10023767.Views
                         ev.StartDate.ToLower().Contains(searchTerm) ||
                         ev.StartTime.ToLower().Contains(searchTerm) ||
                         ev.EndTime.ToLower().Contains(searchTerm))
-                    .Distinct() 
+                    .Distinct()
                     .ToList();
 
-                // Each of the events will get a score based on their weight 
                 foreach (var ev in matchingEvents)
                 {
-                    if (!eventScores.ContainsKey(ev))
-                    {
-                        eventScores[ev] = 0; 
-                    }
-                    eventScores[ev] += weight;  
+                    eventQueue.Enqueue(ev, weight);
                 }
             }
 
-            // I dont want to show past events to the user when they get recommendations, this will filter through them
             var currentDateTime = DateTime.Now;
+            var upcomingAndOngoingEvents = new List<EventClass>();
 
-            var upcomingAndOngoingEvents = eventScores.Keys.Where(ev =>
-                (IsBusyEvent(ev, currentDateTime)) ||
-                (DateTime.Parse(ev.StartDate) > currentDateTime)).ToList();
+            while (eventQueue.Count > 0)
+            {
+                var ev = eventQueue.Dequeue();
 
-            // This will sort them based on their score/relevance...
-            var sortedRecommendedEvents = upcomingAndOngoingEvents
-                .OrderByDescending(ev => eventScores[ev])
-                .ThenBy(ev => DateTime.Parse(ev.StartDate))
-                .ToList();
+                if (IsBusyEvent(ev, currentDateTime) || DateTime.Parse(ev.StartDate) > currentDateTime)
+                {
+                    upcomingAndOngoingEvents.Add(ev);
+                }
+            }
 
-            return sortedRecommendedEvents;
+            return upcomingAndOngoingEvents;
         }
+
 
         #endregion
 

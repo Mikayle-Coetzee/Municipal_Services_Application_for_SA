@@ -109,6 +109,7 @@
     <Compile Include="Classes\PostManager.cs" />
     <Compile Include="Classes\MediaFileClass.cs" />
     <Compile Include="Classes\MediaService.cs" />
+    <Compile Include="Classes\PriorityQueue.cs" />
     <Compile Include="Views\CategoryFilterWindow.xaml.cs">
       <DependentUpon>CategoryFilterWindow.xaml</DependentUpon>
     </Compile>
