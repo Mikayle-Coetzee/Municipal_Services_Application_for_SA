@@ -25,18 +25,28 @@ namespace PROG7312_ST10023767.Views
     /// </summary>
     public partial class EventsUserControl : UserControl
     {
-        private MediaService mediaHelper = new MediaService() ;
         /// <summary>
-        /// Manages the creation and storage of issues
+        /// New instance of the media helper class
+        /// </summary>
+        private MediaService mediaHelper = new MediaService() ;
+        
+        /// <summary>
+        /// Manages the creation and storage of posts
         /// </summary>
         private PostManager PostManager;
 
-        // Dictionary to store events sorted by location
+        /// <summary>
+        /// Dictionary to store events sorted by location
+        /// </summary>
         private Stack<MediaFileClass> mediaAttachments = new Stack<MediaFileClass>();
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
+        /// <param name="postManager"></param>
         public EventsUserControl(PostManager postManager)
         {
-
             this.PostManager = postManager;
 
             InitializeComponent();
@@ -47,6 +57,11 @@ namespace PROG7312_ST10023767.Views
             SetDateToNow(EndDate);
         }
 
+        #region Load and Display Methods
+
+        /// <summary>
+        /// Loads location buttons from PostManager into the UI
+        /// </summary>
         private void LoadLocations()
         {
             foreach (var location in PostManager.locationEvents.Keys)
@@ -64,16 +79,23 @@ namespace PROG7312_ST10023767.Views
             }
         }
 
-
-        public void SetDateToNow(DatePicker datePicker)
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Updates the events list to show all events and announcmnets 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ViewAllEvents_Click(object sender, RoutedEventArgs e)
         {
-            if (datePicker != null)
-            {
-                datePicker.SelectedDate = DateTime.Now;
-            }
+            UpdateEventsList();
         }
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Updates the event list based on the selected location.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LocationButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
@@ -96,7 +118,25 @@ namespace PROG7312_ST10023767.Views
             }
         }
 
+        #endregion
 
+        #region Date and Time Methods
+        /// <summary>
+        /// Sets the date picker to the current date.
+        /// </summary>
+        public void SetDateToNow(DatePicker datePicker)
+        {
+            if (datePicker != null)
+            {
+                datePicker.SelectedDate = DateTime.Now;
+            }
+        }
+        #endregion
+
+        #region Image Handling Methods
+        /// <summary>
+        /// Gets the file path of an image based on its type.
+        /// </summary>
         private string GetImagePath(string type)
         {
             string relativeImagePath;
@@ -123,6 +163,10 @@ namespace PROG7312_ST10023767.Views
             }
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Gets the file path of an image based on its category.
+        /// </summary>
         private string GetImagePathCategory(string category)
         {
             string relativeImagePath;
@@ -161,40 +205,12 @@ namespace PROG7312_ST10023767.Views
                 return null;
             }
         }
+        #endregion
 
-        private void ViewAllEvents_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateEventsList();
-        }
-
-
-        private void MediaItem_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            TextBlock mediaItem = sender as TextBlock;
-            byte[] mediaContent = mediaItem.Tag as byte[];
-
-            if (mediaContent != null)
-            {
-                string tempFilePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), mediaItem.Text);
-
-                try
-                {
-                    File.WriteAllBytes(tempFilePath, mediaContent);
-
-                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(tempFilePath) { UseShellExecute = true });
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error opening media: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-            else
-            {
-                MessageBox.Show("No media content available.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-
+        #region Media Management Methods
+        /// <summary>
+        /// Opens a file dialog to select media files and adds them to the mediaAttachments stack.
+        /// </summary>
         private void AddMedia_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -219,7 +235,10 @@ namespace PROG7312_ST10023767.Views
             }
         }
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Removes the selected media item from the mediaAttachments stack.
+        /// </summary>
         private void RemoveMedia_Click(object sender, RoutedEventArgs e)
         {
             if (MediaList.SelectedItem != null)
@@ -259,8 +278,51 @@ namespace PROG7312_ST10023767.Views
             }
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Opens the selected media item for viewing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MediaItem_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            TextBlock mediaItem = sender as TextBlock;
+            byte[] mediaContent = mediaItem.Tag as byte[];
+
+            if (mediaContent != null)
+            {
+                string tempFilePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), mediaItem.Text);
+
+                try
+                {
+                    File.WriteAllBytes(tempFilePath, mediaContent);
+
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(tempFilePath) { UseShellExecute = true });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error opening media: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No media content available.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        #endregion
+
+        #region Event Submission Methods
+        /// <summary>
+        /// Validates input fields and submits a new event.
+        /// </summary>
         private void SubmitEventButton_Click(object sender, RoutedEventArgs e)
         {
+            if (!ValidateFields())
+            {
+                return;
+            }
+
             string title = EventTitle.Text;
             string date = EventDate.SelectedDate?.ToString("d MMM yyyy") ?? "";
             string location = EventLocation.Text;
@@ -270,7 +332,129 @@ namespace PROG7312_ST10023767.Views
             string endDate = EndDate.SelectedDate?.ToString("d MMM yyyy") ?? "";
             string venue = EventVenue.Text;
 
+            string time = GetSelectedTime(cmbHour, cmbMinute, cmbAmPm);
+            string timeEnd = GetSelectedTime(cmbHourEnd, cmbMinuteEnd, cmbAmPmEnd);
 
+            AddCategoryToUniqueCategories(category);
+
+            if (IsNewLocation(location))
+            {
+                AddNewLocation(location);
+            }
+
+            CreateAndSaveEvent(title, date, time, location, description, type, category, endDate, venue, timeEnd);
+
+            ClearAllFields();
+
+            MessageBox.Show("Event submitted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Validates the input fields to ensure all required information is present and correct.
+        /// </summary>
+        /// <returns></returns>
+        private bool ValidateFields()
+        {
+            string title = EventTitle.Text;
+            DateTime? startDate = EventDate.SelectedDate;
+            DateTime? endDate = EndDate.SelectedDate;
+            string location = EventLocation.Text;
+            string time = GetSelectedTime(cmbHour, cmbMinute, cmbAmPm);
+            string timeEnd = GetSelectedTime(cmbHourEnd, cmbMinuteEnd, cmbAmPmEnd);
+            string description = EventDescription.Text;
+            string venue = EventVenue.Text;
+
+            // Check if all fields are filled
+            if (string.IsNullOrWhiteSpace(title) || !startDate.HasValue || !endDate.HasValue || string.IsNullOrWhiteSpace(location) ||
+                string.IsNullOrEmpty(time) || string.IsNullOrEmpty(timeEnd) || string.IsNullOrWhiteSpace(description) || string.IsNullOrWhiteSpace(venue))
+            {
+                MessageBox.Show("Please fill in all the fields.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            DateTime currentDate = DateTime.Now.Date;
+
+            // Validate start date not in the past
+            if (startDate.Value.Date < currentDate && endDate.Value.Date < currentDate)
+            {
+                MessageBox.Show("Start date cannot be in the past.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            // Validate end date not in the past
+            if (endDate.Value.Date < currentDate)
+            {
+                MessageBox.Show("End date cannot be in the past.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            // Validate start date cannot be after end date
+            if (startDate.Value.Date > endDate.Value.Date)
+            {
+                MessageBox.Show("Start date cannot be later than end date.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            // If the dates are the same, validate start time cannot be later than end time
+            if (startDate.Value.Date == endDate.Value.Date)
+            {
+                TimeSpan startTime = GetTimeSpan(cmbHour, cmbMinute, cmbAmPm);
+                TimeSpan endTime = GetTimeSpan(cmbHourEnd, cmbMinuteEnd, cmbAmPmEnd);
+
+                if (startTime > endTime)
+                {
+                    MessageBox.Show("Start time cannot be later than end time for the same day.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        ///  Gets the selected time span from the provided ComboBoxes
+        /// </summary>
+        /// <param name="cmbHour"></param>
+        /// <param name="cmbMinute"></param>
+        /// <param name="cmbAmPm"></param>
+        /// <returns></returns>
+        private TimeSpan GetTimeSpan(ComboBox cmbHour, ComboBox cmbMinute, ComboBox cmbAmPm)
+        {
+            string selectedHour = (cmbHour.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string selectedMinute = (cmbMinute.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string selectedAmPm = (cmbAmPm.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+            if (string.IsNullOrEmpty(selectedHour) || string.IsNullOrEmpty(selectedMinute) || string.IsNullOrEmpty(selectedAmPm))
+            {
+                return TimeSpan.Zero;
+            }
+
+            int hour = int.Parse(selectedHour);
+            if (selectedAmPm == "PM" && hour != 12)
+            {
+                hour += 12;
+            }
+            else if (selectedAmPm == "AM" && hour == 12)
+            {
+                hour = 0; 
+            }
+
+            int minute = int.Parse(selectedMinute);
+            return new TimeSpan(hour, minute, 0);
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Gets the selected time from the provided ComboBoxes
+        /// </summary>
+        /// <param name="cmbHour"></param>
+        /// <param name="cmbMinute"></param>
+        /// <param name="cmbAmPm"></param>
+        /// <returns></returns>
+        private string GetSelectedTime(ComboBox cmbHour, ComboBox cmbMinute, ComboBox cmbAmPm)
+        {
             string selectedHour = (cmbHour.SelectedItem as ComboBoxItem)?.Content.ToString();
             string selectedMinute = (cmbMinute.SelectedItem as ComboBoxItem)?.Content.ToString();
             string selectedAmPm = (cmbAmPm.SelectedItem as ComboBoxItem)?.Content.ToString();
@@ -278,83 +462,16 @@ namespace PROG7312_ST10023767.Views
             if (string.IsNullOrEmpty(selectedHour) || string.IsNullOrEmpty(selectedMinute) || string.IsNullOrEmpty(selectedAmPm))
             {
                 MessageBox.Show("Please select a valid time.");
-                return;
+                return null;
             }
 
-            string time = $"{selectedHour}:{selectedMinute} {selectedAmPm}";
-
-            if (!string.IsNullOrEmpty(category))
-            {
-                PostManager.uniqueCategories.Add(category);
-            }
-
-            string selectedHourEnd = (cmbHourEnd.SelectedItem as ComboBoxItem)?.Content.ToString();
-            string selectedMinuteEnd = (cmbMinuteEnd.SelectedItem as ComboBoxItem)?.Content.ToString();
-            string selectedAmPmEnd = (cmbAmPmEnd.SelectedItem as ComboBoxItem)?.Content.ToString();
-
-            if (string.IsNullOrEmpty(selectedHourEnd) || string.IsNullOrEmpty(selectedMinuteEnd) || string.IsNullOrEmpty(selectedAmPmEnd))
-            {
-                MessageBox.Show("Please select a valid time.");
-                return;
-            }
-
-            string timeEnd = $"{selectedHourEnd}:{selectedMinuteEnd} {selectedAmPmEnd}";
-
-            if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(date) || string.IsNullOrWhiteSpace(time) || string.IsNullOrWhiteSpace(location))
-            {
-                MessageBox.Show("Please fill in all the fields.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            if (!PostManager.locationEvents.ContainsKey(location))
-            {
-                venueButtonsPanel.Visibility = Visibility.Visible;
-                LocationWrapPanel.Visibility = Visibility.Visible;
-
-                PostManager.locationEvents[location] = new List<EventClass>();
-                Button locationButton = new Button
-                {
-                    Content = location,
-                    Margin = new Thickness(5),
-                    Style = (Style)FindResource("RoundedButtonStyle"),
-                    VerticalAlignment = VerticalAlignment.Top,
-                    HorizontalContentAlignment = HorizontalAlignment.Stretch
-                };
-
-                // Attach the Click event handler
-                locationButton.Click += LocationButton_Click;
-
-
-                // Set the width of the button dynamically based on the available space in the WrapPanel
-                if (LocationWrapPanel.ActualWidth != 0)
-                {
-                    locationButton.Width = LocationWrapPanel.ActualWidth - 10; // Adjust the margin or padding as needed
-                }
-
-                LocationWrapPanel.Children.Add(locationButton);
-            }
-
-            EventClass newEvent = new EventClass(
-                title,
-                date,
-                time,
-                location,
-                description,
-                mediaAttachments.ToArray().ToList(),
-                type,
-                category,
-                endDate,
-                venue,
-                timeEnd
-
-                );
-            PostManager.locationEvents[location].Add(newEvent);
-
-            ClearAllFields();
-
-            MessageBox.Show("Event submitted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            return $"{selectedHour}:{selectedMinute} {selectedAmPm}";
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Clears all input fields after submission
+        /// </summary>
         private void ClearAllFields()
         {
             EventTitle.Text = "";
@@ -375,7 +492,105 @@ namespace PROG7312_ST10023767.Views
             cmbType.SelectedIndex = 0;
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Creates and saves a new event using the provided information.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="date"></param>
+        /// <param name="time"></param>
+        /// <param name="location"></param>
+        /// <param name="description"></param>
+        /// <param name="type"></param>
+        /// <param name="category"></param>
+        /// <param name="endDate"></param>
+        /// <param name="venue"></param>
+        /// <param name="timeEnd"></param>
+        private void CreateAndSaveEvent(string title, string date, string time, string location, string description, string type, string category, string endDate, string venue, string timeEnd)
+        {
+            EventClass newEvent = new EventClass(
+                title,
+                date,
+                time,
+                location,
+                description,
+                mediaAttachments.ToArray().ToList(),
+                type,
+                category,
+                endDate,
+                venue,
+                timeEnd
+            );
 
+            PostManager.locationEvents[location].Add(newEvent);
+        }
+        #endregion
+
+        #region Utility Methods
+        /// <summary>
+        /// Adds the selected category to the unique categories list.
+        /// </summary>
+        /// <param name="category"></param>
+        private void AddCategoryToUniqueCategories(string category)
+        {
+            if (!string.IsNullOrEmpty(category))
+            {
+                PostManager.uniqueCategories.Add(category);
+            }
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Checks if the location is new
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        private bool IsNewLocation(string location)
+        {
+            return !PostManager.locationEvents.ContainsKey(location);
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Adds a new location to the PostManager
+        /// </summary>
+        /// <param name="location"></param>
+        private void AddNewLocation(string location)
+        {
+            venueButtonsPanel.Visibility = Visibility.Visible;
+            LocationWrapPanel.Visibility = Visibility.Visible;
+
+            PostManager.locationEvents[location] = new List<EventClass>();
+
+            Button locationButton = new Button
+            {
+                Content = location,
+                Margin = new Thickness(5),
+                Style = (Style)FindResource("RoundedButtonStyle"),
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalContentAlignment = HorizontalAlignment.Stretch
+            };
+
+            locationButton.Click += LocationButton_Click;
+
+            // Set the width of the button dynamically based on the available space in the WrapPanel
+            if (LocationWrapPanel.ActualWidth != 0)
+            {
+                locationButton.Width = LocationWrapPanel.ActualWidth - 10; // Adjust the margin or padding as needed
+            }
+
+            LocationWrapPanel.Children.Add(locationButton);
+        }
+
+        #endregion
+
+        #region UI Resizing
+
+        /// <summary>
+        /// Adjusts the width of buttons in the LocationWrapPanel when its size changes.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LocationWrapPanel_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             // Loop through each button in the WrapPanel and resize them
@@ -383,340 +598,609 @@ namespace PROG7312_ST10023767.Views
             {
                 if (child is Button button)
                 {
-                    button.Width = LocationWrapPanel.ActualWidth - 10; // Adjust based on margin or padding
+                    button.Width = LocationWrapPanel.ActualWidth - 10;  
                 }
             }
         }
 
+        #endregion
+
+        #region Event Filtering
+        /// <summary>
+        ///  Handles the selection change in the filter ComboBox to display filtered events
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string selectedFilter = (cmbFilter.SelectedItem as ComboBoxItem)?.Content.ToString();
-            string selectedLocation = LocationTextBlock.Text.Contains("Selected") ? LocationTextBlock.Text.Replace("Events & Announcement in Selected ", "") : null;
+            string selectedLocation = GetSelectedLocation();
 
-            List<EventClass> eventsToDisplay = selectedLocation != null && PostManager.locationEvents.ContainsKey(selectedLocation)
-                ? PostManager.locationEvents[selectedLocation]
-                : PostManager.locationEvents.Values.SelectMany(evList => evList).ToList(); // Get all events if no specific location is selected.
-
+            List<EventClass> eventsToDisplay = GetEventsToDisplay(selectedLocation);
 
             DateTime currentDateTime = DateTime.Now;
 
+            // Apply filter based on the selected filter
+            eventsToDisplay = ApplySelectedFilter(selectedFilter, eventsToDisplay, currentDateTime);
 
-            if (selectedFilter == "All")
-            {
-                eventsToDisplay = eventsToDisplay.ToList();
-            }
-            else
-            if (selectedFilter == "Events")
-            {
-                eventsToDisplay = eventsToDisplay.Where(item => item.Type == "Event").ToList();
-            }
-            else if (selectedFilter == "Announcements")
-            {
-                eventsToDisplay = eventsToDisplay.Where(item => item.Type == "Announcement").ToList();
-            }
-            else if (selectedFilter == "Category")
-            {
-                CategoryFilterWindow categoryWindow = new CategoryFilterWindow();
-                categoryWindow.PopulateCategories(PostManager.uniqueCategories);
-
-                if (categoryWindow.ShowDialog() == true)
-                {
-                    string selectedCategory = categoryWindow.SelectedCategory;
-
-                    eventsToDisplay = eventsToDisplay.Where(item => item.Category == selectedCategory).ToList();
-                }
-            }
-            else if (selectedFilter == "Upcoming")
-            {
-                eventsToDisplay = eventsToDisplay.Where(item => currentDateTime < DateTime.Parse(item.StartDate)).ToList();
-            }
-            else if (selectedFilter == "Past")
-            {
-                eventsToDisplay = eventsToDisplay.Where(item => currentDateTime > DateTime.Parse(item.EndDate) && currentDateTime > DateTime.Parse(item.StartDate) && currentDateTime >= DateTime.Parse(item.EndDate).Date.AddDays(1).AddTicks(-1)).ToList();
-            }
-            else if (selectedFilter == "Busy")
-            {
-                eventsToDisplay = eventsToDisplay.Where(item => currentDateTime >= DateTime.Parse(item.StartDate) && currentDateTime <= DateTime.Parse(item.EndDate).Date.AddDays(1).AddTicks(-1)).ToList();
-            }
-
+            // Show message if no posts match the filter
             if (eventsToDisplay.Count == 0)
             {
-                NoPostsMessageBox("No Posts Matching That Filter Request", "Unfortunatley there is no posts that match your filtering requests, feel free to add more posts or apply a different filter.");
+                NoPostsMessageBox("No Posts Matching That Filter Request",
+                    "Unfortunately, there are no posts that match your filtering requests. Feel free to add more posts or apply a different filter.");
+                LocationTextBlock.Text = "Filtered Posts";
+
                 return;
             }
 
+            // Update the events list with filtered events
             UpdateEventsList(eventsToDisplay);
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Gets the selected location from the UI
+        /// </summary>
+        /// <returns></returns>
+        private string GetSelectedLocation()
+        {
+            return LocationTextBlock.Text.Contains("Selected")
+                ? LocationTextBlock.Text.Replace("Events & Announcement in Selected ", "")
+                : null;
+        }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Fetches events to display based on the selected location
+        /// </summary>
+        /// <param name="selectedLocation"></param>
+        /// <returns></returns>
+        private List<EventClass> GetEventsToDisplay(string selectedLocation)
+        {
+            if (selectedLocation != null && PostManager.locationEvents.ContainsKey(selectedLocation))
+            {
+                return PostManager.locationEvents[selectedLocation];
+            }
+            return PostManager.locationEvents.Values.SelectMany(evList => evList).ToList();
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Applies the selected filter to the list of events
+        /// </summary>
+        /// <param name="selectedFilter"></param>
+        /// <param name="eventsToDisplay"></param>
+        /// <param name="currentDateTime"></param>
+        /// <returns></returns>
+        private List<EventClass> ApplySelectedFilter(string selectedFilter, List<EventClass> eventsToDisplay, DateTime currentDateTime)
+        {
+            switch (selectedFilter)
+            {
+                case "All":
+                    LocationTextBlock.Text = "All Events & Announcements";
+
+                    return eventsToDisplay.ToList();
+
+                case "Events":
+                    LocationTextBlock.Text = "All Events";
+
+                    return eventsToDisplay.Where(item => item.Type == "Event").ToList();
+
+                case "Announcements":
+                    LocationTextBlock.Text = "All Announcements";
+
+                    return eventsToDisplay.Where(item => item.Type == "Announcement").ToList();
+
+                case "Category":
+                    LocationTextBlock.Text = "Filtered By Category";
+
+                    return FilterByCategory(eventsToDisplay);
+
+                case "Upcoming":
+                    LocationTextBlock.Text = "Upcoming Events & Announcements";
+
+                    return eventsToDisplay.Where(item => currentDateTime < DateTime.Parse(item.StartDate)).ToList();
+
+                case "Past":
+                    LocationTextBlock.Text = "Past Events & Announcements";
+
+                    return eventsToDisplay.Where(item => IsPastEvent(item, currentDateTime)).ToList();
+
+                case "Busy":
+                    LocationTextBlock.Text = "Events & Announcements Currently Busy" + selectedFilter ;
+
+                    return eventsToDisplay.Where(item => IsBusyEvent(item, currentDateTime)).ToList();
+
+                default:
+                    LocationTextBlock.Text = "Filtered Posts";
+
+                    return eventsToDisplay;
+
+            }
+
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Filters events by category using a category filter window
+        /// </summary>
+        /// <param name="eventsToDisplay"></param>
+        /// <returns></returns>
+        private List<EventClass> FilterByCategory(List<EventClass> eventsToDisplay)
+        {
+            CategoryFilterWindow categoryWindow = new CategoryFilterWindow();
+            categoryWindow.PopulateCategories(PostManager.uniqueCategories);
+
+            if (categoryWindow.ShowDialog() == true)
+            {
+                string selectedCategory = categoryWindow.SelectedCategory;
+                return eventsToDisplay.Where(item => item.Category == selectedCategory).ToList();
+            }
+
+            return eventsToDisplay;
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Checks if the event is in the past
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="currentDateTime"></param>
+        /// <returns></returns>
+        private bool IsPastEvent(EventClass item, DateTime currentDateTime)
+        {
+            DateTime startDate = DateTime.Parse(item.StartDate);
+            DateTime endDate = DateTime.Parse(item.EndDate);
+
+            return currentDateTime > startDate && currentDateTime > endDate && currentDateTime >= endDate.Date.AddDays(1).AddTicks(-1);
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Checks if the event is ongoing (i.e., busy)
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="currentDateTime"></param>
+        /// <returns></returns>
+        private bool IsBusyEvent(EventClass item, DateTime currentDateTime)
+        {
+            DateTime startDate = DateTime.Parse(item.StartDate);
+            DateTime endDate = DateTime.Parse(item.EndDate);
+
+            return currentDateTime >= startDate && currentDateTime <= endDate.Date.AddDays(1).AddTicks(-1);
+        }
+
+        #endregion
+
+        #region Post List Management
+        /// <summary>
+        /// Updates the post list with filtered or all events
+        /// </summary>
+        /// <param name="filteredEvents"></param>
         private void UpdateEventsList(List<EventClass> filteredEvents = null)
         {
             if (EventsList != null)
             {
-                EventsList.Items.Clear();
+                ClearEventsList();
+
                 LocationTextBlock.Text = filteredEvents == null ? "All Events & Announcements" : LocationTextBlock.Text;
 
-                var eventsToDisplay = filteredEvents ?? PostManager.locationEvents.Values.SelectMany(evList => evList).ToList().OrderBy(e => e.StartDate).ToList();
+                var eventsToDisplay = GetEventsToDisplay(filteredEvents);
 
                 if (eventsToDisplay.Count == 0)
                 {
-                    NoPostsMessageBox("No Posts Posted Yet", "Be a champ in your community by posting first!");
+                    ShowNoPostsMessage();
                     return;
                 }
 
                 foreach (var ev in eventsToDisplay)
                 {
-                    bool isEvent = ev.Type == "Event";
-                    string status;
-                    DateTime currentDateTime = DateTime.Now;
-
-                    DateTime startDateTime;
-                    DateTime endDateTime;
-
-                    Border statusBorder = new Border
-                    {
-                        CornerRadius = new CornerRadius(15),
-                        Height = 5,
-                        Margin = new Thickness(7, 0, 7, 0)
-                    };
-
-                    if (DateTime.TryParse(ev.StartDate, out startDateTime) &&
-                        DateTime.TryParse(ev.EndDate, out endDateTime))
-                    {
-                        endDateTime = endDateTime.Date.AddDays(1).AddTicks(-1);
-
-                        if (currentDateTime >= startDateTime && currentDateTime <= endDateTime)
-                        {
-                            // Status is busy
-                            status = "busy";
-                            statusBorder.Background = (Brush)Application.Current.FindResource("busySolidColorBrush");
-                        }
-                        else if (currentDateTime > endDateTime) // Past end date
-                        {
-                            // Status is past
-                            status = "past";
-                            statusBorder.Background = (Brush)Application.Current.FindResource("pastSolidColorBrush");
-                        }
-                        else
-                        {
-                            // Status is upcoming
-                            status = "upcoming";
-                            statusBorder.Background = (Brush)Application.Current.FindResource("upcomingSolidColorBrush");
-                        }
-                    }
-                    else
-                    {
-
-                        status = "unknown";
-                        statusBorder.Background = (Brush)Application.Current.FindResource("defaultSolidColorBrush");
-                        Console.WriteLine($"Failed to parse dates for event: {ev.Title}, StartDate: {ev.StartDate}, EndDate: {ev.EndDate}");
-                    }
-
-                    Console.WriteLine($"Status for event '{ev.Title}': {status}");
-
-
-
-                    // Create a Border for rounded corners
-                    Border eventBorder = new Border
-                    {
-                        CornerRadius = new CornerRadius(15), // Set corner radius
-                        Margin = new Thickness(5),
-                        Background = (Brush)Application.Current.FindResource(isEvent ? "greenSolidColorBrush" : "offWhiteSolidColorBrush")
-                    };
-
-                    // Create a StackPanel inside the Border
-                    StackPanel eventPanel = new StackPanel();
-
-                    eventPanel.Children.Add(statusBorder);
-
-                    Grid horizontalGrid = new Grid();
-                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
-                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-                    horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
-
-                    Image eventTypeImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
-                    mediaHelper.LoadImage(GetImagePath(ev.Type), eventTypeImage);
-                    Grid.SetColumn(eventTypeImage, 0);
-                    horizontalGrid.Children.Add(eventTypeImage);
-
-                    TextBlock eventInfo = new TextBlock
-                    {
-                        Text = $"{ev.StartTime}: {ev.StartDate} - {ev.EndTime}: {ev.EndDate}",
-                        Margin = new Thickness(0, 15, 0, 5),
-                        TextWrapping = TextWrapping.Wrap,
-                        HorizontalAlignment = HorizontalAlignment.Center,
-                        TextAlignment = TextAlignment.Center,
-                        MinWidth = 800,
-                        Width = 800
-                    };
-                    Grid.SetColumn(eventInfo, 1);
-                    horizontalGrid.Children.Add(eventInfo);
-
-                    Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
-                    mediaHelper.LoadImage(GetImagePathCategory(ev.Category), categoryImage);
-                    Grid.SetColumn(categoryImage, 2);
-                    horizontalGrid.Children.Add(categoryImage);
-
-                    eventPanel.Children.Add(horizontalGrid);
-
-                    TextBlock eventTitle = new TextBlock
-                    {
-                        Text = "Title: " + ev.Title,
-                        Margin = new Thickness(5, 5, 0, 5),
-                        FontWeight = FontWeights.Bold,
-                        TextWrapping = TextWrapping.Wrap
-                    };
-                    eventPanel.Children.Add(eventTitle);
-
-                    TextBlock eventDescription = new TextBlock
-                    {
-                        Text = "Description: " + ev.Description,
-                        Margin = new Thickness(5, 5, 0, 5),
-                        TextWrapping = TextWrapping.Wrap
-                    };
-                    eventPanel.Children.Add(eventDescription);
-
-                    TextBlock eventVenue = new TextBlock
-                    {
-                        Text = $"Venue: {ev.Venue}",
-                        Margin = new Thickness(5, 5, 0, 5),
-                        FontWeight = FontWeights.Bold,
-                        TextWrapping = TextWrapping.Wrap
-                    };
-                    eventPanel.Children.Add(eventVenue);
-
-                    TextBlock eventArea = new TextBlock
-                    {
-                        Text = $"City/Area: {ev.Location}",
-                        Margin = new Thickness(5, 5, 0, 5),
-                        FontWeight = FontWeights.Bold,
-                        TextWrapping = TextWrapping.Wrap
-                    };
-                    eventPanel.Children.Add(eventArea);
-
-                    if (ev.MediaFiles != null && ev.MediaFiles.Count > 0)
-                    {
-                        TextBlock mediaBlock = new TextBlock
-                        {
-                            Text = "Media Files:",
-                            FontWeight = FontWeights.Bold,
-                            Margin = new Thickness(0, 10, 0, 5),
-                            TextWrapping = TextWrapping.Wrap
-                        };
-
-                        eventPanel.Children.Add(mediaBlock);
-
-                        foreach (var media in ev.MediaFiles)
-                        {
-                            TextBlock mediaItem = new TextBlock
-                            {
-                                Text = media.FileName,
-                                Margin = new Thickness(20, 0, 0, 5),
-                                Tag = media.FileContent,
-                                TextWrapping = TextWrapping.Wrap
-                            };
-
-                            mediaItem.MouseDown += MediaItem_MouseDown;
-                            eventPanel.Children.Add(mediaItem);
-                        }
-                    }
-
-                    // Add the StackPanel to the Border
-                    eventBorder.Child = eventPanel;
-
-                    // Finally, add the Border to the EventsList
-                    EventsList.Items.Add(eventBorder);
+                    DisplayEvent(ev);
                 }
             }
-
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Clears all items in the events list.
+        /// </summary>
+        private void ClearEventsList()
+        {
+            EventsList.Items.Clear();
+        }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Gets the list of posts to display, ordering by start date.
+        /// </summary>
+        /// <param name="filteredEvents"></param>
+        /// <returns></returns>
+        private List<EventClass> GetEventsToDisplay(List<EventClass> filteredEvents)
+        {
+            return filteredEvents ?? PostManager.locationEvents.Values.SelectMany(evList => evList).OrderBy(e => e.StartDate).ToList();
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Displays a message when there are no posts available
+        /// </summary>
+        private void ShowNoPostsMessage()
+        {
+            NoPostsMessageBox("No Posts Posted Yet", "Be a champ in your community by posting first!");
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Displays the event details on the UI
+        /// </summary>
+        /// <param name="ev"></param>
+        private void DisplayEvent(EventClass ev)
+        {
+            DateTime currentDateTime = DateTime.Now;
+            string status = DetermineEventStatus(ev, currentDateTime, out Border statusBorder);
+
+            Console.WriteLine($"Status for event '{ev.Title}': {status}");
+
+            Border eventBorder = CreateEventBorder(ev);
+            StackPanel eventPanel = CreateEventPanel(statusBorder, ev);
+
+            // Add event details to the panel
+            AddEventDetailsToPanel(eventPanel, ev);
+
+            // Add the StackPanel to the Border
+            eventBorder.Child = eventPanel;
+
+            // Finally, add the Border to the EventsList
+            EventsList.Items.Add(eventBorder);
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Determines the status of the event based on current date and time
+        /// </summary>
+        /// <param name="ev"></param>
+        /// <param name="currentDateTime"></param>
+        /// <param name="statusBorder"></param>
+        /// <returns></returns>
+        private string DetermineEventStatus(EventClass ev, DateTime currentDateTime, out Border statusBorder)
+        {
+            DateTime startDateTime, endDateTime;
+            string status;
+
+            statusBorder = new Border
+            {
+                CornerRadius = new CornerRadius(15),
+                Height = 5,
+                Margin = new Thickness(7, 0, 7, 0)
+            };
+
+            if (DateTime.TryParse(ev.StartDate, out startDateTime) && DateTime.TryParse(ev.EndDate, out endDateTime))
+            {
+                endDateTime = endDateTime.Date.AddDays(1).AddTicks(-1);
+
+                if (currentDateTime >= startDateTime && currentDateTime <= endDateTime)
+                {
+                    status = "busy";
+                    statusBorder.Background = (Brush)Application.Current.FindResource("busySolidColorBrush");
+                }
+                else if (currentDateTime > endDateTime)
+                {
+                    status = "past";
+                    statusBorder.Background = (Brush)Application.Current.FindResource("pastSolidColorBrush");
+                }
+                else
+                {
+                    status = "upcoming";
+                    statusBorder.Background = (Brush)Application.Current.FindResource("upcomingSolidColorBrush");
+                }
+            }
+            else
+            {
+                status = "unknown";
+                statusBorder.Background = (Brush)Application.Current.FindResource("defaultSolidColorBrush");
+                Console.WriteLine($"Failed to parse dates for event: {ev.Title}, StartDate: {ev.StartDate}, EndDate: {ev.EndDate}");
+            }
+
+            return status;
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Creates a Border for the event
+        /// </summary>
+        /// <param name="ev"></param>
+        /// <returns></returns>
+        private Border CreateEventBorder(EventClass ev)
+        {
+            return new Border
+            {
+                CornerRadius = new CornerRadius(15),
+                Margin = new Thickness(5),
+                Background = (Brush)Application.Current.FindResource(ev.Type == "Event" ? "greenSolidColorBrush" : "offWhiteSolidColorBrush")
+            };
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Creates a StackPanel for the event with the status border and event details
+        /// </summary>
+        /// <param name="statusBorder"></param>
+        /// <param name="ev"></param>
+        /// <returns></returns>
+        private StackPanel CreateEventPanel(Border statusBorder, EventClass ev)
+        {
+            StackPanel eventPanel = new StackPanel();
+            eventPanel.Children.Add(statusBorder);
+
+            Grid horizontalGrid = CreateHorizontalGrid(ev);
+            eventPanel.Children.Add(horizontalGrid);
+
+            return eventPanel;
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Creates a horizontal grid for the event display
+        /// </summary>
+        /// <param name="ev"></param>
+        /// <returns></returns>
+        private Grid CreateHorizontalGrid(EventClass ev)
+        {
+            Grid horizontalGrid = new Grid();
+            horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
+            horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
+
+            Image eventTypeImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
+            mediaHelper.LoadImage(GetImagePath(ev.Type), eventTypeImage);
+            Grid.SetColumn(eventTypeImage, 0);
+            horizontalGrid.Children.Add(eventTypeImage);
+
+            TextBlock eventInfo = new TextBlock
+            {
+                Text = $"{ev.StartTime}: {ev.StartDate} - {ev.EndTime}: {ev.EndDate}",
+                Margin = new Thickness(0, 15, 0, 5),
+                TextWrapping = TextWrapping.Wrap,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                TextAlignment = TextAlignment.Center,
+                MinWidth = 800,
+                Width = 800
+            };
+            Grid.SetColumn(eventInfo, 1);
+            horizontalGrid.Children.Add(eventInfo);
+
+            Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
+            mediaHelper.LoadImage(GetImagePathCategory(ev.Category), categoryImage);
+            Grid.SetColumn(categoryImage, 2);
+            horizontalGrid.Children.Add(categoryImage);
+
+            return horizontalGrid;
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Adds detailed information about the event to the provided panel
+        /// </summary>
+        /// <param name="eventPanel"></param>
+        /// <param name="ev"></param>
+        private void AddEventDetailsToPanel(StackPanel eventPanel, EventClass ev)
+        {
+            eventPanel.Children.Add(new TextBlock
+            {
+                Text = "Title: " + ev.Title,
+                Margin = new Thickness(5, 5, 0, 5),
+                FontWeight = FontWeights.Bold,
+                TextWrapping = TextWrapping.Wrap
+            });
+
+            eventPanel.Children.Add(new TextBlock
+            {
+                Text = "Description: " + ev.Description,
+                Margin = new Thickness(5, 5, 0, 5),
+                TextWrapping = TextWrapping.Wrap
+            });
+
+            eventPanel.Children.Add(new TextBlock
+            {
+                Text = $"Venue: {ev.Venue}",
+                Margin = new Thickness(5, 5, 0, 5),
+                FontWeight = FontWeights.Bold,
+                TextWrapping = TextWrapping.Wrap
+            });
+
+            eventPanel.Children.Add(new TextBlock
+            {
+                Text = $"City/Area: {ev.Location}",
+                Margin = new Thickness(5, 5, 0, 5),
+                FontWeight = FontWeights.Bold,
+                TextWrapping = TextWrapping.Wrap
+            });
+
+            if (ev.MediaFiles != null && ev.MediaFiles.Count > 0)
+            {
+                AddMediaFilesToPanel(eventPanel, ev);
+            }
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        ///  Adds media files related to the event to the panel
+        /// </summary>
+        /// <param name="eventPanel"></param>
+        /// <param name="ev"></param>
+        private void AddMediaFilesToPanel(StackPanel eventPanel, EventClass ev)
+        {
+            TextBlock mediaBlock = new TextBlock
+            {
+                Text = "Media Files:",
+                FontWeight = FontWeights.Bold,
+                Margin = new Thickness(0, 10, 0, 5),
+                TextWrapping = TextWrapping.Wrap
+            };
+
+            eventPanel.Children.Add(mediaBlock);
+
+            foreach (var media in ev.MediaFiles)
+            {
+                TextBlock mediaItem = new TextBlock
+                {
+                    Text = media.FileName,
+                    Margin = new Thickness(20, 0, 0, 5),
+                    Tag = media.FileContent,
+                    TextWrapping = TextWrapping.Wrap
+                };
+
+                mediaItem.MouseDown += MediaItem_MouseDown;
+                eventPanel.Children.Add(mediaItem);
+            }
+        }
+
+        #endregion
+
+        #region Message Display Methods
+
+        /// <summary>
+        /// Displays a message when there are no posts.
+        /// </summary>
+        /// <param name="Title"></param>
+        /// <param name="Message"></param>
         private void NoPostsMessageBox(string Title, string Message)
         {
             if (EventsList != null)
             {
-                EventsList.Items.Clear();
-                Border eventBorder = new Border
-                {
-                    CornerRadius = new CornerRadius(15), // Set corner radius
-                    Margin = new Thickness(5),
-                    Background = (Brush)Application.Current.FindResource("blueSolidColorBrush")
-                };
-
-                // Create a StackPanel inside the Border
-                StackPanel eventPanel = new StackPanel();
-
-                Grid horizontalGrid = new Grid();
-                horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
-                horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-                horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
-
-                Image eventTypeImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
-                mediaHelper.LoadImage(GetImagePathCategory("Other"), eventTypeImage);
-                Grid.SetColumn(eventTypeImage, 0);
-                horizontalGrid.Children.Add(eventTypeImage);
-
-                TextBlock eventInfo = new TextBlock
-                {
-                    Text = Title,
-                    Margin = new Thickness(0, 15, 0, 5),
-                    TextWrapping = TextWrapping.Wrap,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    TextAlignment = TextAlignment.Center,
-                    MinWidth = 800,
-                    Width = 800
-                };
-                Grid.SetColumn(eventInfo, 1);
-                horizontalGrid.Children.Add(eventInfo);
-
-                Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
-                mediaHelper.LoadImage(GetImagePathCategory("Other"), categoryImage);
-                Grid.SetColumn(categoryImage, 2);
-                horizontalGrid.Children.Add(categoryImage);
-
-                eventPanel.Children.Add(horizontalGrid);
-
-                TextBlock eventMessage = new TextBlock
-                {
-                    Text = Message,
-                    Margin = new Thickness(5, 5, 0, 5),
-                    FontWeight = FontWeights.Bold,
-                    TextWrapping = TextWrapping.Wrap
-                };
-                eventPanel.Children.Add(eventMessage);
-
-
-                // Add the StackPanel to the Border
-                eventBorder.Child = eventPanel;
-
-                // Finally, add the Border to the EventsList
+                ClearEventsList();
+                Border eventBorder = CreateEventBorderWithPanel(Title, Message);
                 EventsList.Items.Add(eventBorder);
             }
-
         }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Creates an event border with a panel for displaying messages.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        private Border CreateEventBorderWithPanel(string title, string message)
+        {
+            Border eventBorder = new Border
+            {
+                CornerRadius = new CornerRadius(15),
+                Margin = new Thickness(5),
+                Background = (Brush)Application.Current.FindResource("blueSolidColorBrush")
+            };
+
+            StackPanel eventPanel = CreateEventPanel(title, message);
+
+            // Add the StackPanel to the Border
+            eventBorder.Child = eventPanel;
+
+            return eventBorder;
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Method to create the event panel
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        private StackPanel CreateEventPanel(string title, string message)
+        {
+            StackPanel eventPanel = new StackPanel();
+
+            Grid horizontalGrid = CreateHorizontalGridForMessageBox(title);
+            eventPanel.Children.Add(horizontalGrid);
+
+            TextBlock eventMessage = CreateMessageBlock(message);
+            eventPanel.Children.Add(eventMessage);
+
+            return eventPanel;
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Method to create the horizontal grid (title with icons)
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        private Grid CreateHorizontalGridForMessageBox(string title)
+        {
+            Grid horizontalGrid = new Grid();
+            horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
+            horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
+
+            Image eventTypeImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
+            mediaHelper.LoadImage(GetImagePathCategory("Other"), eventTypeImage);
+            Grid.SetColumn(eventTypeImage, 0);
+            horizontalGrid.Children.Add(eventTypeImage);
+
+            TextBlock eventInfo = new TextBlock
+            {
+                Text = title,
+                Margin = new Thickness(0, 15, 0, 5),
+                TextWrapping = TextWrapping.Wrap,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                TextAlignment = TextAlignment.Center,
+                MinWidth = 800,
+                Width = 800
+            };
+            Grid.SetColumn(eventInfo, 1);
+            horizontalGrid.Children.Add(eventInfo);
+
+            Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
+            mediaHelper.LoadImage(GetImagePathCategory("Other"), categoryImage);
+            Grid.SetColumn(categoryImage, 2);
+            horizontalGrid.Children.Add(categoryImage);
+
+            return horizontalGrid;
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Method to create the message block
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        private TextBlock CreateMessageBlock(string message)
+        {
+            return new TextBlock
+            {
+                Text = message,
+                Margin = new Thickness(5, 5, 0, 5),
+                FontWeight = FontWeights.Bold,
+                TextWrapping = TextWrapping.Wrap
+            };
+        }
+
+        #endregion
+
+        #region Button Click Handlers
+
+        /// <summary>
+        /// Toggles the visibility of the venue buttons panel.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void viewByArea_Click(object sender, RoutedEventArgs e)
         {
-            if (venueButtonsPanel.Visibility == Visibility.Visible)
-            {
-                venueButtonsPanel.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                venueButtonsPanel.Visibility = Visibility.Visible;
-            }
+            venueButtonsPanel.Visibility = venueButtonsPanel.Visibility == Visibility.Visible
+                ? Visibility.Collapsed
+                : Visibility.Visible;
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Toggles the visibility of the event creation panel.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAddEvent_Click(object sender, RoutedEventArgs e)
         {
-            if (createPostPanel.Visibility == Visibility.Visible)
-            {
-                createPostPanel.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                createPostPanel.Visibility = Visibility.Visible;
-            }
+            createPostPanel.Visibility = createPostPanel.Visibility == Visibility.Visible
+               ? Visibility.Collapsed
+               : Visibility.Visible;
         }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
@@ -731,6 +1215,12 @@ namespace PROG7312_ST10023767.Views
 
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Searches for events based on the user's query and updates the events list.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             LocationTextBlock.Text = $"Search Results";
@@ -749,6 +1239,7 @@ namespace PROG7312_ST10023767.Views
             if (string.IsNullOrWhiteSpace(query))
             {
                 UpdateEventsList();
+                txbSearch.Text = "";
                 return;
             }
 
@@ -768,18 +1259,32 @@ namespace PROG7312_ST10023767.Views
             if (filteredEvents.Count == 0)
             {
                 NoPostsMessageBox("No Posts Matching That Search Request", "Unfortunatley there is no posts matching that search request, feel free to try something else!");
+                txbSearch.Text = "";
                 return;
             }
             // Display the filtered list of events
             UpdateEventsList(filteredEvents);
+            txbSearch.Text = "";
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Cancels the current post and clears all input fields
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Post Canceled");
             ClearAllFields();
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        ///  Shows recommended events based on the user's search history
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnShowReccomended_Click(object sender, RoutedEventArgs e)
         {
             LocationTextBlock.Text = $"Recommendations";
@@ -792,6 +1297,15 @@ namespace PROG7312_ST10023767.Views
             UpdateEventsList(RecommendEventsBasedOnSearch("currentUserId"));
         }
 
+        #endregion
+
+        #region Event Recommendation Methods
+
+        /// <summary>
+        /// Tracks the user's search query in the search history.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="searchQuery"></param>
         private void TrackUserSearch(string userId, string searchQuery)
         {
             if (!PostManager.userSearchHistory.ContainsKey(userId))
@@ -802,9 +1316,15 @@ namespace PROG7312_ST10023767.Views
             PostManager.userSearchHistory[userId].Add(searchQuery.ToLower());
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Recommends events based on the user's search history
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         private List<EventClass> RecommendEventsBasedOnSearch(string userId)
         {
-            //the reccomendations should be unique...not duplicates 
+            // Return an empty list if there are no searches in the user's history
             if (!PostManager.userSearchHistory.ContainsKey(userId) || PostManager.userSearchHistory[userId].Count == 0)
             {
                 return new List<EventClass>();
@@ -812,36 +1332,77 @@ namespace PROG7312_ST10023767.Views
 
             List<string> pastSearches = PostManager.userSearchHistory[userId];
 
+            // Get the top 3 most frequent search terms
             var frequentSearches = pastSearches.GroupBy(search => search)
                                                .OrderByDescending(group => group.Count())
                                                .Select(group => group.Key)
                                                .Take(3)
                                                .ToList();
 
-            List<EventClass> recommendedEvents = new List<EventClass>();
+            // Dictionary to hold event relevance scores
+            Dictionary<EventClass, int> eventScores = new Dictionary<EventClass, int>();
 
             foreach (var searchTerm in frequentSearches)
             {
-                var matchingEvents = PostManager.locationEvents.Values.SelectMany(evList => evList)
-                                        .Where(ev => ev.Location.ToLower().Contains(searchTerm) ||
-                                                     ev.Title.ToLower().Contains(searchTerm) ||
-                                                     ev.Category.ToLower().Contains(searchTerm) ||
-                                                     ev.Venue.ToLower().Contains(searchTerm) ||
-                                                     ev.EndDate.ToLower().Contains(searchTerm) ||
-                                                     ev.StartDate.ToLower().Contains(searchTerm) ||
-                                                     ev.StartTime.ToLower().Contains(searchTerm) ||
-                                                     ev.EndTime.ToLower().Contains(searchTerm))
-                                                                .ToList();
+                // Weight can be adjusted based on the frequency of the search term
+                int weight = pastSearches.Count(s => s.Equals(searchTerm));
 
-                recommendedEvents.AddRange(matchingEvents);
+                // Find events that match the search term
+                var matchingEvents = PostManager.locationEvents.Values.SelectMany(evList => evList)
+                    .Where(ev =>
+                        ev.Location.ToLower().Contains(searchTerm) ||
+                        ev.Title.ToLower().Contains(searchTerm) ||
+                        ev.Category.ToLower().Contains(searchTerm) ||
+                        ev.Venue.ToLower().Contains(searchTerm) ||
+                        ev.EndDate.ToLower().Contains(searchTerm) ||
+                        ev.StartDate.ToLower().Contains(searchTerm) ||
+                        ev.StartTime.ToLower().Contains(searchTerm) ||
+                        ev.EndTime.ToLower().Contains(searchTerm))
+                    .Distinct() // Ensure uniqueness
+                    .ToList();
+
+                // Score the events based on the search term weight
+                foreach (var ev in matchingEvents)
+                {
+                    if (!eventScores.ContainsKey(ev))
+                    {
+                        eventScores[ev] = 0; // Initialize score
+                    }
+                    eventScores[ev] += weight; // Increase score by the weight of the search term
+                }
             }
 
-            return recommendedEvents;
+            // Filter out events that are in the past
+            var currentDateTime = DateTime.Now;
+
+            var upcomingAndOngoingEvents = eventScores.Keys.Where(ev =>
+                (IsBusyEvent(ev,currentDateTime)) ||
+                (DateTime.Parse(ev.StartDate) > currentDateTime)).ToList();
+
+            // Sort events by relevance (score) and then by date
+            var sortedRecommendedEvents = upcomingAndOngoingEvents
+                .OrderByDescending(ev => eventScores[ev])
+                .ThenBy(ev => DateTime.Parse(ev.StartDate)) 
+                .ToList();
+
+            return sortedRecommendedEvents;
         }
 
+        #endregion
+
+        #region Text Change Handlers
+
+        /// <summary>
+        /// Handles changes in the search text box
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txbSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
 
         }
+
+        #endregion
+
     }
-}
+}//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//

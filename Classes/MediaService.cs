@@ -215,10 +215,18 @@ namespace PROG7312_ST10023767.Classes
             return documentLink;
         }
 
-        public MediaService()
-        {
-        }
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
+        public MediaService(){ }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Loads the image into an image control
+        /// </summary>
+        /// <param name="imagePath"></param>
+        /// <param name="imageControl"></param>
         public void LoadImage(string imagePath, Image imageControl)
         {
             if (imagePath == null) return;
@@ -234,7 +242,12 @@ namespace PROG7312_ST10023767.Classes
 
         }
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Converts byteArray to BitmapImage
+        /// </summary>
+        /// <param name="byteArray"></param>
+        /// <returns></returns>
         private BitmapImage ByteArrayToImage(byte[] byteArray)
         {
             using (var stream = new MemoryStream(byteArray))
@@ -248,7 +261,12 @@ namespace PROG7312_ST10023767.Classes
             }
         }
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Gets The media type
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public string GetMediaType(string filename)
         {
             string extension = System.IO.Path.GetExtension(filename).ToLower();

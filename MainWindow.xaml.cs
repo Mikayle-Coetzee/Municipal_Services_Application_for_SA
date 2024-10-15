@@ -38,6 +38,12 @@ namespace PROG7312_ST10023767
             MainFrame.Navigate(content: reportIssue);
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Navigates to the EventsUserControl
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnLocalEvents_Click(object sender, RoutedEventArgs e)
         {
             // Navigate to the EventsUserControl view
@@ -50,9 +56,15 @@ namespace PROG7312_ST10023767
             MainFrame.Navigate(content: events);
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// To be implemented in part 3
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnServiceRequestStatus_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("The 'Service Request Status' Feature Is Coming!");
+            MessageBox.Show("The 'Service Request Status' Feature Is Coming");
         }
     }
 }//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//
