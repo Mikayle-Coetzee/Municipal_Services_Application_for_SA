@@ -1,15 +1,21 @@
 # ST10023767_PROG7312 (Municipal Services Application for South Africa)
 
-We were given a POE where we needed to make a WPF Application, using C# and .NET Framework. The application is for a municipal services in South Africa. The application will allow users to report issues, request services, and access local event information. Initially, for part 1, the "Report Issues" functionality will be implemented to allow users to submit detailed reports about municipal issues such as sanitation, roads, and utilities.
+This project is part of a POE where I developed a **WPF Application** using **C#** and the **.NET Framework**. The application is designed for managing municipal services in South Africa, offering features that allow users to report issues, request services, and view local events and announcements. The goal is to create an efficient and user-friendly platform that enhances the interaction between citizens and municipal services.
 
 ## Author 
 #### Mikayle Devpnique Coetzee
 ##### ST10023767
 
-## Features (Phase 1)
-- **Report Issues**: Allows users to report municipal issues by providing details such as location, category, description, and media attachments.
-- **Local Events and Announcements**: This feature will be implemented in later phases.
-- **Service Request Status**: This feature will also be implemented in later phases.
+---
+
+## Project Overview
+### Part 1:
+In the first part, the **"Report Issues"** functionality was implemented. This allows users to submit detailed reports about municipal issues such as sanitation, roads, utilities, etc. For more details on Part 1, see the `README_Part_1.md`.
+
+### Part 2:
+This part extends the application by introducing the **Local Events and Announcements** feature and enhancing data structures for efficient performance. Additionally, I implemented an advanced **Recommendation Feature** based on user searches, and I made use of data structures such as **Stacks**, **Priority Queues**, **Dictionaries**, **Sorted Dictionaries**, and **Sets**.
+
+---
 
 ## Instructions for Compiling and Running the Application
 
@@ -25,81 +31,114 @@ Ensure you have the following:
 4. **Restore NuGet packages**: If there are any missing dependencies, right-click on the solution in the Solution Explorer and select `Restore NuGet Packages`.
 5. **Build the solution**: Once the solution is loaded, press `Ctrl + Shift + B` to build the project. Ensure that there are no build errors.
 
-### Steps to Run
-1. **Run the project**: Press `F5` to run the application in Debug mode or click on `Start` in the toolbar.
-2. **Main Menu**: Upon startup, the main window will appear, providing three options:
-   - **Report Issues (active)**
-   - **Local Events and Announcements (disabled)**
-   - **Service Request Status (disabled)**
-   ![image](https://github.com/user-attachments/assets/f9067ad7-98f1-4f76-bb2e-d9410d569d7d)
-   ![image](https://github.com/user-attachments/assets/299adf28-3364-40c1-924d-6add06936f38)
-   ![image](https://github.com/user-attachments/assets/47cf44a1-7002-43f8-9c68-d5046cb77035)
+---
 
-3. **Report Issues**: Select the "Report Issues" option to proceed.
-   - ![image](https://github.com/user-attachments/assets/b0321b5e-acf0-4dfe-8de0-7a5caa155ccc)
+## Usage Instructions
 
-   - **Location Input**: Enter the location of the issue.
-   ![image](https://github.com/user-attachments/assets/b0936349-f5e5-436e-bd09-75045a851501)
-   ![image](https://github.com/user-attachments/assets/a514fd8f-b476-4c0d-92f2-c241b103aea7)
+### Main Menu
+After launching the application, the main menu provides three options:
+- **Report Issues** (Active)
+- **Local Events and Announcements** (Active)
+- **Service Request Status** (Disabled, coming soon)
+![image](https://github.com/user-attachments/assets/7f2952f4-05c4-45e9-b7de-c25af1269140)
 
-   - **Category Selection**: Choose a category from the dropdown (e.g., sanitation, roads, utilities).
-   ![image](https://github.com/user-attachments/assets/80b27cd5-fc67-4fd3-a011-43e96c191ad1)
+### Reporting an Issue (Part 1; README_Part_1.md)
+To report a municipal issue, navigate to the **Report Issues** section and fill in the required details inorder to submit the report.
 
-   - **Description**: Provide a detailed description of the issue.
-   ![image](https://github.com/user-attachments/assets/ff49b878-2aa7-4be8-8efa-9b74b9df4324)
-   ![image](https://github.com/user-attachments/assets/4af68092-2757-4621-827b-8669ace130ed)
+### Local Events and Announcements
+![image](https://github.com/user-attachments/assets/e0735985-ea1f-4033-91e0-a67969f3731e)
 
-   - **Media Attachment**: Click on the "Attach File" button to upload images, videos or documents related to the issue.
-   ![image](https://github.com/user-attachments/assets/6561d1a9-13e0-4b49-a798-dcd784281d8c)
+1. **Create Post**: 
+   - Click **Create Post** to add an event or announcement.
+   - ![image](https://github.com/user-attachments/assets/28427fe2-c806-4532-b214-ac2287f7479a)
+   - Provide details such as title, start/end dates, start/end times, venue, and description.
+   - Optionally, attach media files.
+   - ![image](https://github.com/user-attachments/assets/b5781f7d-6850-4687-9aca-b90736c0220e)
+   - ![image](https://github.com/user-attachments/assets/7dc18814-dd34-44eb-bf97-e88802de28a1)
+   - ![image](https://github.com/user-attachments/assets/1e967da7-002a-4e63-8c56-7ba69801d0d3)
 
-   - **Submit**: Once all fields are completed, the submit button will be enabled, click the "Submit" button to finalize your report.
-5. **Feedback**: A message box will appear to confirm the successful submission or inform the user if any errors occur.
-   ![image](https://github.com/user-attachments/assets/2023a965-bdaa-4435-a069-8f045f87910e)
-   ![image](https://github.com/user-attachments/assets/5083773a-4802-476b-acbb-0ae270e990e6)
+   - Posts are displayed in a list with color-coded status (red for past, yellow for ongoing, green for upcoming).
+   - ![image](https://github.com/user-attachments/assets/b059740a-7465-44b0-965c-25bcb6b2bfe0)
+   - ![image](https://github.com/user-attachments/assets/cff28f03-dc20-4070-bda3-ba8669ca6e70)
+   - ![image](https://github.com/user-attachments/assets/fe8570ba-816c-4a95-a68e-a48c57318aba)
+   - ![image](https://github.com/user-attachments/assets/b26d36f6-9d91-495a-824d-2ec09e3895d7)
+   - ![image](https://github.com/user-attachments/assets/e262badf-229b-4f81-b1f3-dd398723905a)
+   - ![image](https://github.com/user-attachments/assets/64ec7911-cf95-42a5-b945-a33ae7adda58)
+   - ![image](https://github.com/user-attachments/assets/01c6374e-732f-4313-a021-f5c2aecb98f6)
+   - ![image](https://github.com/user-attachments/assets/240d08b4-eaea-44f8-87dc-6cf4195a9223)
 
-   Test data for image upload:
-   ![image](https://github.com/user-attachments/assets/9ae853d1-bdf1-48e2-aced-8a7b762fb96c)
-   ![image](https://github.com/user-attachments/assets/dc9a68e4-38e6-4ed4-a8b9-3db541cc85a9)
+2. **Filtering and Sorting**:
+   - Use filters at the top of the page to sort by **Events**, **Announcements**, **Category**, **Upcoming**, **Busy**, **Past**.
+   - ![image](https://github.com/user-attachments/assets/a92bbbbc-3bda-40b0-bd99-c8b2825e32a4)
+   - ![image](https://github.com/user-attachments/assets/87be43fb-85a4-4187-8ee0-9e9ad2e5877d)
 
-   Test data for video:
-   ![image](https://github.com/user-attachments/assets/0ad9a905-0360-435d-a50c-d73333ec6de9)
-   ![image](https://github.com/user-attachments/assets/99f8ea94-764e-4220-9d06-6d18d052c6a7)
+   - Filter categories based on existing posts.
+   - Select "All Areas" or filter by specific regions.
 
-   Test data for documents:
-   ![image](https://github.com/user-attachments/assets/c9b2349e-945b-4d1d-9d2c-fdf72d09948b)
-   ![image](https://github.com/user-attachments/assets/750e28b6-0e64-46d7-956b-cc70328ca582)
-   When the link is clicked:
-   ![image](https://github.com/user-attachments/assets/7a9acc6b-a5b2-4032-b0b4-18bbeaeaa3b8)
+3. **Recommendations**:
+   - Search for events, and based on your search history, personalized recommendations will appear in the **Recommended** section.
+   - ![image](https://github.com/user-attachments/assets/d3e60867-3faf-4e5f-9384-20632cd68788)
+   - ![image](https://github.com/user-attachments/assets/4ad23ab5-1f6a-428a-a2e1-3906b4960850)
+   - ![image](https://github.com/user-attachments/assets/1d0cee71-99dc-4223-8869-ebcad30c67cd)
+   - ![image](https://github.com/user-attachments/assets/3c9f2adc-1827-47b6-8b3e-4e994ad6787e)
 
-7. **In-app chat messaging function**: On the left side of the window, the submitted reports will display and allow the following message:
-   - **1/help**: will display a support message
-     ![image](https://github.com/user-attachments/assets/777d328e-7c8f-47e7-be8a-9cebb8da5fe5)
+### Navigation
+- Use the navigation buttons (e.g., **Back to Main Menu**) to switch between sections of the application.
 
-   - **2/view**: will display all the submitted reports
-     ![image](https://github.com/user-attachments/assets/cc682d73-25bc-4a45-af5c-61a9cf5fd5ec)
-     ![image](https://github.com/user-attachments/assets/ada94180-3d8f-40a1-bed8-6c2b07936f44)
-     ![image](https://github.com/user-attachments/assets/a0ab9715-e1a1-4e33-b685-1ffebcd131a4)
-   
-   - **3/new**: will start a new message
-     ![image](https://github.com/user-attachments/assets/71acafbe-c2ff-4b48-84d6-63c4959ff04a)
+---
 
-   - **4/search**: will display the report with the same location and category entered
-     ![image](https://github.com/user-attachments/assets/0cd1a3bf-30d4-491f-8d40-da69e547721f)
-     ![image](https://github.com/user-attachments/assets/d567f7cd-fd0a-4994-ac99-46fe8342eb99)
-     ![image](https://github.com/user-attachments/assets/4e9f2298-fd11-4b9a-95b5-89f535b0e73e)
-     ![image](https://github.com/user-attachments/assets/09d97ab0-a87f-4e2c-87f5-907eb6aaa1e9)
+## Features
+### **Report Issues**
+- Users can report municipal issues by specifying details like:
+  - Location 
+  - Issue Category (e.g., Sanitation, Roads, Utilities)
+  - Description of the issue
+  - Attach media (images/videos)
+  
+### **Local Events and Announcements**
+- Users can create posts for events and announcements.
+- Categories include Music, Art, Sports, etc.
+- Posts can be filtered by categories and sorted by dates.
+- User-friendly form for adding:
+  - Event title
+  - Start and end dates
+  - Start and end times
+  - Venue location
+  - Detailed descriptions
+  - Media attachments (optional)
+- Personalized recommendations based on user search history are displayed.
 
-   - **Progress Bar Completed**: When the progress bar is completed, it will trun green and display a message to the user.
-     ![image](https://github.com/user-attachments/assets/8fb5c475-b59f-4b93-9096-3793308689f7)
-     ![image](https://github.com/user-attachments/assets/20b37450-f3d8-401c-a4d3-9cb520db874c)
- 
-### Key Functions
-- **Form Navigation**: Use navigation buttons (e.g., "Back to Main Menu") to move between different sections of the application.
-- **Data Handling**: All reported issues will be stored in a local list, using appropriate data structures for efficient management.
-- **User engagement**: Chat function and progress bar with motivational lables. 
+### **Service Request Status** (Coming Soon)
+- The service request feature will be implemented in a future phase.
 
-## Design 
-- **User-Centric Design**: The application is designed to be intuitive and easy to use, with clear labels and instructions.
-- **Consistency**: A consistent colour scheme and layout are maintained throughout the application.
-- **Responsiveness**: The interface is designed to work well across different screen sizes.
+### **Recommendation Feature**
+- Analyzes user search patterns.
+- Suggests events and announcements based on preferences using advanced algorithms.
+- Recommendations are ordered by priority (weight/score).
 
+---
+
+## Data Structures Used
+- **Stacks, Queues, and Priority Queues**: Efficient management of event data for processing and prioritizing recommendations.
+- **Dictionaries and Sorted Dictionaries**: Organizing and retrieving events by categories, dates, and other filters.
+- **Sets**: Handling unique categories and filtering for user queries.
+
+---
+
+## Design Principles
+- **User-Centric Design**: The application is designed for ease of use with intuitive navigation and clear labels.
+- **Consistency**: The UI follows a consistent color scheme and layout for an enhanced user experience.
+- **Responsiveness**: The interface adapts to different screen sizes for optimal viewing.
+
+---
+
+## Future Enhancements
+- **Service Request Status** will be implemented in the next part to allow users to track their service requests.
+- Further improvements to the recommendation system will be added when multiple users can use the app and data can be stored in a database.
+
+---
+
+## License
+This project is developed as part of an educational assignment and is for learning purposes only. But MIT License was selected.
+
+---
