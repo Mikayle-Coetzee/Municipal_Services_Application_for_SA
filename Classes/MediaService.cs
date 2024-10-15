@@ -248,7 +248,7 @@ namespace PROG7312_ST10023767.Classes
         /// </summary>
         /// <param name="byteArray"></param>
         /// <returns></returns>
-        private BitmapImage ByteArrayToImage(byte[] byteArray)
+        public BitmapImage ByteArrayToImage(byte[] byteArray)
         {
             using (var stream = new MemoryStream(byteArray))
             {

@@ -28,8 +28,8 @@ namespace PROG7312_ST10023767.Views
         /// <summary>
         /// New instance of the media helper class
         /// </summary>
-        private MediaService mediaHelper = new MediaService() ;
-        
+        private MediaService mediaHelper = new MediaService();
+
         /// <summary>
         /// Manages the creation and storage of posts
         /// </summary>
@@ -228,7 +228,8 @@ namespace PROG7312_ST10023767.Views
 
                     string mediaType = mediaHelper.GetMediaType(filename);
 
-                    MediaFileClass mediaFile = new MediaFileClass(System.IO.Path.GetFileName(filename), fileContent, mediaType);
+                    MediaFileClass mediaFile = new MediaFileClass(System.IO.Path.GetFileName(filename),
+                        fileContent, mediaType);
                     mediaAttachments.Push(mediaFile);
                     MediaList.Items.Add(System.IO.Path.GetFileName(filename));
                 }
@@ -375,28 +376,28 @@ namespace PROG7312_ST10023767.Views
 
             DateTime currentDate = DateTime.Now.Date;
 
-            // Validate start date not in the past
+            // Validate if the start date is not in the past
             if (startDate.Value.Date < currentDate && endDate.Value.Date < currentDate)
             {
                 MessageBox.Show("Start date cannot be in the past.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
 
-            // Validate end date not in the past
+            // Validate  if the end date is not in the past
             if (endDate.Value.Date < currentDate)
             {
                 MessageBox.Show("End date cannot be in the past.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
 
-            // Validate start date cannot be after end date
+            // Validate so that start date cannot be after end date
             if (startDate.Value.Date > endDate.Value.Date)
             {
                 MessageBox.Show("Start date cannot be later than end date.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
 
-            // If the dates are the same, validate start time cannot be later than end time
+            // If the dates are the same, validate so that start time cannot be later than end time
             if (startDate.Value.Date == endDate.Value.Date)
             {
                 TimeSpan startTime = GetTimeSpan(cmbHour, cmbMinute, cmbAmPm);
@@ -438,7 +439,7 @@ namespace PROG7312_ST10023767.Views
             }
             else if (selectedAmPm == "AM" && hour == 12)
             {
-                hour = 0; 
+                hour = 0;
             }
 
             int minute = int.Parse(selectedMinute);
@@ -573,10 +574,9 @@ namespace PROG7312_ST10023767.Views
 
             locationButton.Click += LocationButton_Click;
 
-            // Set the width of the button dynamically based on the available space in the WrapPanel
             if (LocationWrapPanel.ActualWidth != 0)
             {
-                locationButton.Width = LocationWrapPanel.ActualWidth - 10; // Adjust the margin or padding as needed
+                locationButton.Width = LocationWrapPanel.ActualWidth - 10; 
             }
 
             LocationWrapPanel.Children.Add(locationButton);
@@ -593,12 +593,11 @@ namespace PROG7312_ST10023767.Views
         /// <param name="e"></param>
         private void LocationWrapPanel_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            // Loop through each button in the WrapPanel and resize them
             foreach (UIElement child in LocationWrapPanel.Children)
             {
                 if (child is Button button)
                 {
-                    button.Width = LocationWrapPanel.ActualWidth - 10;  
+                    button.Width = LocationWrapPanel.ActualWidth - 10;
                 }
             }
         }
@@ -620,7 +619,7 @@ namespace PROG7312_ST10023767.Views
 
             DateTime currentDateTime = DateTime.Now;
 
-            // Apply filter based on the selected filter
+            // Apply filter based on the selected filter 
             eventsToDisplay = ApplySelectedFilter(selectedFilter, eventsToDisplay, currentDateTime);
 
             // Show message if no posts match the filter
@@ -633,7 +632,7 @@ namespace PROG7312_ST10023767.Views
                 return;
             }
 
-            // Update the events list with filtered events
+            // Update the post list with filtered posts
             UpdateEventsList(eventsToDisplay);
         }
 
@@ -707,7 +706,7 @@ namespace PROG7312_ST10023767.Views
                     return eventsToDisplay.Where(item => IsPastEvent(item, currentDateTime)).ToList();
 
                 case "Busy":
-                    LocationTextBlock.Text = "Events & Announcements Currently Busy" + selectedFilter ;
+                    LocationTextBlock.Text = "Events & Announcements Currently Busy" + selectedFilter;
 
                     return eventsToDisplay.Where(item => IsBusyEvent(item, currentDateTime)).ToList();
 
@@ -844,13 +843,11 @@ namespace PROG7312_ST10023767.Views
             Border eventBorder = CreateEventBorder(ev);
             StackPanel eventPanel = CreateEventPanel(statusBorder, ev);
 
-            // Add event details to the panel
+            // Display the post
             AddEventDetailsToPanel(eventPanel, ev);
 
-            // Add the StackPanel to the Border
             eventBorder.Child = eventPanel;
 
-            // Finally, add the Border to the EventsList
             EventsList.Items.Add(eventBorder);
         }
 
@@ -1030,11 +1027,66 @@ namespace PROG7312_ST10023767.Views
         /// <param name="ev"></param>
         private void AddMediaFilesToPanel(StackPanel eventPanel, EventClass ev)
         {
+            foreach (var media in ev.MediaFiles)
+            {
+                Border border = new Border
+                {
+                    Height = 200,
+                    CornerRadius = new CornerRadius(15),
+                    Margin = new Thickness(10),
+                    BorderBrush = Brushes.Transparent,  
+                    Background = Brushes.Transparent  
+                };
+
+                if (media.MediaType == "Image")
+                {
+                    Image imageItem = new Image
+                    {
+                        Stretch = Stretch.Fill
+                    };
+
+                    if (media.FileContent != null && media.FileContent.Length > 0)
+                    {
+                        imageItem.Source = mediaHelper.ByteArrayToImage(media.FileContent);
+                    }
+                    else if (!string.IsNullOrEmpty(media.FileName))
+                    {
+                        mediaHelper.LoadImage(media.FileName, imageItem);
+                    }
+
+                    border.Child = imageItem;
+                }
+                else if (media.MediaType == "Video")
+                {
+                    MediaElement videoItem = new MediaElement
+                    {
+                        Stretch = Stretch.Fill,
+                        LoadedBehavior = MediaState.Play,
+                        UnloadedBehavior = MediaState.Stop,
+                    };
+
+                    if (media.FileContent != null && media.FileContent.Length > 0)
+                    {
+                        string tempFilePath = System.IO.Path.GetTempFileName() + ".mp4";
+                        System.IO.File.WriteAllBytes(tempFilePath, media.FileContent);
+                        videoItem.Source = new Uri(tempFilePath, UriKind.Absolute);
+                    }
+                    else if (!string.IsNullOrEmpty(media.FileName))
+                    {
+                        videoItem.Source = new Uri(media.FileName, UriKind.RelativeOrAbsolute);
+                    }
+
+                    border.Child = videoItem;
+                }
+
+                eventPanel.Children.Add(border);
+            }
+
             TextBlock mediaBlock = new TextBlock
             {
-                Text = "Media Files:",
+                Text = "All Media Files (Click on the file names to open):",
                 FontWeight = FontWeights.Bold,
-                Margin = new Thickness(0, 10, 0, 5),
+                Margin = new Thickness(5, 10, 0, 5),
                 TextWrapping = TextWrapping.Wrap
             };
 
@@ -1229,7 +1281,6 @@ namespace PROG7312_ST10023767.Views
 
             if (!string.IsNullOrEmpty(searchQuery))
             {
-                // Track the user's search
                 TrackUserSearch("currentUserId", searchQuery);
             }
 
@@ -1243,6 +1294,7 @@ namespace PROG7312_ST10023767.Views
                 return;
             }
 
+            //search through everything related to a post to find matches
             List<EventClass> filteredEvents = PostManager.locationEvents.Values
                 .SelectMany(evList => evList)
                 .Where(ev => ev.Title.ToLower().Contains(query) ||
@@ -1262,7 +1314,8 @@ namespace PROG7312_ST10023767.Views
                 txbSearch.Text = "";
                 return;
             }
-            // Display the filtered list of events
+            
+            // Display the filtered list of posts
             UpdateEventsList(filteredEvents);
             txbSearch.Text = "";
         }
@@ -1324,7 +1377,7 @@ namespace PROG7312_ST10023767.Views
         /// <returns></returns>
         private List<EventClass> RecommendEventsBasedOnSearch(string userId)
         {
-            // Return an empty list if there are no searches in the user's history
+            // If the user has no search historu, it will return an empty new list
             if (!PostManager.userSearchHistory.ContainsKey(userId) || PostManager.userSearchHistory[userId].Count == 0)
             {
                 return new List<EventClass>();
@@ -1332,22 +1385,22 @@ namespace PROG7312_ST10023767.Views
 
             List<string> pastSearches = PostManager.userSearchHistory[userId];
 
-            // Get the top 3 most frequent search terms
+            // This will Get the top 3 most frequent search terms of the user
             var frequentSearches = pastSearches.GroupBy(search => search)
                                                .OrderByDescending(group => group.Count())
                                                .Select(group => group.Key)
                                                .Take(3)
                                                .ToList();
 
-            // Dictionary to hold event relevance scores
+            
             Dictionary<EventClass, int> eventScores = new Dictionary<EventClass, int>();
 
             foreach (var searchTerm in frequentSearches)
             {
-                // Weight can be adjusted based on the frequency of the search term
+                // For the weight, I made it to count the amount of searches that tearm has, and that will be the priority 
                 int weight = pastSearches.Count(s => s.Equals(searchTerm));
 
-                // Find events that match the search term
+                // This will find the events that match the search term
                 var matchingEvents = PostManager.locationEvents.Values.SelectMany(evList => evList)
                     .Where(ev =>
                         ev.Location.ToLower().Contains(searchTerm) ||
@@ -1358,31 +1411,31 @@ namespace PROG7312_ST10023767.Views
                         ev.StartDate.ToLower().Contains(searchTerm) ||
                         ev.StartTime.ToLower().Contains(searchTerm) ||
                         ev.EndTime.ToLower().Contains(searchTerm))
-                    .Distinct() // Ensure uniqueness
+                    .Distinct() 
                     .ToList();
 
-                // Score the events based on the search term weight
+                // Each of the events will get a score based on their weight 
                 foreach (var ev in matchingEvents)
                 {
                     if (!eventScores.ContainsKey(ev))
                     {
-                        eventScores[ev] = 0; // Initialize score
+                        eventScores[ev] = 0; 
                     }
-                    eventScores[ev] += weight; // Increase score by the weight of the search term
+                    eventScores[ev] += weight;  
                 }
             }
 
-            // Filter out events that are in the past
+            // I dont want to show past events to the user when they get recommendations, this will filter through them
             var currentDateTime = DateTime.Now;
 
             var upcomingAndOngoingEvents = eventScores.Keys.Where(ev =>
-                (IsBusyEvent(ev,currentDateTime)) ||
+                (IsBusyEvent(ev, currentDateTime)) ||
                 (DateTime.Parse(ev.StartDate) > currentDateTime)).ToList();
 
-            // Sort events by relevance (score) and then by date
+            // This will sort them based on their score/relevance...
             var sortedRecommendedEvents = upcomingAndOngoingEvents
                 .OrderByDescending(ev => eventScores[ev])
-                .ThenBy(ev => DateTime.Parse(ev.StartDate)) 
+                .ThenBy(ev => DateTime.Parse(ev.StartDate))
                 .ToList();
 
             return sortedRecommendedEvents;
