@@ -105,11 +105,13 @@
     </ApplicationDefinition>
     <Compile Include="Classes\ButtonHelper.cs" />
     <Compile Include="Classes\ChatService.cs" />
+    <Compile Include="Classes\DisplayHelper.cs" />
     <Compile Include="Classes\EventClass.cs" />
     <Compile Include="Classes\PostManager.cs" />
     <Compile Include="Classes\MediaFileClass.cs" />
     <Compile Include="Classes\MediaService.cs" />
     <Compile Include="Classes\PriorityQueue.cs" />
+    <Compile Include="Classes\FilterAndRecommendHelper.cs" />
     <Compile Include="Views\CategoryFilterWindow.xaml.cs">
       <DependentUpon>CategoryFilterWindow.xaml</DependentUpon>
     </Compile>

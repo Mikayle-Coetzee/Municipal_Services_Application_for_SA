@@ -25,6 +25,11 @@ namespace PROG7312_ST10023767.Views
     /// </summary>
     public partial class EventsUserControl : UserControl
     {
+        private FilterAndRecommendHelper filterAndRecommendHelper = new FilterAndRecommendHelper();
+
+
+        private DisplayHelper displayHelper = new DisplayHelper();
+
         /// <summary>
         /// New instance of the media helper class
         /// </summary>
@@ -118,6 +123,20 @@ namespace PROG7312_ST10023767.Views
             }
         }
 
+        /// <summary>
+        /// Displays a message when there are no posts.
+        /// </summary>
+        /// <param name="Title"></param>
+        /// <param name="Message"></param>
+        private void NoPostsMessageBox(string Title, string Message)
+        {
+            if (EventsList != null)
+            {
+                ClearEventsList();
+                Border eventBorder = displayHelper.CreateEventBorderWithPanel(Title, Message);
+                EventsList.Items.Add(eventBorder);
+            }
+        }
         #endregion
 
         #region Date and Time Methods
@@ -129,80 +148,6 @@ namespace PROG7312_ST10023767.Views
             if (datePicker != null)
             {
                 datePicker.SelectedDate = DateTime.Now;
-            }
-        }
-        #endregion
-
-        #region Image Handling Methods
-        /// <summary>
-        /// Gets the file path of an image based on its type.
-        /// </summary>
-        private string GetImagePath(string type)
-        {
-            string relativeImagePath;
-
-            if (type == "Announcement")
-            {
-                relativeImagePath = "Images/Part2/announcement.png";
-            }
-            else
-            {
-                relativeImagePath = "Images/Part2/event.png";
-            }
-
-            string fullImagePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativeImagePath);
-
-            if (File.Exists(fullImagePath))
-            {
-                return fullImagePath;
-            }
-            else
-            {
-                MessageBox.Show($"Image not found: {fullImagePath}");
-                return null;
-            }
-        }
-
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
-        /// Gets the file path of an image based on its category.
-        /// </summary>
-        private string GetImagePathCategory(string category)
-        {
-            string relativeImagePath;
-
-            switch (category)
-            {
-                case "Music":
-                    relativeImagePath = "Images/Part2/music.png";
-                    break;
-                case "Sports":
-                    relativeImagePath = "Images/Part2/sports.png";
-                    break;
-                case "Art":
-                    relativeImagePath = "Images/Part2/art.png";
-                    break;
-                case "Theater":
-                    relativeImagePath = "Images/Part2/theater.png";
-                    break;
-                case "Networking":
-                    relativeImagePath = "Images/Part2/networking.png";
-                    break;
-                default:
-                    relativeImagePath = "Images/Part2/other.png";
-                    break;
-            }
-
-            string fullImagePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativeImagePath);
-
-            if (File.Exists(fullImagePath))
-            {
-                return fullImagePath;
-            }
-            else
-            {
-                MessageBox.Show($"Image not found: {fullImagePath}");
-                return null;
             }
         }
         #endregion
@@ -619,7 +564,7 @@ namespace PROG7312_ST10023767.Views
 
             DateTime currentDateTime = DateTime.Now;
 
-            // Apply filter based on the selected filter 
+            // Apply filter based on the filter selected  
             eventsToDisplay = ApplySelectedFilter(selectedFilter, eventsToDisplay, currentDateTime);
 
             // Show message if no posts match the filter
@@ -693,7 +638,7 @@ namespace PROG7312_ST10023767.Views
                 case "Category":
                     LocationTextBlock.Text = "Filtered By Category";
 
-                    return FilterByCategory(eventsToDisplay);
+                    return filterAndRecommendHelper.FilterByCategory(eventsToDisplay, PostManager.uniqueCategories);
 
                 case "Upcoming":
                     LocationTextBlock.Text = "Upcoming Events & Announcements";
@@ -703,12 +648,12 @@ namespace PROG7312_ST10023767.Views
                 case "Past":
                     LocationTextBlock.Text = "Past Events & Announcements";
 
-                    return eventsToDisplay.Where(item => IsPastEvent(item, currentDateTime)).ToList();
+                    return eventsToDisplay.Where(item => filterAndRecommendHelper.IsPastEvent(item, currentDateTime)).ToList();
 
                 case "Busy":
                     LocationTextBlock.Text = "Events & Announcements Currently Busy" + selectedFilter;
 
-                    return eventsToDisplay.Where(item => IsBusyEvent(item, currentDateTime)).ToList();
+                    return eventsToDisplay.Where(item => filterAndRecommendHelper.IsBusyEvent(item, currentDateTime)).ToList();
 
                 default:
                     LocationTextBlock.Text = "Filtered Posts";
@@ -717,56 +662,6 @@ namespace PROG7312_ST10023767.Views
 
             }
 
-        }
-
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
-        /// Filters events by category using a category filter window
-        /// </summary>
-        /// <param name="eventsToDisplay"></param>
-        /// <returns></returns>
-        private List<EventClass> FilterByCategory(List<EventClass> eventsToDisplay)
-        {
-            CategoryFilterWindow categoryWindow = new CategoryFilterWindow();
-            categoryWindow.PopulateCategories(PostManager.uniqueCategories);
-
-            if (categoryWindow.ShowDialog() == true)
-            {
-                string selectedCategory = categoryWindow.SelectedCategory;
-                return eventsToDisplay.Where(item => item.Category == selectedCategory).ToList();
-            }
-
-            return eventsToDisplay;
-        }
-
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
-        /// Checks if the event is in the past
-        /// </summary>
-        /// <param name="item"></param>
-        /// <param name="currentDateTime"></param>
-        /// <returns></returns>
-        private bool IsPastEvent(EventClass item, DateTime currentDateTime)
-        {
-            DateTime startDate = DateTime.Parse(item.StartDate);
-            DateTime endDate = DateTime.Parse(item.EndDate);
-
-            return currentDateTime > startDate && currentDateTime > endDate && currentDateTime >= endDate.Date.AddDays(1).AddTicks(-1);
-        }
-
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
-        /// Checks if the event is ongoing (i.e., busy)
-        /// </summary>
-        /// <param name="item"></param>
-        /// <param name="currentDateTime"></param>
-        /// <returns></returns>
-        private bool IsBusyEvent(EventClass item, DateTime currentDateTime)
-        {
-            DateTime startDate = DateTime.Parse(item.StartDate);
-            DateTime endDate = DateTime.Parse(item.EndDate);
-
-            return currentDateTime >= startDate && currentDateTime <= endDate.Date.AddDays(1).AddTicks(-1);
         }
 
         #endregion
@@ -817,206 +712,6 @@ namespace PROG7312_ST10023767.Views
         private List<EventClass> GetEventsToDisplay(List<EventClass> filteredEvents)
         {
             return filteredEvents ?? PostManager.locationEvents.Values.SelectMany(evList => evList).OrderBy(e => e.StartDate).ToList();
-        }
-
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
-        /// Displays a message when there are no posts available
-        /// </summary>
-        private void ShowNoPostsMessage()
-        {
-            NoPostsMessageBox("No Posts Posted Yet", "Be a champ in your community by posting first!");
-        }
-
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
-        /// Displays the event details on the UI
-        /// </summary>
-        /// <param name="ev"></param>
-        private void DisplayEvent(EventClass ev)
-        {
-            DateTime currentDateTime = DateTime.Now;
-            string status = DetermineEventStatus(ev, currentDateTime, out Border statusBorder);
-
-            Console.WriteLine($"Status for event '{ev.Title}': {status}");
-
-            Border eventBorder = CreateEventBorder(ev);
-            StackPanel eventPanel = CreateEventPanel(statusBorder, ev);
-
-            // Display the post
-            AddEventDetailsToPanel(eventPanel, ev);
-
-            eventBorder.Child = eventPanel;
-
-            EventsList.Items.Add(eventBorder);
-        }
-
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
-        /// Determines the status of the event based on current date and time
-        /// </summary>
-        /// <param name="ev"></param>
-        /// <param name="currentDateTime"></param>
-        /// <param name="statusBorder"></param>
-        /// <returns></returns>
-        private string DetermineEventStatus(EventClass ev, DateTime currentDateTime, out Border statusBorder)
-        {
-            DateTime startDateTime, endDateTime;
-            string status;
-
-            statusBorder = new Border
-            {
-                CornerRadius = new CornerRadius(15),
-                Height = 5,
-                Margin = new Thickness(7, 0, 7, 0)
-            };
-
-            if (DateTime.TryParse(ev.StartDate, out startDateTime) && DateTime.TryParse(ev.EndDate, out endDateTime))
-            {
-                endDateTime = endDateTime.Date.AddDays(1).AddTicks(-1);
-
-                if (currentDateTime >= startDateTime && currentDateTime <= endDateTime)
-                {
-                    status = "busy";
-                    statusBorder.Background = (Brush)Application.Current.FindResource("busySolidColorBrush");
-                }
-                else if (currentDateTime > endDateTime)
-                {
-                    status = "past";
-                    statusBorder.Background = (Brush)Application.Current.FindResource("pastSolidColorBrush");
-                }
-                else
-                {
-                    status = "upcoming";
-                    statusBorder.Background = (Brush)Application.Current.FindResource("upcomingSolidColorBrush");
-                }
-            }
-            else
-            {
-                status = "unknown";
-                statusBorder.Background = (Brush)Application.Current.FindResource("defaultSolidColorBrush");
-                Console.WriteLine($"Failed to parse dates for event: {ev.Title}, StartDate: {ev.StartDate}, EndDate: {ev.EndDate}");
-            }
-
-            return status;
-        }
-
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
-        /// Creates a Border for the event
-        /// </summary>
-        /// <param name="ev"></param>
-        /// <returns></returns>
-        private Border CreateEventBorder(EventClass ev)
-        {
-            return new Border
-            {
-                CornerRadius = new CornerRadius(15),
-                Margin = new Thickness(5),
-                Background = (Brush)Application.Current.FindResource(ev.Type == "Event" ? "greenSolidColorBrush" : "offWhiteSolidColorBrush")
-            };
-        }
-
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
-        /// Creates a StackPanel for the event with the status border and event details
-        /// </summary>
-        /// <param name="statusBorder"></param>
-        /// <param name="ev"></param>
-        /// <returns></returns>
-        private StackPanel CreateEventPanel(Border statusBorder, EventClass ev)
-        {
-            StackPanel eventPanel = new StackPanel();
-            eventPanel.Children.Add(statusBorder);
-
-            Grid horizontalGrid = CreateHorizontalGrid(ev);
-            eventPanel.Children.Add(horizontalGrid);
-
-            return eventPanel;
-        }
-
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
-        /// Creates a horizontal grid for the event display
-        /// </summary>
-        /// <param name="ev"></param>
-        /// <returns></returns>
-        private Grid CreateHorizontalGrid(EventClass ev)
-        {
-            Grid horizontalGrid = new Grid();
-            horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
-            horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
-
-            Image eventTypeImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
-            mediaHelper.LoadImage(GetImagePath(ev.Type), eventTypeImage);
-            Grid.SetColumn(eventTypeImage, 0);
-            horizontalGrid.Children.Add(eventTypeImage);
-
-            TextBlock eventInfo = new TextBlock
-            {
-                Text = $"{ev.StartTime}: {ev.StartDate} - {ev.EndTime}: {ev.EndDate}",
-                Margin = new Thickness(0, 15, 0, 5),
-                TextWrapping = TextWrapping.Wrap,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                TextAlignment = TextAlignment.Center,
-                MinWidth = 800,
-                Width = 800
-            };
-            Grid.SetColumn(eventInfo, 1);
-            horizontalGrid.Children.Add(eventInfo);
-
-            Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
-            mediaHelper.LoadImage(GetImagePathCategory(ev.Category), categoryImage);
-            Grid.SetColumn(categoryImage, 2);
-            horizontalGrid.Children.Add(categoryImage);
-
-            return horizontalGrid;
-        }
-
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
-        /// Adds detailed information about the event to the provided panel
-        /// </summary>
-        /// <param name="eventPanel"></param>
-        /// <param name="ev"></param>
-        private void AddEventDetailsToPanel(StackPanel eventPanel, EventClass ev)
-        {
-            eventPanel.Children.Add(new TextBlock
-            {
-                Text = "Title: " + ev.Title,
-                Margin = new Thickness(5, 5, 0, 5),
-                FontWeight = FontWeights.Bold,
-                TextWrapping = TextWrapping.Wrap
-            });
-
-            eventPanel.Children.Add(new TextBlock
-            {
-                Text = "Description: " + ev.Description,
-                Margin = new Thickness(5, 5, 0, 5),
-                TextWrapping = TextWrapping.Wrap
-            });
-
-            eventPanel.Children.Add(new TextBlock
-            {
-                Text = $"Venue: {ev.Venue}",
-                Margin = new Thickness(5, 5, 0, 5),
-                FontWeight = FontWeights.Bold,
-                TextWrapping = TextWrapping.Wrap
-            });
-
-            eventPanel.Children.Add(new TextBlock
-            {
-                Text = $"City/Area: {ev.Location}",
-                Margin = new Thickness(5, 5, 0, 5),
-                FontWeight = FontWeights.Bold,
-                TextWrapping = TextWrapping.Wrap
-            });
-
-            if (ev.MediaFiles != null && ev.MediaFiles.Count > 0)
-            {
-                AddMediaFilesToPanel(eventPanel, ev);
-            }
         }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
@@ -1101,124 +796,82 @@ namespace PROG7312_ST10023767.Views
             }
         }
 
-        #endregion
-
-        #region Message Display Methods
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
-        /// Displays a message when there are no posts.
+        /// Displays a message when there are no posts available
         /// </summary>
-        /// <param name="Title"></param>
-        /// <param name="Message"></param>
-        private void NoPostsMessageBox(string Title, string Message)
+        private void ShowNoPostsMessage()
         {
-            if (EventsList != null)
-            {
-                ClearEventsList();
-                Border eventBorder = CreateEventBorderWithPanel(Title, Message);
-                EventsList.Items.Add(eventBorder);
-            }
+            NoPostsMessageBox("No Posts Posted Yet", "Be a champ in your community by posting first!");
         }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
-        /// Creates an event border with a panel for displaying messages.
+        /// Displays the event details on the UI
         /// </summary>
-        /// <param name="title"></param>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        private Border CreateEventBorderWithPanel(string title, string message)
+        /// <param name="ev"></param>
+        private void DisplayEvent(EventClass ev)
         {
-            Border eventBorder = new Border
-            {
-                CornerRadius = new CornerRadius(15),
-                Margin = new Thickness(5),
-                Background = (Brush)Application.Current.FindResource("blueSolidColorBrush")
-            };
+            DateTime currentDateTime = DateTime.Now;
+            string status = displayHelper.DetermineEventStatus(ev, currentDateTime, out Border statusBorder);
 
-            StackPanel eventPanel = CreateEventPanel(title, message);
+            Console.WriteLine($"Status for event '{ev.Title}': {status}");
 
-            // Add the StackPanel to the Border
+            Border eventBorder = displayHelper.CreateEventBorder(ev);
+            StackPanel eventPanel = displayHelper.CreateEventPanel(statusBorder, ev);
+
+            // Display the post
+            AddEventDetailsToPanel(eventPanel, ev);
+
             eventBorder.Child = eventPanel;
 
-            return eventBorder;
+            EventsList.Items.Add(eventBorder);
         }
-
         //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
-        /// Method to create the event panel
+        /// Adds detailed information about the event to the provided panel
         /// </summary>
-        /// <param name="title"></param>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        private StackPanel CreateEventPanel(string title, string message)
+        /// <param name="eventPanel"></param>
+        /// <param name="ev"></param>
+        private void AddEventDetailsToPanel(StackPanel eventPanel, EventClass ev)
         {
-            StackPanel eventPanel = new StackPanel();
-
-            Grid horizontalGrid = CreateHorizontalGridForMessageBox(title);
-            eventPanel.Children.Add(horizontalGrid);
-
-            TextBlock eventMessage = CreateMessageBlock(message);
-            eventPanel.Children.Add(eventMessage);
-
-            return eventPanel;
-        }
-
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
-        /// Method to create the horizontal grid (title with icons)
-        /// </summary>
-        /// <param name="title"></param>
-        /// <returns></returns>
-        private Grid CreateHorizontalGridForMessageBox(string title)
-        {
-            Grid horizontalGrid = new Grid();
-            horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
-            horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
-
-            Image eventTypeImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
-            mediaHelper.LoadImage(GetImagePathCategory("Other"), eventTypeImage);
-            Grid.SetColumn(eventTypeImage, 0);
-            horizontalGrid.Children.Add(eventTypeImage);
-
-            TextBlock eventInfo = new TextBlock
+            eventPanel.Children.Add(new TextBlock
             {
-                Text = title,
-                Margin = new Thickness(0, 15, 0, 5),
-                TextWrapping = TextWrapping.Wrap,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                TextAlignment = TextAlignment.Center,
-                MinWidth = 800,
-                Width = 800
-            };
-            Grid.SetColumn(eventInfo, 1);
-            horizontalGrid.Children.Add(eventInfo);
-
-            Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
-            mediaHelper.LoadImage(GetImagePathCategory("Other"), categoryImage);
-            Grid.SetColumn(categoryImage, 2);
-            horizontalGrid.Children.Add(categoryImage);
-
-            return horizontalGrid;
-        }
-
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
-        /// Method to create the message block
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        private TextBlock CreateMessageBlock(string message)
-        {
-            return new TextBlock
-            {
-                Text = message,
+                Text = "Title: " + ev.Title,
                 Margin = new Thickness(5, 5, 0, 5),
                 FontWeight = FontWeights.Bold,
                 TextWrapping = TextWrapping.Wrap
-            };
+            });
+
+            eventPanel.Children.Add(new TextBlock
+            {
+                Text = "Description: " + ev.Description,
+                Margin = new Thickness(5, 5, 0, 5),
+                TextWrapping = TextWrapping.Wrap
+            });
+
+            eventPanel.Children.Add(new TextBlock
+            {
+                Text = $"Venue: {ev.Venue}",
+                Margin = new Thickness(5, 5, 0, 5),
+                FontWeight = FontWeights.Bold,
+                TextWrapping = TextWrapping.Wrap
+            });
+
+            eventPanel.Children.Add(new TextBlock
+            {
+                Text = $"City/Area: {ev.Location}",
+                Margin = new Thickness(5, 5, 0, 5),
+                FontWeight = FontWeights.Bold,
+                TextWrapping = TextWrapping.Wrap
+            });
+
+            if (ev.MediaFiles != null && ev.MediaFiles.Count > 0)
+            {
+                AddMediaFilesToPanel(eventPanel, ev);
+            }
         }
+
 
         #endregion
 
@@ -1275,7 +928,7 @@ namespace PROG7312_ST10023767.Views
 
             if (!string.IsNullOrEmpty(searchQuery))
             {
-                TrackUserSearch("currentUserId", searchQuery);
+                filterAndRecommendHelper.TrackUserSearch("currentUserId", searchQuery, PostManager.userSearchHistory);
             }
 
 
@@ -1336,100 +989,13 @@ namespace PROG7312_ST10023767.Views
         {
             LocationTextBlock.Text = $"Recommendations";
 
-            if (RecommendEventsBasedOnSearch("currentUserId").Count == 0)
+            if (filterAndRecommendHelper.RecommendEventsBasedOnSearch("currentUserId", PostManager.userSearchHistory, PostManager.locationEvents).Count == 0)
             {
                 NoPostsMessageBox("No Recommended Posts Yet", "Unfortunatley we cant run our algoritm to recommend you something if we have no data to work off of, please search something to build your search history");
                 return;
             }
-            UpdateEventsList(RecommendEventsBasedOnSearch("currentUserId"));
+            UpdateEventsList(filterAndRecommendHelper.RecommendEventsBasedOnSearch("currentUserId", PostManager.userSearchHistory, PostManager.locationEvents));
         }
-
-        #endregion
-
-        #region Event Recommendation Methods
-
-        /// <summary>
-        /// Tracks the user's search query in the search history.
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="searchQuery"></param>
-        private void TrackUserSearch(string userId, string searchQuery)
-        {
-            if (!PostManager.userSearchHistory.ContainsKey(userId))
-            {
-                PostManager.userSearchHistory[userId] = new List<string>();
-            }
-
-            PostManager.userSearchHistory[userId].Add(searchQuery.ToLower());
-        }
-
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
-        /// Recommends events based on the user's search history
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        private List<EventClass> RecommendEventsBasedOnSearch(string userId)
-        {
-            // If the user has no search historu, it will return an empty new list
-            if (!PostManager.userSearchHistory.ContainsKey(userId) || PostManager.userSearchHistory[userId].Count == 0)
-            {
-                return new List<EventClass>();
-            }
-
-            List<string> pastSearches = PostManager.userSearchHistory[userId];
-
-            // This will Get the top 3 most frequent search terms of the user
-            var frequentSearches = pastSearches.GroupBy(search => search)
-                                               .OrderByDescending(group => group.Count())
-                                               .Select(group => group.Key)
-                                               .Take(3)
-                                               .ToList();
-
-            // I made use of a custom Priority Queue so that its eaiser to mark
-            PriorityQueue<EventClass, int> eventQueue = new PriorityQueue<EventClass, int>();
-
-            foreach (var searchTerm in frequentSearches)
-            {
-                // For the weight, I made it to count the amount of searches that tearm has, and that will be the priority 
-                int weight = pastSearches.Count(s => s.Equals(searchTerm));
-
-                // This will find the events that match the search term
-                var matchingEvents = PostManager.locationEvents.Values.SelectMany(evList => evList)
-                    .Where(ev =>
-                        ev.Location.ToLower().Contains(searchTerm) ||
-                        ev.Title.ToLower().Contains(searchTerm) ||
-                        ev.Category.ToLower().Contains(searchTerm) ||
-                        ev.Venue.ToLower().Contains(searchTerm) ||
-                        ev.EndDate.ToLower().Contains(searchTerm) ||
-                        ev.StartDate.ToLower().Contains(searchTerm) ||
-                        ev.StartTime.ToLower().Contains(searchTerm) ||
-                        ev.EndTime.ToLower().Contains(searchTerm))
-                    .Distinct()
-                    .ToList();
-
-                foreach (var ev in matchingEvents)
-                {
-                    eventQueue.Enqueue(ev, weight);
-                }
-            }
-
-            var currentDateTime = DateTime.Now;
-            var upcomingAndOngoingEvents = new List<EventClass>();
-
-            while (eventQueue.Count > 0)
-            {
-                var ev = eventQueue.Dequeue();
-
-                if (IsBusyEvent(ev, currentDateTime) || DateTime.Parse(ev.StartDate) > currentDateTime)
-                {
-                    upcomingAndOngoingEvents.Add(ev);
-                }
-            }
-
-            return upcomingAndOngoingEvents;
-        }
-
 
         #endregion
 
