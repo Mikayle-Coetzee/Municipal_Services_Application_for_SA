@@ -78,7 +78,10 @@
                                                 VerticalAlignment="Top" 
                                                  Click="ViewAllEvents_Click"/>
 
-                                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                            <ScrollViewer 
+                                                VerticalScrollBarVisibility="Auto" 
+                                                AutomationProperties.IsOffscreenBehavior="Offscreen" 
+                                                >
                                                 <WrapPanel x:Name="LocationWrapPanel" Orientation="Vertical" SizeChanged="LocationWrapPanel_SizeChanged">
                                                 </WrapPanel>
                                             </ScrollViewer>
@@ -156,14 +159,18 @@ FontWeight="Bold"  Style="{StaticResource RoundedButtonStyleMain}" Click="btnSho
 
 
                                 </Grid>
-                                <ItemsControl x:Name="EventsList">
-                                </ItemsControl>
-
+                                <ScrollViewer 
+                                    VerticalScrollBarVisibility="Auto" 
+                                    AutomationProperties.IsOffscreenBehavior="Offscreen" 
+                                    >       
+                                    <ItemsControl x:Name="EventsList">
+                                    </ItemsControl>
+                                </ScrollViewer>
                             </StackPanel>
+                            
+                                <Border x:Name="createPostPanel" Visibility="Visible" CornerRadius="15" Margin="10,10,10,10" Grid.Column="2" Background="{DynamicResource darkestSolidColorBrush}" HorizontalAlignment="Center">
 
-                            <Border x:Name="createPostPanel" Visibility="Visible" CornerRadius="15" Margin="10,10,10,10" Grid.Column="2" Background="{DynamicResource darkestSolidColorBrush}">
-
-                                <StackPanel  Grid.Column="2" Margin="10,10,10,10" >
+                                <StackPanel  Grid.Column="2" Margin="10,10,10,10" HorizontalAlignment="Center" >
                                     <TextBlock Text="Create New Post" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,0,0,20"  Foreground="{DynamicResource greenSolidColorBrush}" TextDecorations="Underline" />
 
                                     <Grid x:Name="typeAndCategoryPanel" Margin="0,0,0,10">
@@ -198,8 +205,12 @@ FontWeight="Bold"  Style="{StaticResource RoundedButtonStyleMain}" Click="btnSho
                                             </ComboBox>
                                         </StackPanel>
                                     </Grid>
-                                    <ScrollViewer VerticalScrollBarVisibility="Visible">
-                                        <StackPanel>
+                                    <ScrollViewer 
+                                        VerticalScrollBarVisibility="Auto" HorizontalAlignment="Right" Margin="2"
+>
+                                        <Grid>
+                                            
+                                    <StackPanel>
                                             <StackPanel Orientation="Horizontal"  Margin="10,0,0,0" >
 
                                                 <TextBlock Text="Title "  FontWeight="Bold" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -375,13 +386,14 @@ FontWeight="Bold"  Style="{StaticResource RoundedButtonStyleMain}" Click="btnSho
                                             </Grid>
 
                                         </StackPanel>
-                                    </ScrollViewer>
-                                </StackPanel>
+                        </Grid>
+                        </ScrollViewer>
+                        </StackPanel>
                             </Border>
+
                         </Grid>
                     </Grid>
                 </Border>
-
             </Grid>
 
         </Border>

@@ -1,7 +1,7 @@
 ﻿using PROG7312_ST10023767.Classes;
 using System;
 using System.Collections.Generic;
-using System.IO; 
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,33 +25,39 @@ namespace PROG7312_ST10023767.Views
     /// </summary>
     public partial class EventsUserControl : UserControl
     {
+        private MediaService mediaHelper = new MediaService() ;
+        /// <summary>
+        /// Manages the creation and storage of issues
+        /// </summary>
+        private PostManager PostManager;
+
         // Dictionary to store events sorted by location
-        private SortedDictionary<string, List<EventClass>> locationEvents = new SortedDictionary<string, List<EventClass>>();
         private Stack<MediaFileClass> mediaAttachments = new Stack<MediaFileClass>();
-        private Dictionary<string, List<string>> userSearchHistory = new Dictionary<string, List<string>>();
 
-        private HashSet<string> uniqueCategories = new HashSet<string>();
-
-        public EventsUserControl()
+        public EventsUserControl(PostManager postManager)
         {
+
+            this.PostManager = postManager;
+
             InitializeComponent();
             LoadLocations();
             UpdateEventsList();
 
-            SetDateToNow(EventDate); 
+            SetDateToNow(EventDate);
             SetDateToNow(EndDate);
         }
 
         private void LoadLocations()
         {
-            foreach (var location in locationEvents.Keys)
+            foreach (var location in PostManager.locationEvents.Keys)
             {
                 Button locationButton = new Button
                 {
                     Content = location,
                     Margin = new Thickness(5),
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Top
+                    Style = (Style)FindResource("RoundedButtonStyle"),
+                    VerticalAlignment = VerticalAlignment.Top,
+                    HorizontalContentAlignment = HorizontalAlignment.Stretch
                 };
                 locationButton.Click += LocationButton_Click;
                 LocationWrapPanel.Children.Add(locationButton);
@@ -59,13 +65,13 @@ namespace PROG7312_ST10023767.Views
         }
 
 
-            public void SetDateToNow(DatePicker datePicker)
+        public void SetDateToNow(DatePicker datePicker)
+        {
+            if (datePicker != null)
             {
-                if (datePicker != null)
-                {
-                    datePicker.SelectedDate = DateTime.Now; 
-                }
+                datePicker.SelectedDate = DateTime.Now;
             }
+        }
 
 
         private void LocationButton_Click(object sender, RoutedEventArgs e)
@@ -79,33 +85,16 @@ namespace PROG7312_ST10023767.Views
 
             EventsList.Items.Clear();
 
-            if (locationEvents.ContainsKey(selectedLocation))
+            if (PostManager.locationEvents.ContainsKey(selectedLocation))
             {
-                if (locationEvents[selectedLocation].Count == 0)
+                if (PostManager.locationEvents[selectedLocation].Count == 0)
                 {
                     NoPostsMessageBox("No Posts Posted Yet", "Be a champ in your community by clicking on the 'Create Post' and posting first!");
                     return;
                 }
-                UpdateEventsList(locationEvents[selectedLocation]);
+                UpdateEventsList(PostManager.locationEvents[selectedLocation]);
             }
         }
-
-
-        private void LoadImage(string imagePath, Image imageControl)
-        {
-            if (imagePath == null) return;
-
-
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(imagePath, UriKind.RelativeOrAbsolute);
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.EndInit();
-
-            imageControl.Source = bitmap;
-
-        }
-
 
 
         private string GetImagePath(string type)
@@ -221,42 +210,14 @@ namespace PROG7312_ST10023767.Views
                 {
                     byte[] fileContent = File.ReadAllBytes(filename);
 
-                     string mediaType = GetMediaType(filename);
+                    string mediaType = mediaHelper.GetMediaType(filename);
 
-                     MediaFileClass mediaFile = new MediaFileClass(System.IO.Path.GetFileName(filename), fileContent, mediaType);
+                    MediaFileClass mediaFile = new MediaFileClass(System.IO.Path.GetFileName(filename), fileContent, mediaType);
                     mediaAttachments.Push(mediaFile);
                     MediaList.Items.Add(System.IO.Path.GetFileName(filename));
                 }
             }
         }
-
-        private BitmapImage ByteArrayToImage(byte[] byteArray)
-        {
-            using (var stream = new MemoryStream(byteArray))
-            {
-                BitmapImage image = new BitmapImage();
-                image.BeginInit();
-                image.StreamSource = stream;
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.EndInit();
-                return image;
-            }
-        }
-
-
-         private string GetMediaType(string filename)
-        {
-            string extension = System.IO.Path.GetExtension(filename).ToLower();
-            if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".gif")
-                return "Image";
-            if (extension == ".mp4" || extension == ".avi" || extension == ".mov")
-                return "Video";
-            if (extension == ".doc" || extension == ".docx" || extension == ".pdf")
-                return "Document";
-
-            return "Unknown";
-        }
-
 
 
         private void RemoveMedia_Click(object sender, RoutedEventArgs e)
@@ -300,7 +261,7 @@ namespace PROG7312_ST10023767.Views
 
         private void SubmitEventButton_Click(object sender, RoutedEventArgs e)
         {
-             string title = EventTitle.Text;
+            string title = EventTitle.Text;
             string date = EventDate.SelectedDate?.ToString("d MMM yyyy") ?? "";
             string location = EventLocation.Text;
             string description = EventDescription.Text;
@@ -324,7 +285,7 @@ namespace PROG7312_ST10023767.Views
 
             if (!string.IsNullOrEmpty(category))
             {
-                uniqueCategories.Add(category);
+                PostManager.uniqueCategories.Add(category);
             }
 
             string selectedHourEnd = (cmbHourEnd.SelectedItem as ComboBoxItem)?.Content.ToString();
@@ -345,19 +306,19 @@ namespace PROG7312_ST10023767.Views
                 return;
             }
 
-            if (!locationEvents.ContainsKey(location))
+            if (!PostManager.locationEvents.ContainsKey(location))
             {
                 venueButtonsPanel.Visibility = Visibility.Visible;
                 LocationWrapPanel.Visibility = Visibility.Visible;
 
-                locationEvents[location] = new List<EventClass>();
+                PostManager.locationEvents[location] = new List<EventClass>();
                 Button locationButton = new Button
                 {
                     Content = location,
                     Margin = new Thickness(5),
                     Style = (Style)FindResource("RoundedButtonStyle"),
                     VerticalAlignment = VerticalAlignment.Top,
-                    HorizontalContentAlignment = HorizontalAlignment.Stretch // Aligns the content to the left
+                    HorizontalContentAlignment = HorizontalAlignment.Stretch
                 };
 
                 // Attach the Click event handler
@@ -365,9 +326,9 @@ namespace PROG7312_ST10023767.Views
 
 
                 // Set the width of the button dynamically based on the available space in the WrapPanel
-                if(LocationWrapPanel.ActualWidth != 0)
+                if (LocationWrapPanel.ActualWidth != 0)
                 {
-                locationButton.Width = LocationWrapPanel.ActualWidth - 10; // Adjust the margin or padding as needed
+                    locationButton.Width = LocationWrapPanel.ActualWidth - 10; // Adjust the margin or padding as needed
                 }
 
                 LocationWrapPanel.Children.Add(locationButton);
@@ -387,7 +348,7 @@ namespace PROG7312_ST10023767.Views
                 timeEnd
 
                 );
-            locationEvents[location].Add(newEvent);
+            PostManager.locationEvents[location].Add(newEvent);
 
             ClearAllFields();
 
@@ -432,9 +393,9 @@ namespace PROG7312_ST10023767.Views
             string selectedFilter = (cmbFilter.SelectedItem as ComboBoxItem)?.Content.ToString();
             string selectedLocation = LocationTextBlock.Text.Contains("Selected") ? LocationTextBlock.Text.Replace("Events & Announcement in Selected ", "") : null;
 
-            List<EventClass> eventsToDisplay = selectedLocation != null && locationEvents.ContainsKey(selectedLocation)
-                ? locationEvents[selectedLocation]
-                : locationEvents.Values.SelectMany(evList => evList).ToList(); // Get all events if no specific location is selected.
+            List<EventClass> eventsToDisplay = selectedLocation != null && PostManager.locationEvents.ContainsKey(selectedLocation)
+                ? PostManager.locationEvents[selectedLocation]
+                : PostManager.locationEvents.Values.SelectMany(evList => evList).ToList(); // Get all events if no specific location is selected.
 
 
             DateTime currentDateTime = DateTime.Now;
@@ -456,7 +417,7 @@ namespace PROG7312_ST10023767.Views
             else if (selectedFilter == "Category")
             {
                 CategoryFilterWindow categoryWindow = new CategoryFilterWindow();
-                categoryWindow.PopulateCategories(uniqueCategories);
+                categoryWindow.PopulateCategories(PostManager.uniqueCategories);
 
                 if (categoryWindow.ShowDialog() == true)
                 {
@@ -471,7 +432,7 @@ namespace PROG7312_ST10023767.Views
             }
             else if (selectedFilter == "Past")
             {
-                eventsToDisplay = eventsToDisplay.Where(item => currentDateTime > DateTime.Parse(item.EndDate) && currentDateTime > DateTime.Parse(item.StartDate) && currentDateTime >= DateTime.Parse(item.EndDate).Date.AddDays(1).AddTicks(-1)).ToList() ;
+                eventsToDisplay = eventsToDisplay.Where(item => currentDateTime > DateTime.Parse(item.EndDate) && currentDateTime > DateTime.Parse(item.StartDate) && currentDateTime >= DateTime.Parse(item.EndDate).Date.AddDays(1).AddTicks(-1)).ToList();
             }
             else if (selectedFilter == "Busy")
             {
@@ -495,7 +456,7 @@ namespace PROG7312_ST10023767.Views
                 EventsList.Items.Clear();
                 LocationTextBlock.Text = filteredEvents == null ? "All Events & Announcements" : LocationTextBlock.Text;
 
-                var eventsToDisplay = filteredEvents ?? locationEvents.Values.SelectMany(evList => evList).ToList().OrderBy(e => e.StartDate).ToList();
+                var eventsToDisplay = filteredEvents ?? PostManager.locationEvents.Values.SelectMany(evList => evList).ToList().OrderBy(e => e.StartDate).ToList();
 
                 if (eventsToDisplay.Count == 0)
                 {
@@ -574,7 +535,7 @@ namespace PROG7312_ST10023767.Views
                     horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
 
                     Image eventTypeImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
-                    LoadImage(GetImagePath(ev.Type), eventTypeImage);
+                    mediaHelper.LoadImage(GetImagePath(ev.Type), eventTypeImage);
                     Grid.SetColumn(eventTypeImage, 0);
                     horizontalGrid.Children.Add(eventTypeImage);
 
@@ -592,7 +553,7 @@ namespace PROG7312_ST10023767.Views
                     horizontalGrid.Children.Add(eventInfo);
 
                     Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
-                    LoadImage(GetImagePathCategory(ev.Category), categoryImage);
+                    mediaHelper.LoadImage(GetImagePathCategory(ev.Category), categoryImage);
                     Grid.SetColumn(categoryImage, 2);
                     horizontalGrid.Children.Add(categoryImage);
 
@@ -667,7 +628,7 @@ namespace PROG7312_ST10023767.Views
                     EventsList.Items.Add(eventBorder);
                 }
             }
-            
+
         }
 
 
@@ -692,7 +653,7 @@ namespace PROG7312_ST10023767.Views
                 horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
 
                 Image eventTypeImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
-                LoadImage(GetImagePathCategory("Other"), eventTypeImage);
+                mediaHelper.LoadImage(GetImagePathCategory("Other"), eventTypeImage);
                 Grid.SetColumn(eventTypeImage, 0);
                 horizontalGrid.Children.Add(eventTypeImage);
 
@@ -710,7 +671,7 @@ namespace PROG7312_ST10023767.Views
                 horizontalGrid.Children.Add(eventInfo);
 
                 Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
-                LoadImage(GetImagePathCategory("Other"), categoryImage);
+                mediaHelper.LoadImage(GetImagePathCategory("Other"), categoryImage);
                 Grid.SetColumn(categoryImage, 2);
                 horizontalGrid.Children.Add(categoryImage);
 
@@ -739,7 +700,8 @@ namespace PROG7312_ST10023767.Views
             if (venueButtonsPanel.Visibility == Visibility.Visible)
             {
                 venueButtonsPanel.Visibility = Visibility.Collapsed;
-            }else
+            }
+            else
             {
                 venueButtonsPanel.Visibility = Visibility.Visible;
             }
@@ -771,12 +733,14 @@ namespace PROG7312_ST10023767.Views
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
+            LocationTextBlock.Text = $"Search Results";
+
             string searchQuery = txbSearch.Text;
 
             if (!string.IsNullOrEmpty(searchQuery))
             {
                 // Track the user's search
-                TrackUserSearch("currentUserId", searchQuery);  // Replace with actual user ID logic
+                TrackUserSearch("currentUserId", searchQuery);
             }
 
 
@@ -788,8 +752,8 @@ namespace PROG7312_ST10023767.Views
                 return;
             }
 
-            List<EventClass> filteredEvents = locationEvents.Values
-                .SelectMany(evList => evList) 
+            List<EventClass> filteredEvents = PostManager.locationEvents.Values
+                .SelectMany(evList => evList)
                 .Where(ev => ev.Title.ToLower().Contains(query) ||
                              ev.Location.ToLower().Contains(query) ||
                              ev.Category.ToLower().Contains(query) ||
@@ -830,34 +794,35 @@ namespace PROG7312_ST10023767.Views
 
         private void TrackUserSearch(string userId, string searchQuery)
         {
-            if (!userSearchHistory.ContainsKey(userId))
+            if (!PostManager.userSearchHistory.ContainsKey(userId))
             {
-                userSearchHistory[userId] = new List<string>();
+                PostManager.userSearchHistory[userId] = new List<string>();
             }
 
-            userSearchHistory[userId].Add(searchQuery.ToLower());
+            PostManager.userSearchHistory[userId].Add(searchQuery.ToLower());
         }
 
         private List<EventClass> RecommendEventsBasedOnSearch(string userId)
         {
-            if (!userSearchHistory.ContainsKey(userId) || userSearchHistory[userId].Count == 0)
+            //the reccomendations should be unique...not duplicates 
+            if (!PostManager.userSearchHistory.ContainsKey(userId) || PostManager.userSearchHistory[userId].Count == 0)
             {
-                return new List<EventClass>();  
+                return new List<EventClass>();
             }
 
-            List<string> pastSearches = userSearchHistory[userId];
+            List<string> pastSearches = PostManager.userSearchHistory[userId];
 
             var frequentSearches = pastSearches.GroupBy(search => search)
                                                .OrderByDescending(group => group.Count())
                                                .Select(group => group.Key)
-                                               .Take(3) 
+                                               .Take(3)
                                                .ToList();
 
             List<EventClass> recommendedEvents = new List<EventClass>();
 
             foreach (var searchTerm in frequentSearches)
             {
-                var matchingEvents = locationEvents.Values.SelectMany(evList => evList)
+                var matchingEvents = PostManager.locationEvents.Values.SelectMany(evList => evList)
                                         .Where(ev => ev.Location.ToLower().Contains(searchTerm) ||
                                                      ev.Title.ToLower().Contains(searchTerm) ||
                                                      ev.Category.ToLower().Contains(searchTerm) ||
@@ -865,8 +830,7 @@ namespace PROG7312_ST10023767.Views
                                                      ev.EndDate.ToLower().Contains(searchTerm) ||
                                                      ev.StartDate.ToLower().Contains(searchTerm) ||
                                                      ev.StartTime.ToLower().Contains(searchTerm) ||
-                                                     ev.EndTime.ToLower().Contains(searchTerm) ||
-                                                     ev.Description.ToLower().Contains(searchTerm))
+                                                     ev.EndTime.ToLower().Contains(searchTerm))
                                                                 .ToList();
 
                 recommendedEvents.AddRange(matchingEvents);

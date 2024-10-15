@@ -214,5 +214,52 @@ namespace PROG7312_ST10023767.Classes
 
             return documentLink;
         }
+
+        public MediaService()
+        {
+        }
+
+        public void LoadImage(string imagePath, Image imageControl)
+        {
+            if (imagePath == null) return;
+
+
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(imagePath, UriKind.RelativeOrAbsolute);
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.EndInit();
+
+            imageControl.Source = bitmap;
+
+        }
+
+
+        private BitmapImage ByteArrayToImage(byte[] byteArray)
+        {
+            using (var stream = new MemoryStream(byteArray))
+            {
+                BitmapImage image = new BitmapImage();
+                image.BeginInit();
+                image.StreamSource = stream;
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.EndInit();
+                return image;
+            }
+        }
+
+
+        public string GetMediaType(string filename)
+        {
+            string extension = System.IO.Path.GetExtension(filename).ToLower();
+            if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".gif")
+                return "Image";
+            if (extension == ".mp4" || extension == ".avi" || extension == ".mov")
+                return "Video";
+            if (extension == ".doc" || extension == ".docx" || extension == ".pdf")
+                return "Document";
+
+            return "Unknown";
+        }
     }
 }//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//

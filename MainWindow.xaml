@@ -101,21 +101,22 @@
                                    HorizontalAlignment="Left" Margin="34,213,0,0" VerticalAlignment="Top" Height="98" Width="593" FontSize="25" FontFamily="Tahoma" Foreground="White"/>
 
                             <Button x:Name="btnReportIssues"  
-                                    Click="btnReportIssues_Click"   
+                                    Click="btnReportIssues_Click"   ToolTip="Part 1"
                                     Style="{StaticResource CustomImageButtonReportIssue}" Grid.Row="1" >
                             </Button>
 
                             <Button x:Name="btnLocalEvents"  
                                     Style="{StaticResource CustomImageButtonEvent}" 
                                     Margin="0,0,0,69" Grid.Row="1" 
-                                    HorizontalAlignment="Center" 
+                                    HorizontalAlignment="Center" ToolTip="Part 2"
                                     IsEnabled="True" Click="btnLocalEvents_Click"
 />
                             <Button x:Name="btnServiceRequestStatus" 
                                     Style="{StaticResource CustomImageButtonStatus}" 
                                     Grid.Row="1" HorizontalAlignment="Right" 
                                     Margin="0,0,37,74"
-                                    IsEnabled="False">
+                                    ToolTip="Part 3" Click="btnServiceRequestStatus_Click"
+                                    >
                             </Button>
 
                             <Label x:Name="lblHeadding_Copy1" 
