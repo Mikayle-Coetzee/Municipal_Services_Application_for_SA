@@ -47,7 +47,7 @@ namespace PROG7312_ST10023767
         private void btnLocalEvents_Click(object sender, RoutedEventArgs e)
         {
             // Navigate to the EventsUserControl view
-            EventsUserControl events = new EventsUserControl(postManager);
+            EventsUserControl events = new EventsUserControl(postManager, issueManager);
 
             // Set the visibility of the events section to visible
             events.Visibility = Visibility.Visible;

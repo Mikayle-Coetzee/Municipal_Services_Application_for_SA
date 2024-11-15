@@ -205,7 +205,7 @@ namespace PROG7312_ST10023767.Classes
         /// <param name="currentDateTime"></param>
         /// <param name="statusBorder"></param>
         /// <returns></returns>
-        public string DetermineEventStatus(EventClass ev, DateTime currentDateTime, out Border statusBorder)
+        public string DetermineEventStatus(EventClass ev, IssueClass ic, DateTime currentDateTime, out Border statusBorder)
         {
             DateTime startDateTime, endDateTime;
             string status;
@@ -217,34 +217,42 @@ namespace PROG7312_ST10023767.Classes
                 Margin = new Thickness(7, 0, 7, 0)
             };
 
-            if (DateTime.TryParse(ev.StartDate, out startDateTime) && DateTime.TryParse(ev.EndDate, out endDateTime))
+            if (ev != null)
             {
-                endDateTime = endDateTime.Date.AddDays(1).AddTicks(-1);
 
-                if (currentDateTime >= startDateTime && currentDateTime <= endDateTime)
+                if (DateTime.TryParse(ev.StartDate, out startDateTime) && DateTime.TryParse(ev.EndDate, out endDateTime))
                 {
-                    status = "busy";
-                    statusBorder.Background = (Brush)Application.Current.FindResource("busySolidColorBrush");
-                }
-                else if (currentDateTime > endDateTime)
-                {
-                    status = "past";
-                    statusBorder.Background = (Brush)Application.Current.FindResource("pastSolidColorBrush");
+                    endDateTime = endDateTime.Date.AddDays(1).AddTicks(-1);
+
+                    if (currentDateTime >= startDateTime && currentDateTime <= endDateTime)
+                    {
+                        status = "busy";
+                        statusBorder.Background = (Brush)Application.Current.FindResource("busySolidColorBrush");
+                    }
+                    else if (currentDateTime > endDateTime)
+                    {
+                        status = "past";
+                        statusBorder.Background = (Brush)Application.Current.FindResource("pastSolidColorBrush");
+                    }
+                    else
+                    {
+                        status = "upcoming";
+                        statusBorder.Background = (Brush)Application.Current.FindResource("upcomingSolidColorBrush");
+                    }
                 }
                 else
                 {
-                    status = "upcoming";
-                    statusBorder.Background = (Brush)Application.Current.FindResource("upcomingSolidColorBrush");
+                    status = "unknown";
+                    statusBorder.Background = (Brush)Application.Current.FindResource("defaultSolidColorBrush");
+                    Console.WriteLine($"Failed to parse dates for event: {ev.Title}, StartDate: {ev.StartDate}, EndDate: {ev.EndDate}");
                 }
+
+                return status;
             }
             else
             {
-                status = "unknown";
-                statusBorder.Background = (Brush)Application.Current.FindResource("defaultSolidColorBrush");
-                Console.WriteLine($"Failed to parse dates for event: {ev.Title}, StartDate: {ev.StartDate}, EndDate: {ev.EndDate}");
+                return "pending"; //code
             }
-
-            return status;
         }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
@@ -253,14 +261,27 @@ namespace PROG7312_ST10023767.Classes
         /// </summary>
         /// <param name="ev"></param>
         /// <returns></returns>
-        public Border CreateEventBorder(EventClass ev)
+        public Border CreateEventBorder(EventClass ev, IssueClass ic)
         {
-            return new Border
+            if (ev != null)
+            {
+return new Border
             {
                 CornerRadius = new CornerRadius(15),
                 Margin = new Thickness(5),
-                Background = (Brush)Application.Current.FindResource(ev.Type == "Event" ? "greenSolidColorBrush" : "offWhiteSolidColorBrush")
+                Background = (Brush)Application.Current.FindResource(ev.Type == "Event" ? "darkSolidColorBrush" : "blueSolidColorBrush")
             };
+            }
+            else
+            {//code
+                return new Border
+                {
+                    CornerRadius = new CornerRadius(15),
+                    Margin = new Thickness(5),
+                    Background = (Brush)Application.Current.FindResource(ic.Category == "Utilities" ? "darkSolidColorBrush" : "blueSolidColorBrush")
+                };
+            }
+            
         }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
@@ -270,12 +291,12 @@ namespace PROG7312_ST10023767.Classes
         /// <param name="statusBorder"></param>
         /// <param name="ev"></param>
         /// <returns></returns>
-        public StackPanel CreateEventPanel(Border statusBorder, EventClass ev)
+        public StackPanel CreateEventPanel(Border statusBorder, EventClass ev, IssueClass ic)
         {
             StackPanel eventPanel = new StackPanel();
             eventPanel.Children.Add(statusBorder);
 
-            Grid horizontalGrid = CreateHorizontalGrid(ev);
+            Grid horizontalGrid = CreateHorizontalGrid(ev, ic);
             eventPanel.Children.Add(horizontalGrid);
 
             return eventPanel;
@@ -287,7 +308,7 @@ namespace PROG7312_ST10023767.Classes
         /// </summary>
         /// <param name="ev"></param>
         /// <returns></returns>
-        public Grid CreateHorizontalGrid(EventClass ev)
+        public Grid CreateHorizontalGrid(EventClass ev, IssueClass ic)
         {
             Grid horizontalGrid = new Grid();
             horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
@@ -295,27 +316,55 @@ namespace PROG7312_ST10023767.Classes
             horizontalGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
 
             Image eventTypeImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
-            mediaHelper.LoadImage(GetImagePath(ev.Type), eventTypeImage);
-            Grid.SetColumn(eventTypeImage, 0);
-            horizontalGrid.Children.Add(eventTypeImage);
 
-            TextBlock eventInfo = new TextBlock
+            if (ev != null)
             {
-                Text = $"{ev.StartTime}: {ev.StartDate} - {ev.EndTime}: {ev.EndDate}",
-                Margin = new Thickness(0, 15, 0, 5),
-                TextWrapping = TextWrapping.Wrap,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                TextAlignment = TextAlignment.Center,
-                MinWidth = 800,
-                Width = 800
-            };
-            Grid.SetColumn(eventInfo, 1);
-            horizontalGrid.Children.Add(eventInfo);
+            mediaHelper.LoadImage(GetImagePath(ev.Type), eventTypeImage);
+                Grid.SetColumn(eventTypeImage, 0);
+                horizontalGrid.Children.Add(eventTypeImage);
 
-            Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
-            mediaHelper.LoadImage(GetImagePathCategory(ev.Category), categoryImage);
-            Grid.SetColumn(categoryImage, 2);
-            horizontalGrid.Children.Add(categoryImage);
+                TextBlock eventInfo = new TextBlock
+                {
+                    Text = $"{ev.StartTime}: {ev.StartDate} - {ev.EndTime}: {ev.EndDate}",
+                    Margin = new Thickness(0, 15, 0, 5),
+                    TextWrapping = TextWrapping.Wrap,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    TextAlignment = TextAlignment.Center,
+                    MinWidth = 800,
+                    Width = 800
+                };
+                Grid.SetColumn(eventInfo, 1);
+                horizontalGrid.Children.Add(eventInfo);
+
+                Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
+                mediaHelper.LoadImage(GetImagePathCategory(ev.Category), categoryImage);
+                Grid.SetColumn(categoryImage, 2);
+                horizontalGrid.Children.Add(categoryImage);
+            }
+            else
+            {
+                //mediaHelper.LoadImage(GetImagePath(ic.Attachments.), eventTypeImage);
+                Grid.SetColumn(eventTypeImage, 0);
+                horizontalGrid.Children.Add(eventTypeImage);
+
+                TextBlock eventInfo = new TextBlock
+                {
+                    Text = $"{ic.Timestamp}",
+                    Margin = new Thickness(0, 15, 0, 5),
+                    TextWrapping = TextWrapping.Wrap,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    TextAlignment = TextAlignment.Center,
+                    MinWidth = 800,
+                    Width = 800
+                };
+                Grid.SetColumn(eventInfo, 1);
+                horizontalGrid.Children.Add(eventInfo);
+
+                Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
+                mediaHelper.LoadImage(GetImagePathCategory("other"), categoryImage);
+                Grid.SetColumn(categoryImage, 2);
+                horizontalGrid.Children.Add(categoryImage);
+            }
 
             return horizontalGrid;
         }

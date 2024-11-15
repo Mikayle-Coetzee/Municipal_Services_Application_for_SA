@@ -11,7 +11,7 @@
     <Color x:Key="whiteColor">#FFFFFF</Color>
     <Color x:Key="redColor">#D94F47</Color>
     <Color x:Key="darkRedColor">#913C48</Color>
-    <Color x:Key="greenColor">#BAF0BF</Color>
+    <Color x:Key="greenColor">#00754F</Color>
 
 
     <Color x:Key="upcomingColor">#B5E0B2</Color>
@@ -27,7 +27,7 @@
     <SolidColorBrush x:Key="offWhiteSolidColorBrush">#F7F7F7</SolidColorBrush>
     <SolidColorBrush x:Key="whiteSolidColorBrush">#FFFFFF</SolidColorBrush>
     <SolidColorBrush x:Key="redSolidColorBrush">#D94F47</SolidColorBrush>
-    <SolidColorBrush x:Key="greenSolidColorBrush">#BAF0BF</SolidColorBrush>
+    <SolidColorBrush x:Key="greenSolidColorBrush">#00754F</SolidColorBrush>
     <SolidColorBrush x:Key="darkRedSolidColorBrush">#8A1F26</SolidColorBrush>
 
     <SolidColorBrush x:Key="upcomingSolidColorBrush">#B5E0B2</SolidColorBrush>

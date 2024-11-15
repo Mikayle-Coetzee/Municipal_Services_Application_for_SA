@@ -61,9 +61,10 @@
                                 <ColumnDefinition Width="333*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.Background>
-                                <ImageBrush ImageSource="/Images/Backgrounds/report_background.png"/>
+                                <ImageBrush ImageSource="/Images/Backgrounds/new_background.png"/>
                             </Grid.Background>
 
+                            
                             <Label x:Name="lblHeading" Content="Report an issue" 
                                    HorizontalAlignment="Left" Margin="33,23,0,0" 
                                    VerticalAlignment="Top" Height="109" Width="489"

@@ -190,6 +190,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Resource Include="Images\Backgrounds\new_background.png" />
+    <Resource Include="Images\Backgrounds\new_background_home.png" />
+    <Resource Include="Images\Backgrounds\new_overlay.png" />
     <Resource Include="Images\Logos\new_logo.png" />
     <Resource Include="Images\Backgrounds\event_background.png" />
     <Resource Include="Images\Part2\popup_background.png" />

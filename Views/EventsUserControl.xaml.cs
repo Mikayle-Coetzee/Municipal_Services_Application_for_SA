@@ -40,6 +40,9 @@ namespace PROG7312_ST10023767.Views
         /// </summary>
         private PostManager PostManager;
 
+
+        private IssueManager IssueManager;
+
         /// <summary>
         /// Dictionary to store events sorted by location
         /// </summary>
@@ -50,9 +53,10 @@ namespace PROG7312_ST10023767.Views
         /// Default Constructor
         /// </summary>
         /// <param name="postManager"></param>
-        public EventsUserControl(PostManager postManager)
+        public EventsUserControl(PostManager postManager, IssueManager issueManager)
         {
             this.PostManager = postManager;
+            this.IssueManager = issueManager;
 
             InitializeComponent();
             LoadLocations();
@@ -720,79 +724,89 @@ namespace PROG7312_ST10023767.Views
         /// </summary>
         /// <param name="eventPanel"></param>
         /// <param name="ev"></param>
-        private void AddMediaFilesToPanel(StackPanel eventPanel, EventClass ev)
+        private void AddMediaFilesToPanel(StackPanel eventPanel, EventClass ev, IssueClass ic)
         {
-            foreach (var media in ev.MediaFiles)
+            if (ev != null)
             {
-
-                if (media.MediaType == "Image")
+                foreach (var media in ev.MediaFiles)
                 {
-                    Image imageItem = new Image
-                    {
-                        Height = 200,
-                        Margin = new Thickness(10),
-                        Stretch = Stretch.Fill
-                    };
 
-                    if (media.FileContent != null && media.FileContent.Length > 0)
+                    if (media.MediaType == "Image")
                     {
-                        imageItem.Source = mediaHelper.ByteArrayToImage(media.FileContent);
-                    }
-                    else if (!string.IsNullOrEmpty(media.FileName))
-                    {
-                        mediaHelper.LoadImage(media.FileName, imageItem);
-                    }
+                        Image imageItem = new Image
+                        {
+                            Height = 200,
+                            Margin = new Thickness(10),
+                            Stretch = Stretch.Fill
+                        };
 
-                    eventPanel.Children.Add(imageItem);
+                        if (media.FileContent != null && media.FileContent.Length > 0)
+                        {
+                            imageItem.Source = mediaHelper.ByteArrayToImage(media.FileContent);
+                        }
+                        else if (!string.IsNullOrEmpty(media.FileName))
+                        {
+                            mediaHelper.LoadImage(media.FileName, imageItem);
+                        }
+
+                        eventPanel.Children.Add(imageItem);
+                    }
+                    else if (media.MediaType == "Video")
+                    {
+                        MediaElement videoItem = new MediaElement
+                        {
+                            Height = 200,
+                            Margin = new Thickness(10),
+                            Stretch = Stretch.Fill,
+                            LoadedBehavior = MediaState.Play,
+                            UnloadedBehavior = MediaState.Stop,
+                        };
+
+                        if (media.FileContent != null && media.FileContent.Length > 0)
+                        {
+                            string tempFilePath = System.IO.Path.GetTempFileName() + ".mp4";
+                            System.IO.File.WriteAllBytes(tempFilePath, media.FileContent);
+                            videoItem.Source = new Uri(tempFilePath, UriKind.Absolute);
+                        }
+                        else if (!string.IsNullOrEmpty(media.FileName))
+                        {
+                            videoItem.Source = new Uri(media.FileName, UriKind.RelativeOrAbsolute);
+                        }
+
+                        eventPanel.Children.Add(videoItem);
+                    }
                 }
-                else if (media.MediaType == "Video")
+
+                TextBlock mediaBlock = new TextBlock
                 {
-                    MediaElement videoItem = new MediaElement
-                    {
-                        Height = 200,
-                        Margin = new Thickness(10),
-                        Stretch = Stretch.Fill,
-                        LoadedBehavior = MediaState.Play,
-                        UnloadedBehavior = MediaState.Stop,
-                    };
-
-                    if (media.FileContent != null && media.FileContent.Length > 0)
-                    {
-                        string tempFilePath = System.IO.Path.GetTempFileName() + ".mp4";
-                        System.IO.File.WriteAllBytes(tempFilePath, media.FileContent);
-                        videoItem.Source = new Uri(tempFilePath, UriKind.Absolute);
-                    }
-                    else if (!string.IsNullOrEmpty(media.FileName))
-                    {
-                        videoItem.Source = new Uri(media.FileName, UriKind.RelativeOrAbsolute);
-                    }
-
-                    eventPanel.Children.Add(videoItem);
-                }
-            }
-
-            TextBlock mediaBlock = new TextBlock
-            {
-                Text = "All Media Files (Click on the file names to open):",
-                FontWeight = FontWeights.Bold,
-                Margin = new Thickness(5, 10, 0, 5),
-                TextWrapping = TextWrapping.Wrap
-            };
-
-            eventPanel.Children.Add(mediaBlock);
-
-            foreach (var media in ev.MediaFiles)
-            {
-                TextBlock mediaItem = new TextBlock
-                {
-                    Text = media.FileName,
-                    Margin = new Thickness(20, 0, 0, 5),
-                    Tag = media.FileContent,
+                    Text = "All Media Files (Click on the file names to open):",
+                    FontWeight = FontWeights.Bold,
+                    Margin = new Thickness(5, 10, 0, 5),
                     TextWrapping = TextWrapping.Wrap
                 };
 
-                mediaItem.MouseDown += MediaItem_MouseDown;
-                eventPanel.Children.Add(mediaItem);
+                eventPanel.Children.Add(mediaBlock);
+
+                foreach (var media in ev.MediaFiles)
+                {
+                    TextBlock mediaItem = new TextBlock
+                    {
+                        Text = media.FileName,
+                        Margin = new Thickness(20, 0, 0, 5),
+                        Tag = media.FileContent,
+                        TextWrapping = TextWrapping.Wrap
+                    };
+
+                    mediaItem.MouseDown += MediaItem_MouseDown;
+                    eventPanel.Children.Add(mediaItem);
+                }
+            }
+            else
+            {
+                foreach (var media in ic.Attachments)
+                {
+                    //code
+                }
             }
         }
 
@@ -813,15 +827,15 @@ namespace PROG7312_ST10023767.Views
         private void DisplayEvent(EventClass ev)
         {
             DateTime currentDateTime = DateTime.Now;
-            string status = displayHelper.DetermineEventStatus(ev, currentDateTime, out Border statusBorder);
+            string status = displayHelper.DetermineEventStatus(ev, null, currentDateTime, out Border statusBorder);
 
             Console.WriteLine($"Status for event '{ev.Title}': {status}");
 
-            Border eventBorder = displayHelper.CreateEventBorder(ev);
-            StackPanel eventPanel = displayHelper.CreateEventPanel(statusBorder, ev);
+            Border eventBorder = displayHelper.CreateEventBorder(ev, null);
+            StackPanel eventPanel = displayHelper.CreateEventPanel(statusBorder, ev,null);
 
             // Display the post
-            AddEventDetailsToPanel(eventPanel, ev);
+            AddEventDetailsToPanel(eventPanel, ev, null);
 
             eventBorder.Child = eventPanel;
 
@@ -833,42 +847,77 @@ namespace PROG7312_ST10023767.Views
         /// </summary>
         /// <param name="eventPanel"></param>
         /// <param name="ev"></param>
-        private void AddEventDetailsToPanel(StackPanel eventPanel, EventClass ev)
+        private void AddEventDetailsToPanel(StackPanel eventPanel, EventClass ev, IssueClass ic)
         {
-            eventPanel.Children.Add(new TextBlock
+            if (ev != null)
             {
-                Text = "Title: " + ev.Title,
-                Margin = new Thickness(5, 5, 0, 5),
-                FontWeight = FontWeights.Bold,
-                TextWrapping = TextWrapping.Wrap
-            });
 
-            eventPanel.Children.Add(new TextBlock
-            {
-                Text = "Description: " + ev.Description,
-                Margin = new Thickness(5, 5, 0, 5),
-                TextWrapping = TextWrapping.Wrap
-            });
+                eventPanel.Children.Add(new TextBlock
+                {
+                    Text = "Title: " + ev.Title,
+                    Margin = new Thickness(5, 5, 0, 5),
+                    FontWeight = FontWeights.Bold,
+                    TextWrapping = TextWrapping.Wrap
+                });
 
-            eventPanel.Children.Add(new TextBlock
-            {
-                Text = $"Venue: {ev.Venue}",
-                Margin = new Thickness(5, 5, 0, 5),
-                FontWeight = FontWeights.Bold,
-                TextWrapping = TextWrapping.Wrap
-            });
+                eventPanel.Children.Add(new TextBlock
+                {
+                    Text = "Description: " + ev.Description,
+                    Margin = new Thickness(5, 5, 0, 5),
+                    TextWrapping = TextWrapping.Wrap
+                });
 
-            eventPanel.Children.Add(new TextBlock
-            {
-                Text = $"City/Area: {ev.Location}",
-                Margin = new Thickness(5, 5, 0, 5),
-                FontWeight = FontWeights.Bold,
-                TextWrapping = TextWrapping.Wrap
-            });
+                eventPanel.Children.Add(new TextBlock
+                {
+                    Text = $"Venue: {ev.Venue}",
+                    Margin = new Thickness(5, 5, 0, 5),
+                    FontWeight = FontWeights.Bold,
+                    TextWrapping = TextWrapping.Wrap
+                });
 
-            if (ev.MediaFiles != null && ev.MediaFiles.Count > 0)
+                eventPanel.Children.Add(new TextBlock
+                {
+                    Text = $"City/Area: {ev.Location}",
+                    Margin = new Thickness(5, 5, 0, 5),
+                    FontWeight = FontWeights.Bold,
+                    TextWrapping = TextWrapping.Wrap
+                });
+
+                if (ev.MediaFiles != null && ev.MediaFiles.Count > 0)
+                {
+                    AddMediaFilesToPanel(eventPanel, ev, null);
+                }
+            }
+            else
             {
-                AddMediaFilesToPanel(eventPanel, ev);
+
+                eventPanel.Children.Add(new TextBlock
+                {
+                    Text = "Category: " + ic.Category,
+                    Margin = new Thickness(5, 5, 0, 5),
+                    FontWeight = FontWeights.Bold,
+                    TextWrapping = TextWrapping.Wrap
+                });
+
+                eventPanel.Children.Add(new TextBlock
+                {
+                    Text = "Description: " + ic.Description,
+                    Margin = new Thickness(5, 5, 0, 5),
+                    TextWrapping = TextWrapping.Wrap
+                });
+
+                eventPanel.Children.Add(new TextBlock
+                {
+                    Text = $"Location: {ic.Location}",
+                    Margin = new Thickness(5, 5, 0, 5),
+                    FontWeight = FontWeights.Bold,
+                    TextWrapping = TextWrapping.Wrap
+                });
+
+                if (ic.Attachments != null && ic.Attachments.Count > 0)
+                {
+                    AddMediaFilesToPanel(eventPanel, null, ic);
+                }
             }
         }
 
@@ -1033,6 +1082,65 @@ namespace PROG7312_ST10023767.Views
                 venueButtonsPanel.Visibility = newVisibility;
                 createPostPanel.Visibility = newVisibility;
             }
+        }
+
+        private void BtnServiceRequestStatus_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateServicesList();
+        }
+
+        /// <summary>
+        /// Updates the post list with filtered or all events
+        /// </summary>
+        /// <param name="filteredEvents"></param>
+        private void UpdateServicesList(List<EventClass> filteredEvents = null)
+        {
+            if (EventsList != null)
+            {
+                ClearEventsList();
+
+                LocationTextBlock.Text = filteredEvents == null ? "All Service Requests" : LocationTextBlock.Text;
+
+                var reportsToDisplay = GetReportsToDisplay();
+
+                if (reportsToDisplay.Count == 0)
+                {
+                    ShowNoReportsMessage();
+                    return;
+                }
+
+                foreach (var ic in reportsToDisplay)
+                {
+                    DisplayReport(ic);
+                }
+            }
+        }
+        private List<IssueClass> GetReportsToDisplay()
+        {
+            return IssueManager.issues;
+        }
+
+        private void ShowNoReportsMessage()
+        {
+            NoPostsMessageBox("No Service Issue Reported Yet", "Feel free to report an issue!");
+        }
+
+        private void DisplayReport(IssueClass ic)
+        {
+            DateTime currentDateTime = DateTime.Now;
+            string status = displayHelper.DetermineEventStatus(null, ic, currentDateTime, out Border statusBorder);
+
+            Console.WriteLine($"Status for issue '{ic.Category}': {ic.Timestamp}");
+
+            Border eventBorder = displayHelper.CreateEventBorder(null, ic);
+            StackPanel eventPanel = displayHelper.CreateEventPanel(statusBorder, null,  ic);
+
+            // Display the post
+            AddEventDetailsToPanel(eventPanel, null,  ic);
+
+            eventBorder.Child = eventPanel;
+
+            EventsList.Items.Add(eventBorder);
         }
     }
 }//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//

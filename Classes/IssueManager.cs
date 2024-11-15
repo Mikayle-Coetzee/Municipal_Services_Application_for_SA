@@ -15,7 +15,7 @@ namespace PROG7312_ST10023767.Classes
         /// <summary>
         /// Stores the list of issues reported by the user
         /// </summary>
-        private List<IssueClass> issues;
+        public List<IssueClass> issues;
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
