@@ -52,7 +52,7 @@
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
-        <Setter Property="TextElement.Foreground" Value="{DynamicResource whiteSolidColorBrush}"/>
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource darkestSolidColorBrush}"/>
         <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Control.Template">
             <Setter.Value>
@@ -87,9 +87,9 @@
                             <Grid Name="DropDown" SnapsToDevicePixels="True"
                     MinWidth="{TemplateBinding FrameworkElement.ActualWidth}"
                     MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}">
-                                <Border Name="DropDownBorder" Background="{DynamicResource greenSolidColorBrush}" Margin="0, 1, 0, 0"
+                                <Border Name="DropDownBorder" Background="{DynamicResource offWhiteSolidColorBrush}" Margin="0, 1, 0, 0"
                         CornerRadius="0" BorderThickness="3" 
-                        BorderBrush="{DynamicResource greenSolidColorBrush}"/>
+                        BorderBrush="{DynamicResource whiteSolidColorBrush}"/>
                                 <ScrollViewer Margin="4" SnapsToDevicePixels="True">
                                     <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" />
                                 </ScrollViewer>
@@ -101,7 +101,7 @@
                             <Setter Property="FrameworkElement.MinHeight" TargetName="DropDownBorder" Value="95"/>
                         </Trigger>
                         <Trigger Property="UIElement.IsEnabled" Value="False">
-                            <Setter Property="TextElement.Foreground" Value="{DynamicResource offWhiteSolidColorBrush}"/>
+                            <Setter Property="TextElement.Foreground" Value="{DynamicResource darkestSolidColorBrush}"/>
                         </Trigger>
                         <Trigger Property="ItemsControl.IsGrouping" Value="True">
                             <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>

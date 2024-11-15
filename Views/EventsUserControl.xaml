@@ -46,7 +46,7 @@
 
                         <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" VerticalAlignment ="Center" 
                            Height="50" HorizontalAlignment="Left" Width="209" Margin="-3,0,0,0">
-                            <Image Stretch="Fill" Source="/Images/Logos/new_logo.png" VerticalAlignment="Center" Width="165" Height="34"/>
+                            <Image Stretch="Fill" Source="/Images/Logos/new_logo.png" VerticalAlignment="Center" Width="189" Height="34"/>
                         </StackPanel>
                         
                         
@@ -64,16 +64,23 @@
                             <Grid.Background>
                                 <ImageBrush ImageSource="/Images/Backgrounds/event_background.png"/>
                             </Grid.Background>
-                            
-                                <Border Grid.Column="0" Margin="10,10,10,10" Background="{DynamicResource darkestSolidColorBrush}" CornerRadius="15">
+
+                            <Border Grid.Column="0" Margin="10,10,10,10" Background="{DynamicResource darkSolidColorBrush}" CornerRadius="15">
                                 <ScrollViewer 
 VerticalScrollBarVisibility="Hidden"  Grid.Column="0"
 ><StackPanel Margin="10">
-                                    <Button x:Name="viewByArea"  
-                                            Content="All Areas" Margin="5" VerticalAlignment="Top" FontSize="14" 
-                                            Click="viewByArea_Click" Style="{StaticResource RoundedButtonStyleMain}" FontWeight="Bold" 
+
+                                        <Button x:Name="BtnEvents"  
+                                           Content="Events" Margin="5" VerticalAlignment="Top" FontSize="14" 
+                                            Style="{StaticResource RoundedButtonStyleMain}" FontWeight="Bold" Click="BtnEvents_Click" 
+/>
+    
+    
+                                        <Button x:Name="BtnViewByArea"  
+                                            Content="All Areas" Margin="5" Visibility="Collapsed" VerticalAlignment="Top" FontSize="14" 
+                                            Click="viewByArea_Click" Style="{StaticResource RoundedButtonStyle}" FontWeight="Bold" 
  />
-                                    <Border x:Name="venueButtonsPanel" Visibility="Collapsed" Background="{DynamicResource darkSolidColorBrush}" CornerRadius="10">
+                                    <Border x:Name="venueButtonsPanel" Visibility="Collapsed" Background="{DynamicResource darkestSolidColorBrush}" CornerRadius="10">
 
                                         <StackPanel>
                                             <Button Content="View All" 
@@ -89,14 +96,19 @@ VerticalScrollBarVisibility="Hidden"  Grid.Column="0"
                                     </Border>
 
                                     <Button x:Name="btnShowReccomended" 
-Content="Recommended" Margin="5" VerticalAlignment="Top" FontSize="14" 
-FontWeight="Bold"  Style="{StaticResource RoundedButtonStyleMain}" Click="btnShowReccomended_Click"/>
+Content="Recommended" Margin="5" VerticalAlignment="Top" FontSize="14" Visibility="Collapsed"
+FontWeight="Bold"  Style="{StaticResource RoundedButtonStyle}" Click="btnShowReccomended_Click" />
 
-                                    <Button x:Name="btnAddEvent" 
+                                        <Button x:Name="btnAddEvent"  Visibility="Collapsed"
                 Content="Create Post" Margin="5" VerticalAlignment="Top" FontSize="14" 
                 FontWeight="Bold"
-                Click="btnAddEvent_Click"  Style="{StaticResource RoundedButtonStyleMain}"/>
-                                </StackPanel>
+                Click="btnAddEvent_Click"  Style="{StaticResource RoundedButtonStyle}"/>
+
+                                        <Button x:Name="BtnServiceRequestStatus"  
+                                           Content="Service Request Status" Margin="5" VerticalAlignment="Top" FontSize="14" 
+                                            Style="{StaticResource RoundedButtonStyleMain}" FontWeight="Bold"  
+/>
+                                    </StackPanel>
                             </ScrollViewer>
                                 </Border>
 
@@ -112,7 +124,7 @@ FontWeight="Bold"  Style="{StaticResource RoundedButtonStyleMain}" Click="btnSho
                                             <ColumnDefinition Width="Auto" MinWidth="111.4"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <TextBlock x:Name="LocationTextBlock" Text="Events &amp; Announcement " FontSize="16" FontWeight="Bold" TextWrapping="Wrap"  Foreground="{DynamicResource greenSolidColorBrush}" VerticalAlignment="Center" Margin="10,0,2,0" Height="20" TextDecorations="Underline" />
+                                        <TextBlock x:Name="LocationTextBlock" Text="Events &amp; Announcement " FontSize="16" FontWeight="Bold" TextWrapping="Wrap"  Foreground="{DynamicResource darkestSolidColorBrush}" VerticalAlignment="Center" Margin="10,0,2,0" Height="20" TextDecorations="Underline" />
 
 
                                         <Grid Grid.Column="1" VerticalAlignment="Center" Height="24" Margin="10,0,10,0">
@@ -122,13 +134,13 @@ FontWeight="Bold"  Style="{StaticResource RoundedButtonStyleMain}" Click="btnSho
                                             </Grid.ColumnDefinitions>
 
                                             <Border Background="{x:Null}" 
-                                        BorderBrush="{DynamicResource greenSolidColorBrush}" 
+                                        BorderBrush="{DynamicResource darkestSolidColorBrush}" 
                                         BorderThickness="1" 
                                         CornerRadius="10" Margin="0,0,1,0">
                                                 <TextBox x:Name="txbSearch" 
                                              TextWrapping="Wrap" 
                                              Background="Transparent" 
-                                             Foreground="White" 
+                                             Foreground="{DynamicResource darkSolidColorBrush}" 
                                              SelectionTextBrush="Gainsboro"
                                              FontSize="14"  
                                              Height="24" 
@@ -142,16 +154,16 @@ FontWeight="Bold"  Style="{StaticResource RoundedButtonStyleMain}" Click="btnSho
                                                 <fa:IconImage Icon="Search"
                                                            Style="{StaticResource iconInIconButtonLight}"
                                                           
-                                                           Foreground="{DynamicResource ResourceKey=greenSolidColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Top" Height="23"/>
+                                                           Foreground="{DynamicResource ResourceKey=darkestSolidColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Top" Height="23"/>
                                             </Button>
                                         </Grid>
 
-                                        <TextBlock Text="Filter by" FontSize="13" TextWrapping="Wrap" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2" Height="17" Width="46"/>
+                                        <TextBlock Text="Filter by" FontSize="13" TextWrapping="Wrap" Foreground="{DynamicResource darkestSolidColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2" Height="17" Width="46"/>
 
                                         <ComboBox x:Name="cmbFilter" Width="100" VerticalAlignment="Center"
                                               ScrollViewer.CanContentScroll="False" VerticalContentAlignment="Center" Margin="1,0,0,0"
                                               SelectionChanged="cmbFilter_SelectionChanged"  Style="{DynamicResource ComboBoxFlatStyle}"
-                                                Background="{x:Null}" HorizontalAlignment="Left" Grid.Column="3" Height="22">
+                                                Background="{x:Null}" HorizontalAlignment="Left" Grid.Column="3" Height="22"  >
                                             <ComboBoxItem Content="All" IsSelected="True" />
                                             <ComboBoxItem Content="Events" />
                                             <ComboBoxItem Content="Announcements" />
@@ -169,7 +181,7 @@ FontWeight="Bold"  Style="{StaticResource RoundedButtonStyleMain}" Click="btnSho
                                 </StackPanel>
                             </ScrollViewer>
                             
-                                <Border x:Name="createPostPanel" Visibility="Collapsed" CornerRadius="15" Margin="10,10,10,10" Grid.Column="2" Background="{DynamicResource darkestSolidColorBrush}" HorizontalAlignment="Center">
+                                <Border x:Name="createPostPanel" Visibility="Collapsed" CornerRadius="15" Margin="10,10,10,10" Grid.Column="2" Background="{DynamicResource darkSolidColorBrush}" HorizontalAlignment="Center">
 <ScrollViewer 
 VerticalScrollBarVisibility="Hidden"  Grid.Column="2"
 >

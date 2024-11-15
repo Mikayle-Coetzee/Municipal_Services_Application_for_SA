@@ -1013,5 +1013,26 @@ namespace PROG7312_ST10023767.Views
 
         #endregion
 
+        /// <summary>
+        /// This method will make the buttons visible or collapsed when clicked on the 'Event' button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnEvents_Click(object sender, RoutedEventArgs e)
+        {
+            Visibility newVisibility = BtnViewByArea.Visibility == Visibility.Visible
+                  ? Visibility.Collapsed
+                  : Visibility.Visible;
+
+            BtnViewByArea.Visibility = newVisibility;
+            btnShowReccomended.Visibility = newVisibility;
+            btnAddEvent.Visibility = newVisibility;
+
+            if (newVisibility == Visibility.Collapsed)
+            {
+                venueButtonsPanel.Visibility = newVisibility;
+                createPostPanel.Visibility = newVisibility;
+            }
+        }
     }
 }//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//

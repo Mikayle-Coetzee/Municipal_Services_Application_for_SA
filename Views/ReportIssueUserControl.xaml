@@ -46,9 +46,10 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" VerticalAlignment ="Center" 
-                                  Height="50" HorizontalAlignment="Left" Width="209" Margin="-3,0,0,0">
-                            <Image Stretch="Fill" Source="/Images/Logos/new_logo.png" VerticalAlignment="Center" Width="165" Height="34"/>
+      Height="50" HorizontalAlignment="Left" Width="209" Margin="-3,0,0,0">
+                            <Image Stretch="Fill" Source="/Images/Logos/new_logo.png" VerticalAlignment="Center" Width="189" Height="34"/>
                         </StackPanel>
+
 
                         <!-- Usercontrol section -->
                         <Grid Grid.Row="1">

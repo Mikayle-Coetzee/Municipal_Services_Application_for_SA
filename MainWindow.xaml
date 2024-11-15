@@ -55,22 +55,12 @@
                         <!--#endregion-->
 
                         <!--#region Header -->
-                        <StackPanel
-                              Orientation="Horizontal"
-                              VerticalAlignment="Center" Margin="0,0,243,0" Height="47">
-
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,243,0" Height="47">
                         </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" 
-                                    FlowDirection="RightToLeft" 
-                                    VerticalAlignment ="Center" 
-                                    Height="50" HorizontalAlignment="Left" 
-                                    Width="209" Margin="-3,0,0,0">
-                            
-                            <Image Stretch="Fill" 
-                                   Source="/Images/Logos/new_logo.png" 
-                                   VerticalAlignment="Center" 
-                                   Width="165" Height="34"/>
+                        <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" VerticalAlignment ="Center" 
+Height="50" HorizontalAlignment="Left" Width="209" Margin="-3,0,0,0">
+                            <Image Stretch="Fill" Source="/Images/Logos/new_logo.png" VerticalAlignment="Center" Width="189" Height="34"/>
                         </StackPanel>
                         <!--#endregion-->
 
@@ -91,14 +81,14 @@
                             <Label x:Name="lblHeadding" 
                                    Content="South Africa  &#xD;&#xA;Municipality" 
                                    HorizontalAlignment="Left"
-                                   Margin="33,9,0,0" VerticalAlignment="Top" 
+                                   Margin="20,9,0,0" VerticalAlignment="Top" 
                                    Height="216" Width="594" FontSize="72" 
                                    FontFamily="Tahoma" FontWeight="Bold"
-                                   Foreground="White"/>
+                                   Foreground="{DynamicResource darkestSolidColorBrush}"/>
 
                             <Label x:Name="lblHeadding_Copy" 
                                    Content="We are here to help you through the process of &#xD;&#xA;reporting issues, view server request statuses, and &#xD;&#xA;stay updated on local events and announcements. " 
-                                   HorizontalAlignment="Left" Margin="34,213,0,0" VerticalAlignment="Top" Height="98" Width="593" FontSize="25" FontFamily="Tahoma" Foreground="White"/>
+                                   HorizontalAlignment="Left" Margin="22,213,0,0" VerticalAlignment="Top" Height="98" Width="593" FontSize="25" FontFamily="Tahoma" Foreground="{DynamicResource darkestSolidColorBrush}"/>
 
                             <Button x:Name="btnReportIssues"  
                                     Click="btnReportIssues_Click"   ToolTip="Part 1"
@@ -121,9 +111,9 @@
 
                             <Label x:Name="lblHeadding_Copy1" 
                                    Content="Click one of the buttons below to access a feature:" 
-                                   HorizontalAlignment="Left" Margin="33,0,0,229" 
+                                   HorizontalAlignment="Left" Margin="22,0,0,229" 
                                    VerticalAlignment="Bottom" Height="39" Width="594" 
-                                   FontSize="22" FontFamily="Tahoma" Foreground="White" 
+                                   FontSize="22" FontFamily="Tahoma" Foreground="{DynamicResource darkestSolidColorBrush}" 
                                    RenderTransformOrigin="0.5,0.5" Grid.Row="1">
 
                                 <Label.RenderTransform>
@@ -139,7 +129,7 @@
                             <Label x:Name="lblHeadding_Copy2" Content="Report &#xD;&#xA; Issue" 
                                    HorizontalAlignment="Left" Margin="33,0,0,0" VerticalAlignment="Bottom" 
                                    Height="69" Width="120" FontSize="20" FontFamily="Tahoma" 
-                                   Foreground="White" RenderTransformOrigin="0.5,0.5" 
+                                   Foreground="{DynamicResource darkestSolidColorBrush}" RenderTransformOrigin="0.5,0.5" 
                                    HorizontalContentAlignment="Center" Grid.Row="1">
 
                                 <Label.RenderTransform>
@@ -154,7 +144,7 @@
 
                             <Label x:Name="lblHeadding_Copy3" Content="Local Events and&#xD;&#xA; Announcements"
                                    HorizontalAlignment="Center" Margin="0,209,0,0" VerticalAlignment="Bottom" 
-                                   Height="69" Width="188" FontSize="20" FontFamily="Tahoma" Foreground="White"
+                                   Height="69" Width="188" FontSize="20" FontFamily="Tahoma" Foreground="{DynamicResource darkestSolidColorBrush}"
                                    RenderTransformOrigin="0.5,0.5" HorizontalContentAlignment="Center" Grid.Row="1">
 
                                 <Label.RenderTransform>
@@ -169,7 +159,7 @@
 
                             <Label x:Name="lblHeadding_Copy4" Content="Service Request &#xD;&#xA;       Status" 
                                    HorizontalAlignment="Right" Margin="0,0,3,0" VerticalAlignment="Bottom" Height="69" 
-                                   Width="188" FontSize="20" FontFamily="Tahoma" Foreground="White" RenderTransformOrigin="0.5,0.5" 
+                                   Width="188" FontSize="20" FontFamily="Tahoma" Foreground="{DynamicResource darkestSolidColorBrush}" RenderTransformOrigin="0.5,0.5" 
                                    HorizontalContentAlignment="Center" Grid.Row="1">
 
                                 <Label.RenderTransform>

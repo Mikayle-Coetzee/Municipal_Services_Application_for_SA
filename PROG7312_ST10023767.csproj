@@ -189,8 +189,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Resource Include="Images\Part2\popup_background.png" />
+    <Resource Include="Images\Backgrounds\new_background.png" />
+    <Resource Include="Images\Logos\new_logo.png" />
     <Resource Include="Images\Backgrounds\event_background.png" />
+    <Resource Include="Images\Part2\popup_background.png" />
     <Resource Include="Images\Part2\art.png" />
     <Resource Include="Images\Part2\music.png" />
     <Resource Include="Images\Part2\networking.png" />
@@ -222,7 +224,6 @@
     <Resource Include="Images\Buttons\report_sanitation.png" />
     <Resource Include="Images\Buttons\report_sanitation_click.png" />
     <Resource Include="Images\Buttons\report_sanitation_hover.png" />
-    <Resource Include="Images\Logos\new_logo.png" />
     <Resource Include="Images\Buttons\report_utilities.png" />
     <Resource Include="Images\Buttons\report_utilities_click.png" />
     <Resource Include="Images\Buttons\report_utilities_hover.png" />
@@ -238,7 +239,6 @@
     <Resource Include="Images\Buttons\report_image.png" />
     <Resource Include="Images\Buttons\status_image.png" />
     <Resource Include="Images\Images\side_image_old.png" />
-    <Resource Include="Images\Backgrounds\new_background.png" />
     <Resource Include="Images\Backgrounds\white_background.png" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
