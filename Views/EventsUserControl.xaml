@@ -73,7 +73,7 @@ VerticalScrollBarVisibility="Hidden"  Grid.Column="0"
 
                                         <Button x:Name="BtnReportIssue"  
                                            Content="Report Issues" Margin="5" VerticalAlignment="Top" FontSize="14" 
-                                            Style="{StaticResource RoundedButtonStyleMain}" FontWeight="Bold" 
+                                            Style="{StaticResource RoundedButtonStyleMain}" FontWeight="Bold" Click="BtnReportIssue_Click" 
 />
 
                                         <Button x:Name="BtnEvents"  
@@ -117,16 +117,21 @@ FontWeight="Bold"  Style="{StaticResource RoundedButtonStyle}" Click="btnShowRec
 
                                         <Button x:Name="BtnStats"  
                                            Content="Insight" Margin="5" VerticalAlignment="Top" FontSize="14" 
-                                            Style="{StaticResource RoundedButtonStyleMain}" FontWeight="Bold"  
+                                            Style="{StaticResource RoundedButtonStyleMain}" FontWeight="Bold" Click="BtnStats_Click"  
 />
                                     </StackPanel>
                                 </ScrollViewer>
                             </Border>
 
+                            
+
+                            <ContentControl Grid.Column="1" x:Name="ContentArea" Panel.ZIndex="10"  />
+
                             <ScrollViewer 
      VerticalScrollBarVisibility="Hidden"  Grid.Column="1"
      >
-                                <StackPanel Grid.Column="1" Margin="10,10,10,10">
+                                
+                                <StackPanel x:Name="MainEventDisplay" Grid.Column="1" Margin="10,10,10,10" Visibility="Visible">
                                     <Grid >
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="242*"/>

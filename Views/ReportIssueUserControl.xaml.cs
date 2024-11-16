@@ -1,5 +1,7 @@
 ﻿using Microsoft.Win32;
-using PROG7312_ST10023767.Classes;
+using PROG7312_ST10023767.Controllers;
+using PROG7312_ST10023767.Models;
+using PROG7312_ST10023767.Models.Managers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,7 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static PROG7312_ST10023767.Classes.IssueClass;
+using static PROG7312_ST10023767.Models.IssueClass;
 
 namespace PROG7312_ST10023767.Views
 {
@@ -30,6 +32,7 @@ namespace PROG7312_ST10023767.Views
         /// </summary>
         private IssueManager issueManager;
 
+        private IssueTracker issueTracker;
         /// <summary>
         /// Manages the chat-based user interface for interacting with the issue report
         /// </summary>
@@ -60,15 +63,17 @@ namespace PROG7312_ST10023767.Views
         /// </summary>
         bool isLocationValid = false, isDescriptionValid = false, isMediaUploaded = false;
 
+        
         //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
         /// Initializes a new instance of ReportIssueUserControl
         /// </summary>
         /// <param name="issueManager"></param>
-        public ReportIssueUserControl(IssueManager issueManager)
+        public ReportIssueUserControl(IssueManager issueManager, IssueTracker issueTracker)
         {
             InitializeComponent();
             this.issueManager = issueManager;
+            this.issueTracker = issueTracker;
             this.chatService = new ChatService(ChatHistoryPanel, issueManager, attachedMediaPaths);
             this.mediaManager = new MediaService(attachedMediaPaths);
 
@@ -117,13 +122,16 @@ namespace PROG7312_ST10023767.Views
             if (!ValidateFields()) return;
 
             var issue = new IssueClass(txtLocation.Text, (cmbCategory.SelectedItem as ComboBoxItem)?.Content.ToString(), 
-                GetRichTextBoxText());
+                GetRichTextBoxText(), 1);   
+
             foreach (var mediaPath in attachedMediaPaths)
             {
                 issue.AddAttachment(mediaPath);
             }
 
             issueManager.AddIssue(issue);
+            issueTracker.AddIssue(issue);
+
             string reportMessage = $"Location: {txtLocation.Text}\nCategory: " +
                 $"{(cmbCategory.SelectedItem as ComboBoxItem)?.Content.ToString()}\nDescription: " +
                 $"{GetRichTextBoxText()}\nTime: {DateTime.Now}";
@@ -290,14 +298,14 @@ namespace PROG7312_ST10023767.Views
         /// <param name="e"></param>
         private void btnBackToReports_Click(object sender, RoutedEventArgs e)
         {
-            var mainWindow = Window.GetWindow(this) as MainWindow;
+            /*var mainWindow = Window.GetWindow(this) as MainWindow;
 
             if (mainWindow != null)
             {
                 var mainReportControl = new MainReportUserControl(issueManager);
 
                 mainWindow.MainFrame.Content = mainReportControl;
-            }
+            }*/
         }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//

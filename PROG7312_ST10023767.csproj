@@ -37,11 +37,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime, Version=3.3.1.7705, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\WebGrease.1.1.0\lib\Antlr3.Runtime.dll</HintPath>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="FontAwesome.Sharp, Version=6.6.0.0, Culture=neutral, PublicKeyToken=d16d1e4e568ec10f, processorArchitecture=MSIL">
       <HintPath>packages\FontAwesome.Sharp.6.6.0\lib\net48\FontAwesome.Sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="MaterialDesignColors, Version=3.1.0.0, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>packages\MaterialDesignColors.3.1.0\lib\net462\MaterialDesignColors.dll</HintPath>
@@ -49,34 +55,37 @@
     <Reference Include="MaterialDesignThemes.Wpf, Version=5.1.0.0, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>packages\MaterialDesignThemes.5.1.0\lib\net462\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Web.Infrastructure.2.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Xaml.Behaviors.Wpf.1.1.39\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+      <HintPath>packages\Microsoft.Xaml.Behaviors.Wpf.1.1.135\lib\net462\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.AspNet.WebPages.1.0.20105.408\lib\net40\System.Web.Helpers.dll</HintPath>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.AspNet.Mvc.3.0.20105.1\lib\net40\System.Web.Mvc.dll</HintPath>
+    <Reference Include="System.Web.Mvc, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.Mvc.5.3.0\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Optimization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.AspNet.Web.Optimization.1.0.0\lib\net40\System.Web.Optimization.dll</HintPath>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.AspNet.Razor.1.0.20105.408\lib\net40\System.Web.Razor.dll</HintPath>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.Razor.3.3.0\lib\net45\System.Web.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.AspNet.WebPages.1.0.20105.408\lib\net40\System.Web.WebPages.dll</HintPath>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.WebPages.Deployment, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.AspNet.WebPages.1.0.20105.408\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.WebPages.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.AspNet.WebPages.1.0.20105.408\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -89,10 +98,10 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <HintPath>packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <HintPath>packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
     </Reference>
-    <Reference Include="WebGrease, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\WebGrease.1.1.0\lib\WebGrease.dll</HintPath>
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -103,23 +112,32 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Classes\ButtonHelper.cs" />
-    <Compile Include="Classes\ChatService.cs" />
-    <Compile Include="Classes\DisplayHelper.cs" />
-    <Compile Include="Classes\EventClass.cs" />
-    <Compile Include="Classes\PostManager.cs" />
-    <Compile Include="Classes\MediaFileClass.cs" />
-    <Compile Include="Classes\MediaService.cs" />
-    <Compile Include="Classes\PriorityQueue.cs" />
-    <Compile Include="Classes\FilterAndRecommendHelper.cs" />
+    <Compile Include="Controllers\AddDummyDataClass.cs" />
+    <Compile Include="Controllers\ButtonHelper.cs" />
+    <Compile Include="Controllers\ChatService.cs" />
+    <Compile Include="Controllers\DisplayHelper.cs" />
+    <Compile Include="Models\EventClass.cs" />
+    <Compile Include="Models\Managers\PostManager.cs" />
+    <Compile Include="Models\MediaFileClass.cs" />
+    <Compile Include="Controllers\MediaService.cs" />
+    <Compile Include="Controllers\PriorityQueue.cs" />
+    <Compile Include="Controllers\FilterAndRecommendHelper.cs" />
+    <Compile Include="Models\DataStructures\AVLTree.cs" />
+    <Compile Include="Models\DataStructures\BinarySearchTree.cs" />
+    <Compile Include="Models\DataStructures\BinaryTree.cs" />
+    <Compile Include="Models\DataStructures\Graph.cs" />
+    <Compile Include="Models\DataStructures\MaxHeap.cs" />
+    <Compile Include="Models\DataStructures\RedBlackTreeNode.cs" />
+    <Compile Include="Models\DataStructures\TreeNode.cs" />
+    <Compile Include="Models\Managers\IssueTracker.cs" />
     <Compile Include="Views\CategoryFilterWindow.xaml.cs">
       <DependentUpon>CategoryFilterWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EventsUserControl.xaml.cs">
       <DependentUpon>EventsUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainReportUserControl.xaml.cs">
-      <DependentUpon>MainReportUserControl.xaml</DependentUpon>
+    <Compile Include="Views\InsightUserControl.xaml.cs">
+      <DependentUpon>InsightUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ReportIssueUserControl.xaml.cs">
       <DependentUpon>ReportIssueUserControl.xaml</DependentUpon>
@@ -132,29 +150,33 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\IssueClass.cs" />
-    <Compile Include="Classes\IssueManager.cs" />
+    <Compile Include="Models\IssueClass.cs" />
+    <Compile Include="Models\Managers\IssueManager.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Styles\ButtonStyles.xaml">
+    <Page Include="Views\Styles\ButtonStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\ColorPalette.xaml">
+    <Page Include="Views\Styles\ColorPalette.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\ComboBoxStyles.xaml">
+    <Page Include="Views\Styles\ComboBoxStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\ScrollBarStyles.xaml">
+    <Page Include="Views\Styles\DataGridStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\StackPanelStyles.xaml">
+    <Page Include="Views\Styles\ScrollBarStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Styles\StackPanelStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -166,7 +188,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainReportUserControl.xaml">
+    <Page Include="Views\InsightUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -205,51 +227,19 @@
     <Resource Include="Images\Part2\event.png" />
     <Resource Include="Images\Buttons\back_to_main_hover.png" />
     <Resource Include="Images\Buttons\back_to_main.png" />
-    <Resource Include="Images\Buttons\report_traffic_lights.png" />
-    <Resource Include="Images\Buttons\report_traffic_lights_click.png" />
-    <Resource Include="Images\Buttons\report_traffic_lights_hover.png" />
-    <Resource Include="Images\Buttons\report_car_crash.png" />
-    <Resource Include="Images\Buttons\report_car_crash_click.png" />
-    <Resource Include="Images\Buttons\report_car_crash_hover.png" />
-    <Resource Include="Images\Buttons\report_traffic.png" />
-    <Resource Include="Images\Buttons\report_traffic_hover.png" />
-    <Resource Include="Images\Buttons\report_traffic_click.png" />
-    <Resource Include="Images\Buttons\report_other_issue.png" />
-    <Resource Include="Images\Buttons\report_other_issue_click.png" />
-    <Resource Include="Images\Buttons\report_other_issue_hover.png" />
-    <Resource Include="Images\Buttons\report_road_signs.png" />
-    <Resource Include="Images\Buttons\report_road_signs_click.png" />
-    <Resource Include="Images\Buttons\report_road_signs_hover.png" />
-    <Resource Include="Images\Buttons\report_potholes.png" />
-    <Resource Include="Images\Buttons\report_potholes_click.png" />
-    <Resource Include="Images\Buttons\report_potholes_hover.png" />
-    <Resource Include="Images\Buttons\report_sanitation.png" />
-    <Resource Include="Images\Buttons\report_sanitation_click.png" />
-    <Resource Include="Images\Buttons\report_sanitation_hover.png" />
-    <Resource Include="Images\Buttons\report_utilities.png" />
-    <Resource Include="Images\Buttons\report_utilities_click.png" />
-    <Resource Include="Images\Buttons\report_utilities_hover.png" />
-    <Resource Include="Images\Backgrounds\report_background.png" />
     <Resource Include="Images\Buttons\event_image_hover.png" />
     <Resource Include="Images\Buttons\report_image_hover.png" />
     <Resource Include="Images\Buttons\status_image_hover.png" />
     <Resource Include="Images\Buttons\event_image_click.png" />
     <Resource Include="Images\Buttons\report_image_click.png" />
     <Resource Include="Images\Buttons\status_image_click.png" />
-    <Resource Include="Images\Images\side_image.png" />
     <Resource Include="Images\Buttons\event_image.png" />
     <Resource Include="Images\Buttons\report_image.png" />
     <Resource Include="Images\Buttons\status_image.png" />
-    <Resource Include="Images\Images\side_image_old.png" />
-    <Resource Include="Images\Backgrounds\white_background.png" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="Content\fonts\FontAwesome.otf" />
-    <Content Include="Content\fonts\fontawesome-webfont.ttf" />
-    <Content Include="Content\fonts\fontawesome-webfont.eot" />
-    <Content Include="Content\fonts\fontawesome-webfont.woff" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -260,11 +250,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\fontawesome\font-awesome.css" />
-    <Content Include="Content\fontawesome\font-awesome.min.css" />
-    <Content Include="Content\fonts\fontawesome-webfont.svg" />
+    <Folder Include="Content\" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\MaterialDesignThemes.5.1.0\build\MaterialDesignThemes.targets" Condition="Exists('packages\MaterialDesignThemes.5.1.0\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

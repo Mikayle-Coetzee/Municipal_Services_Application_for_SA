@@ -1,4 +1,4 @@
-﻿using PROG7312_ST10023767.Classes;
+﻿using PROG7312_ST10023767.Controllers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,6 +17,8 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.Windows.Controls.Primitives;
 using System.Collections;
+using PROG7312_ST10023767.Models;
+using PROG7312_ST10023767.Models.Managers;
 
 namespace PROG7312_ST10023767.Views
 {
@@ -43,6 +45,8 @@ namespace PROG7312_ST10023767.Views
 
         private IssueManager IssueManager;
 
+        private IssueTracker IssueTracker;
+
         /// <summary>
         /// Dictionary to store events sorted by location
         /// </summary>
@@ -53,10 +57,11 @@ namespace PROG7312_ST10023767.Views
         /// Default Constructor
         /// </summary>
         /// <param name="postManager"></param>
-        public EventsUserControl(PostManager postManager, IssueManager issueManager)
+        public EventsUserControl(PostManager postManager, IssueManager issueManager, IssueTracker issueTracker)
         {
             this.PostManager = postManager;
             this.IssueManager = issueManager;
+            IssueTracker = issueTracker;
 
             InitializeComponent();
             LoadLocations();
@@ -1077,6 +1082,18 @@ namespace PROG7312_ST10023767.Views
             btnShowReccomended.Visibility = newVisibility;
             btnAddEvent.Visibility = newVisibility;
 
+            if (ContentArea.Content is ReportIssueUserControl)
+            {
+                // Remove the ReportIssueUserControl
+                ContentArea.Content = null;
+            }
+            if (ContentArea.Content is InsightUserControl)
+            {
+                // Remove the ReportIssueUserControl
+                ContentArea.Content = null;
+            }
+
+            MainEventDisplay.Visibility = newVisibility;
             if (newVisibility == Visibility.Collapsed)
             {
                 venueButtonsPanel.Visibility = newVisibility;
@@ -1117,7 +1134,7 @@ namespace PROG7312_ST10023767.Views
         }
         private List<IssueClass> GetReportsToDisplay()
         {
-            return IssueManager.issues;
+            return IssueManager.GetIssues();
         }
 
         private void ShowNoReportsMessage()
@@ -1141,6 +1158,55 @@ namespace PROG7312_ST10023767.Views
             eventBorder.Child = eventPanel;
 
             EventsList.Items.Add(eventBorder);
+        }
+
+        private void BtnReportIssue_Click(object sender, RoutedEventArgs e)
+        {
+            // Create an instance of the UserControl
+            var reportIssue = new ReportIssueUserControl(IssueManager,IssueTracker);
+
+            // Make sure the UserControl is interactive
+            reportIssue.Visibility = Visibility.Visible;
+            reportIssue.IsEnabled = true;
+            reportIssue.IsHitTestVisible = true;
+
+            Visibility newVisibility = Visibility.Collapsed ;
+
+            BtnViewByArea.Visibility = newVisibility;
+            btnShowReccomended.Visibility = newVisibility;
+            btnAddEvent.Visibility = newVisibility;
+            venueButtonsPanel.Visibility = newVisibility;
+
+            // Assign the UserControl to the ContentControl
+            ContentArea.Content = reportIssue;
+
+            // Optionally, hide the main display if required
+            MainEventDisplay.Visibility = Visibility.Collapsed;
+            createPostPanel.Visibility = Visibility.Collapsed; 
+
+        }
+
+        private void BtnStats_Click(object sender, RoutedEventArgs e)
+        {
+            var insight = new InsightUserControl(IssueTracker);
+            // Make sure the UserControl is interactive
+            insight.Visibility = Visibility.Visible;
+            insight.IsEnabled = true;
+            insight.IsHitTestVisible = true;
+
+            Visibility newVisibility = Visibility.Collapsed;
+
+            BtnViewByArea.Visibility = newVisibility;
+            btnShowReccomended.Visibility = newVisibility;
+            btnAddEvent.Visibility = newVisibility;
+            venueButtonsPanel.Visibility = newVisibility;
+
+            // Assign the UserControl to the ContentControl
+            ContentArea.Content = insight;
+
+            // Optionally, hide the main display if required
+            MainEventDisplay.Visibility = Visibility.Collapsed;
+            createPostPanel.Visibility = Visibility.Collapsed;
         }
     }
 }//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//

@@ -6,10 +6,10 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Styles/ColorPalette.xaml"/>
-                <ResourceDictionary Source="/Styles/ButtonStyles.xaml"/>
-                <ResourceDictionary Source="/Styles/ComboBoxStyles.xaml"/>
-                <ResourceDictionary Source="/Styles/ScrollBarStyles.xaml"/>
+                <ResourceDictionary Source="Views/Styles/ColorPalette.xaml"/>
+                <ResourceDictionary Source="Views/Styles/ButtonStyles.xaml"/>
+                <ResourceDictionary Source="Views/Styles/ComboBoxStyles.xaml"/>
+                <ResourceDictionary Source="Views/Styles/ScrollBarStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

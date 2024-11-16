@@ -1,6 +1,8 @@
-﻿using PROG7312_ST10023767.Classes;
+﻿using PROG7312_ST10023767.Controllers;
+using PROG7312_ST10023767.Models.Managers;
 using PROG7312_ST10023767.Views;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace PROG7312_ST10023767
 {
@@ -11,12 +13,20 @@ namespace PROG7312_ST10023767
     {
         private IssueManager issueManager;
         private PostManager postManager;
-
-        public MainWindow()
+        private IssueTracker issueTracker;
+        private AddDummyDataClass AddDummyDataClass ;
+         public MainWindow()
         {
             InitializeComponent();
             issueManager = new IssueManager();
             postManager = new PostManager();
+            issueTracker = new IssueTracker();
+
+            var addDummyData = new AddDummyDataClass();
+
+            // Add dummy issues to the IssueManager
+            addDummyData.AddDummyIssues(issueManager,issueTracker);
+
         }
 
         /// <summary>
@@ -28,14 +38,15 @@ namespace PROG7312_ST10023767
         /// <param name="e"></param>
         private void btnReportIssues_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the ReportIssueUserControl view
-            ReportIssueUserControl reportIssue = new ReportIssueUserControl(issueManager);
+            // Navigate to the EventsUserControl view
+            EventsUserControl events = new EventsUserControl(postManager, issueManager, issueTracker);
 
-            // Set the visibility of the reportIssue section to visible
-            reportIssue.Visibility = Visibility.Visible;
+            // Set the visibility of the events section to visible
+            events.Visibility = Visibility.Visible;
+            events.BtnReportIssue.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            // Navigate to the events using the MainFrame
+            MainFrame.Navigate(content: events);
 
-            // Navigate to the reportIssue using the MainFrame
-            MainFrame.Navigate(content: reportIssue);
         }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
@@ -47,7 +58,7 @@ namespace PROG7312_ST10023767
         private void btnLocalEvents_Click(object sender, RoutedEventArgs e)
         {
             // Navigate to the EventsUserControl view
-            EventsUserControl events = new EventsUserControl(postManager, issueManager);
+            EventsUserControl events = new EventsUserControl(postManager, issueManager , issueTracker);
 
             // Set the visibility of the events section to visible
             events.Visibility = Visibility.Visible;
@@ -64,7 +75,14 @@ namespace PROG7312_ST10023767
         /// <param name="e"></param>
         private void btnServiceRequestStatus_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("The 'Service Request Status' Feature Is Coming");
+            // Navigate to the EventsUserControl view
+            EventsUserControl events = new EventsUserControl(postManager, issueManager, issueTracker);
+
+            // Set the visibility of the events section to visible
+            events.Visibility = Visibility.Visible;
+            events.BtnServiceRequestStatus.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            // Navigate to the events using the MainFrame
+            MainFrame.Navigate(content: events);
         }
     }
 }//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//
