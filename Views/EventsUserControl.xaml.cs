@@ -19,6 +19,7 @@ using System.Windows.Controls.Primitives;
 using System.Collections;
 using PROG7312_ST10023767.Models;
 using PROG7312_ST10023767.Models.Managers;
+using System.Net.Mail;
 
 namespace PROG7312_ST10023767.Views
 {
@@ -69,6 +70,12 @@ namespace PROG7312_ST10023767.Views
 
             SetDateToNow(EventDate);
             SetDateToNow(EndDate);
+        }
+
+        private void ReportIssueUserControl_ShowAllReportsClicked(object sender, EventArgs e)
+        {
+            // Trigger the parent button click
+            BtnServiceRequestStatus.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
         }
 
         #region Load and Display Methods
@@ -261,7 +268,22 @@ namespace PROG7312_ST10023767.Views
             }
             else
             {
-                MessageBox.Show("No media content available.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                if (sender is TextBlock textBlock && textBlock.Tag is string filePath)
+                {
+                    try
+                    {
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                        {
+                            FileName = filePath,
+                            UseShellExecute = true
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Unable to open file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
             }
         }
 
@@ -799,7 +821,9 @@ namespace PROG7312_ST10023767.Views
                         Text = media.FileName,
                         Margin = new Thickness(20, 0, 0, 5),
                         Tag = media.FileContent,
-                        TextWrapping = TextWrapping.Wrap
+                        TextWrapping = TextWrapping.Wrap,
+                        Foreground = Brushes.DarkBlue,
+                        Cursor = Cursors.Hand
                     };
 
                     mediaItem.MouseDown += MediaItem_MouseDown;
@@ -808,13 +832,91 @@ namespace PROG7312_ST10023767.Views
             }
             else
             {
-                foreach (var media in ic.Attachments)
+                foreach (var filePath in ic.Attachments)
                 {
-                    //code
+                    // Ensure the file exists before processing
+                    if (!System.IO.File.Exists(filePath))
+                        continue;
+
+                    string extension = System.IO.Path.GetExtension(filePath).ToLower();
+
+                    if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".bmp" || extension == ".gif")
+                    {
+                        // Load image
+                        Image imageItem = new Image
+                        {
+                            Height = 200,
+                            Margin = new Thickness(10),
+                            Stretch = Stretch.Fill,
+                            Source = new BitmapImage(new Uri(filePath, UriKind.Absolute))
+                        };
+
+                        eventPanel.Children.Add(imageItem);
+                    }
+                    else if (extension == ".mp4" || extension == ".avi" || extension == ".mov" || extension == ".wmv")
+                    {
+                        // Load video
+                        MediaElement videoItem = new MediaElement
+                        {
+                            Height = 200,
+                            Margin = new Thickness(10),
+                            Stretch = Stretch.Fill,
+                            LoadedBehavior = MediaState.Manual,
+                            UnloadedBehavior = MediaState.Stop,
+                            Source = new Uri(filePath, UriKind.Absolute)
+                        };
+
+                        videoItem.LoadedBehavior = MediaState.Play; // Optionally start playback automatically
+                        eventPanel.Children.Add(videoItem);
+                    }
+                    else
+                    {
+                        // Handle unsupported media types
+                        TextBlock unsupportedMedia = new TextBlock
+                        {
+                            Text = $"Unsupported file: {System.IO.Path.GetFileName(filePath)}",
+                            FontWeight = FontWeights.Bold,
+                            Margin = new Thickness(10),
+                            TextWrapping = TextWrapping.Wrap
+                        };
+
+                        eventPanel.Children.Add(unsupportedMedia);
+                    }
+                }
+
+                // Add a section for displaying file names and allowing interaction
+                TextBlock mediaBlock = new TextBlock
+                {
+                    Text = "All Media Files (Click on the file names to open):",
+                    FontWeight = FontWeights.Bold,
+                    Margin = new Thickness(5, 10, 0, 5),
+                    TextWrapping = TextWrapping.Wrap
+                };
+
+                eventPanel.Children.Add(mediaBlock);
+
+                foreach (var filePath in ic.Attachments)
+                {
+                    // Ensure the file exists before displaying
+                    if (!System.IO.File.Exists(filePath))
+                        continue;
+
+                    TextBlock mediaItem = new TextBlock
+                    {
+                        Text = System.IO.Path.GetFileName(filePath),
+                        Margin = new Thickness(20, 0, 0, 5),
+                        Tag = filePath,
+                        TextWrapping = TextWrapping.Wrap,
+                        Foreground = Brushes.DarkBlue,
+                        Cursor = Cursors.Hand
+                    };
+
+                    mediaItem.MouseDown += MediaItem_MouseDown;
+                    eventPanel.Children.Add(mediaItem);
                 }
             }
         }
-
+       
         //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
         /// Displays a message when there are no posts available
@@ -1081,28 +1183,29 @@ namespace PROG7312_ST10023767.Views
             BtnViewByArea.Visibility = newVisibility;
             btnShowReccomended.Visibility = newVisibility;
             btnAddEvent.Visibility = newVisibility;
-
-            if (ContentArea.Content is ReportIssueUserControl)
-            {
-                // Remove the ReportIssueUserControl
-                ContentArea.Content = null;
-            }
-            if (ContentArea.Content is InsightUserControl)
-            {
-                // Remove the ReportIssueUserControl
-                ContentArea.Content = null;
-            }
-
+            ContentArea.Content = null;
+  
+            UpdateEventsList();
             MainEventDisplay.Visibility = newVisibility;
             if (newVisibility == Visibility.Collapsed)
             {
                 venueButtonsPanel.Visibility = newVisibility;
                 createPostPanel.Visibility = newVisibility;
             }
+
         }
 
         private void BtnServiceRequestStatus_Click(object sender, RoutedEventArgs e)
         {
+            BtnViewByArea.Visibility = Visibility.Collapsed;
+            btnShowReccomended.Visibility = Visibility.Collapsed;
+            btnAddEvent.Visibility = Visibility.Collapsed;
+            venueButtonsPanel.Visibility = Visibility.Collapsed;
+            createPostPanel.Visibility = Visibility.Collapsed;
+            ContentArea.Content = null;
+
+            MainEventDisplay.Visibility = Visibility.Visible;
+
             UpdateServicesList();
         }
 
@@ -1163,7 +1266,7 @@ namespace PROG7312_ST10023767.Views
         private void BtnReportIssue_Click(object sender, RoutedEventArgs e)
         {
             // Create an instance of the UserControl
-            var reportIssue = new ReportIssueUserControl(IssueManager,IssueTracker);
+            var reportIssue = new ReportIssueUserControl(IssueManager,IssueTracker, PostManager);
 
             // Make sure the UserControl is interactive
             reportIssue.Visibility = Visibility.Visible;

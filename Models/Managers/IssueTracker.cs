@@ -153,7 +153,7 @@ namespace PROG7312_ST10023767.Models.Managers
 
             if (newStatus == "Pending")
                 statusValue = 0;
-            else if (newStatus == "Closed")
+            else if (newStatus == "Active")
                 statusValue = 1;
             else if (newStatus == "Resolved")
                 statusValue = 2;
@@ -175,7 +175,7 @@ namespace PROG7312_ST10023767.Models.Managers
 
             if (newStatus == "Pending")
                 statusValue = 0;
-            else if (newStatus == "Closed")
+            else if (newStatus == "Active")
                 statusValue = 1;
             else if (newStatus == "Resolved")
                 statusValue = 2;
@@ -197,7 +197,7 @@ namespace PROG7312_ST10023767.Models.Managers
 
             if (newStatus == "Pending")
                 statusValue = 0;
-            else if (newStatus == "Closed")
+            else if (newStatus == "Active")
                 statusValue = 1;
             else if (newStatus == "Resolved")
                 statusValue = 2;

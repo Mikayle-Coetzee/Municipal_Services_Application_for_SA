@@ -194,6 +194,51 @@ namespace PROG7312_ST10023767.Controllers
                 return null;
             }
         }
+
+        public string GetImagePathIssue(string category)
+        {
+            string relativeImagePath;
+
+            switch (category)
+            {
+                case "Utilities":
+                    relativeImagePath = "Images/Part3/utilities.png";
+                    break;
+                case "TrafficLights":
+                    relativeImagePath = "Images/Part3/traffic_lights.png";
+                    break;
+                case "Traffic":
+                    relativeImagePath = "Images/Part3/traffic.png";
+                    break;
+                case "Sanitation":
+                    relativeImagePath = "Images/Part3/sanitation.png";
+                    break;
+                case "RoadSigns":
+                    relativeImagePath = "Images/Part3/road_signs.png";
+                    break;
+                case "Potholes":
+                    relativeImagePath = "Images/Part3/potholes.png";
+                    break;
+                case "CarCrash":
+                    relativeImagePath = "Images/Part3/car_crash.png";
+                    break;
+                default:
+                    relativeImagePath = "Images/Part3/other_issue.png";
+                    break;
+            }
+
+            string fullImagePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativeImagePath);
+
+            if (File.Exists(fullImagePath))
+            {
+                return fullImagePath;
+            }
+            else
+            {
+                MessageBox.Show($"Image not found: {fullImagePath}");
+                return null;
+            }
+        }
         #endregion
 
         #region Message Handling Methods
@@ -266,25 +311,43 @@ namespace PROG7312_ST10023767.Controllers
         {
             if (ev != null)
             {
-return new Border
-            {
-                CornerRadius = new CornerRadius(15),
-                Margin = new Thickness(5),
-                Background = (Brush)Application.Current.FindResource(ev.Type == "Event" ? "darkSolidColorBrush" : "blueSolidColorBrush")
-            };
-            }
-            else
-            {//code
                 return new Border
                 {
                     CornerRadius = new CornerRadius(15),
                     Margin = new Thickness(5),
-                    Background = (Brush)Application.Current.FindResource(ic.Category == "Utilities" ? "darkSolidColorBrush" : "blueSolidColorBrush")
+                    Background = (Brush)Application.Current.FindResource(ev.Type == "Event" ? "darkSolidColorBrush" : "blueSolidColorBrush")
+                };
+            }
+            else
+            {
+                var categoryBrush = GetCategoryBrush(ic.Category);
+                return new Border
+                {
+                    CornerRadius = new CornerRadius(15),
+                    Margin = new Thickness(5),
+                    Background = categoryBrush
                 };
             }
             
         }
+        private Brush GetCategoryBrush(string category)
+        {
+            var brushDictionary = new Dictionary<string, string>
+                {
+                    { "Utilities", "LightBlueSolidColorBrush" },
+                    { "Sanitation", "PinkSolidColorBrush" },
+                    { "Potholes", "greenSolidColorBrush" },
+                    { "Traffic", "blueSolidColorBrush" },
+                    { "RoadSigns", "busySolidColorBrush" },
+                    { "OtherIssue", "offWhiteSolidColorBrush" },
+                    { "TrafficLights", "upcomingSolidColorBrush" },
+                    { "CarCrash", "pastSolidColorBrush" }
+                };
 
+            return (Brush)Application.Current.FindResource(
+                brushDictionary.ContainsKey(category) ? brushDictionary[category] : "whiteSolidColorBrush"
+            );
+        }
         //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
         /// Creates a StackPanel for the event with the status border and event details
@@ -320,7 +383,7 @@ return new Border
 
             if (ev != null)
             {
-            mediaHelper.LoadImage(GetImagePath(ev.Type), eventTypeImage);
+                mediaHelper.LoadImage(GetImagePath(ev.Type), eventTypeImage);
                 Grid.SetColumn(eventTypeImage, 0);
                 horizontalGrid.Children.Add(eventTypeImage);
 
@@ -344,9 +407,10 @@ return new Border
             }
             else
             {
-                //mediaHelper.LoadImage(GetImagePath(ic.Attachments.), eventTypeImage);
-                Grid.SetColumn(eventTypeImage, 0);
-                horizontalGrid.Children.Add(eventTypeImage);
+                Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
+                mediaHelper.LoadImage(GetImagePathCategory("other"), categoryImage);
+                Grid.SetColumn(categoryImage, 0);
+                horizontalGrid.Children.Add(categoryImage);
 
                 TextBlock eventInfo = new TextBlock
                 {
@@ -361,10 +425,10 @@ return new Border
                 Grid.SetColumn(eventInfo, 1);
                 horizontalGrid.Children.Add(eventInfo);
 
-                Image categoryImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
-                mediaHelper.LoadImage(GetImagePathCategory("other"), categoryImage);
-                Grid.SetColumn(categoryImage, 2);
-                horizontalGrid.Children.Add(categoryImage);
+                Image IssueImage = new Image { Width = 40, Height = 40, Stretch = Stretch.Fill, Margin = new Thickness(5) };
+                mediaHelper.LoadImage(GetImagePathIssue(ic.Category), IssueImage);
+                Grid.SetColumn(IssueImage, 2);
+                horizontalGrid.Children.Add(IssueImage);
             }
 
             return horizontalGrid;

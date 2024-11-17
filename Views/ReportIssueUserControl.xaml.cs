@@ -27,12 +27,15 @@ namespace PROG7312_ST10023767.Views
     /// </summary>
     public partial class ReportIssueUserControl : UserControl
     {
+
         /// <summary>
         /// Manages the creation and storage of issues
         /// </summary>
         private IssueManager issueManager;
 
         private IssueTracker issueTracker;
+
+        private PostManager postManager;
         /// <summary>
         /// Manages the chat-based user interface for interacting with the issue report
         /// </summary>
@@ -69,11 +72,12 @@ namespace PROG7312_ST10023767.Views
         /// Initializes a new instance of ReportIssueUserControl
         /// </summary>
         /// <param name="issueManager"></param>
-        public ReportIssueUserControl(IssueManager issueManager, IssueTracker issueTracker)
+        public ReportIssueUserControl(IssueManager issueManager, IssueTracker issueTracker , PostManager postManager)
         {
             InitializeComponent();
             this.issueManager = issueManager;
             this.issueTracker = issueTracker;
+            this.postManager = postManager;
             this.chatService = new ChatService(ChatHistoryPanel, issueManager, attachedMediaPaths);
             this.mediaManager = new MediaService(attachedMediaPaths);
 
@@ -107,7 +111,7 @@ namespace PROG7312_ST10023767.Views
         public string GetRichTextBoxText()
         {
             TextRange textRange = new TextRange(txtDescription.Document.ContentStart, txtDescription.Document.ContentEnd);
-            return textRange.Text.Trim();  // Trim unnecessary whitespace
+            return textRange.Text.Trim();  
         }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
@@ -172,7 +176,7 @@ namespace PROG7312_ST10023767.Views
             txtLocation.Clear();
             txtDescription.Document.Blocks.Clear();
             cmbCategory.SelectedIndex = 0;
-            lblMotivation.Content = "You're off to a great start! A category has been selected.";
+            lblMotivation.Content = "You're off to a great start! Category selected.";
             ResetValidationFlags();
             UpdateProgressBar(1);
             attachedMediaPaths.Clear();
@@ -282,24 +286,6 @@ namespace PROG7312_ST10023767.Views
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
-        /// Directs the user to the main report page
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnBackToReports_Click(object sender, RoutedEventArgs e)
-        {
-            /*var mainWindow = Window.GetWindow(this) as MainWindow;
-
-            if (mainWindow != null)
-            {
-                var mainReportControl = new MainReportUserControl(issueManager);
-
-                mainWindow.MainFrame.Content = mainReportControl;
-            }*/
-        }
-
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
         /// Sends a command based on user input to either help, view, start new conversation, or search
         /// </summary>
         /// <param name="sender"></param>
@@ -357,7 +343,7 @@ namespace PROG7312_ST10023767.Views
         private void txtLocation_TextChanged(object sender, TextChangedEventArgs e)
         {
             HandleTextChange(txtLocation.Text, ref isLocationValid, 30, 
-                "Great! You've entered the location. Keep going!", "Oops! The location is missing. Please enter it.");
+                "Great! You've entered the location!", "Oops! The location is missing.");
         }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
@@ -369,7 +355,7 @@ namespace PROG7312_ST10023767.Views
         private void txtDescription_TextChanged(object sender, TextChangedEventArgs e)
         {
             HandleTextChange(GetRichTextBoxText(), ref isDescriptionValid, 30,
-                "Awesome! You've described the issue. Almost there!", "Please describe the issue.");
+                "Awesome! You've described the issue!", "Please describe the issue.");
         }
 
 
@@ -436,7 +422,7 @@ namespace PROG7312_ST10023767.Views
                         {
                             UpdateProgressBar(progressValue - 30); // Adjust the progress
                             isMediaUploaded = false;
-                            lblMotivation.Content = "Media removed! You can still upload something if needed.";
+                            lblMotivation.Content = "Media removed! You can still upload.";
                         }
 
                         itemFound = true;
@@ -463,6 +449,11 @@ namespace PROG7312_ST10023767.Views
             ClearFields();
         }
 
+        private void txtMessage_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+
+        }
+
         //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
         /// Enables or disables the submit button based on progress values
@@ -484,7 +475,7 @@ namespace PROG7312_ST10023767.Views
             {
                 UpdateProgressBar(progressValue + 30);
                 isMediaUploaded = true;
-                lblMotivation.Content = "Fantastic! Your report is ready. Click submit to complete!";
+                lblMotivation.Content = "Fantastic! Your report is ready!";
             }
 
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -502,6 +493,27 @@ namespace PROG7312_ST10023767.Views
                     MediaList.Items.Add(System.IO.Path.GetFileName(filePath));
 
                 }
+            }
+        }
+
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (textBox != null && textBox.Text == "Enter Message Here...")
+            {
+                textBox.Text = "";  
+                textBox.Foreground = new SolidColorBrush(Colors.Black);  
+            }
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (textBox != null && string.IsNullOrEmpty(textBox.Text))
+            {
+                textBox.Text = "Enter Message Here...";  
+                textBox.Foreground = new SolidColorBrush(Colors.Gray);  
             }
         }
 

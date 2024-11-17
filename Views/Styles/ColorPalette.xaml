@@ -29,7 +29,8 @@
     <SolidColorBrush x:Key="redSolidColorBrush">#D94F47</SolidColorBrush>
     <SolidColorBrush x:Key="greenSolidColorBrush">#06D6A0</SolidColorBrush>
     <SolidColorBrush x:Key="darkRedSolidColorBrush">#8A1F26</SolidColorBrush>
-
+    <SolidColorBrush x:Key="LightBlueSolidColorBrush">#9DFCF9</SolidColorBrush>
+    <SolidColorBrush x:Key="PinkSolidColorBrush">#FFF5C2</SolidColorBrush>
     <SolidColorBrush x:Key="upcomingSolidColorBrush">#B5E0B2</SolidColorBrush>
     <SolidColorBrush x:Key="busySolidColorBrush">#F4C542</SolidColorBrush>
     <SolidColorBrush x:Key="pastSolidColorBrush">#D94F47</SolidColorBrush>

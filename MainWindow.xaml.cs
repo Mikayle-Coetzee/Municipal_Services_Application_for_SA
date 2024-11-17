@@ -80,7 +80,7 @@ namespace PROG7312_ST10023767
 
             // Set the visibility of the events section to visible
             events.Visibility = Visibility.Visible;
-            events.BtnServiceRequestStatus.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            events.BtnStats.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             // Navigate to the events using the MainFrame
             MainFrame.Navigate(content: events);
         }

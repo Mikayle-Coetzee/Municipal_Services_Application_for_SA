@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace PROG7312_ST10023767.Views
 {
@@ -102,14 +103,26 @@ namespace PROG7312_ST10023767.Views
                 .GroupBy(i => i.Status)
                 .Select(group => new { Status = group.Key, Count = group.Count() });
 
+            var colors = new List<SolidColorBrush>
+                {
+                    new SolidColorBrush(Colors.Blue),
+                    (SolidColorBrush)FindResource("greenSolidColorBrush"),
+                    new SolidColorBrush(Colors.Gray)
+                }; 
+            
+            int colorIndex = 0;
+
             foreach (var group in groupedByStatus)
             {
                 PieChartSeries.Add(new PieSeries
                 {
                     Title = group.Status,
                     Values = new ChartValues<int> { group.Count },
-                    DataLabels = true
+                    DataLabels = true,
+                    Fill = colors[colorIndex % colors.Count]
                 });
+
+                colorIndex++;
             }
         }
 
@@ -152,7 +165,7 @@ namespace PROG7312_ST10023767.Views
                 case 0:
                     return "Pending";
                 case 1:
-                    return "Closed";
+                    return "Active";
                 case 2:
                     return "Resolved";
                 default:

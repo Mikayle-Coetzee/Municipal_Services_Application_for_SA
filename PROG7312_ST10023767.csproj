@@ -256,6 +256,16 @@
   <ItemGroup>
     <Resource Include="Images\Backgrounds\new_overlay.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Part3\car_crash.png" />
+    <Resource Include="Images\Part3\other_issue.png" />
+    <Resource Include="Images\Part3\potholes.png" />
+    <Resource Include="Images\Part3\road_signs.png" />
+    <Resource Include="Images\Part3\sanitation.png" />
+    <Resource Include="Images\Part3\traffic.png" />
+    <Resource Include="Images\Part3\traffic_lights.png" />
+    <Resource Include="Images\Part3\utilities.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\MaterialDesignThemes.5.1.0\build\MaterialDesignThemes.targets" Condition="Exists('packages\MaterialDesignThemes.5.1.0\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
