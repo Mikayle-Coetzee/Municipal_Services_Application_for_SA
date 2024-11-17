@@ -11,15 +11,18 @@ namespace PROG7312_ST10023767.Models.Managers
          private AVLTree _avlTree;
         private RedBlackTreeNode _redBlackTree;
         private BinarySearchTree _binarySearchTree;
+        private Graph<IssueClass> _issueGraph;
 
-         public IssueTracker()
+        public IssueTracker()
         {
             _avlTree = new AVLTree();
             _redBlackTree = new RedBlackTreeNode(null);  
             _binarySearchTree = new BinarySearchTree();
+            _issueGraph = new Graph<IssueClass>();
+
         }
 
-         public void AddIssue(IssueClass issue)
+        public void AddIssue(IssueClass issue)
         {
             // Add issue to AVL Tree
             _avlTree.Insert(issue);
@@ -32,6 +35,7 @@ namespace PROG7312_ST10023767.Models.Managers
 
             // Add issue to Binary Search Tree
             _binarySearchTree.Insert(issue);
+            _issueGraph.AddVertex(issue);
         }
 
          private void InsertRedBlackTree(RedBlackTreeNode node, IssueClass issue)
@@ -82,6 +86,20 @@ namespace PROG7312_ST10023767.Models.Managers
             return new List<IssueClass>(allIssues);
         }
 
+        public void AddDependency(IssueClass from, IssueClass to)
+        {
+            _issueGraph.AddEdge(from, to);
+        }
+
+        public List<IssueClass> GetDependencies(IssueClass issue)
+        {
+            return _issueGraph.GetConnections(issue);
+        }
+
+        public Dictionary<IssueClass, List<IssueClass>> GetAllDependencies()
+        {
+            return _issueGraph.GetGraph();
+        }
         private List<IssueClass> GetIssuesFromAVLTree()
         {
             var issues = new List<IssueClass>(); 
@@ -143,7 +161,7 @@ namespace PROG7312_ST10023767.Models.Managers
             if (node == null) return false;
             if (node.Issue.IssueID == issueID)
             {
-                node.Issue.Status = statusValue;
+                node.Issue.Status = statusValue.ToString();
                 return true;
             }
             return issueID.CompareTo(node.Issue.IssueID) < 0 ?
@@ -165,7 +183,7 @@ namespace PROG7312_ST10023767.Models.Managers
             if (node == null) return false;
             if (node.Issue.IssueID == issueID)
             {
-                node.Issue.Status = statusValue;
+                node.Issue.Status = statusValue.ToString();
                 return true;
             }
             return issueID.CompareTo(node.Issue.IssueID) < 0 ?
@@ -187,7 +205,7 @@ namespace PROG7312_ST10023767.Models.Managers
             if (node == null) return false;
             if (node.Issue.IssueID == issueID)
             {
-                node.Issue.Status = statusValue;
+                node.Issue.Status = statusValue.ToString();
                 return true;
             }
             return issueID.CompareTo(node.Issue.IssueID) < 0 ?

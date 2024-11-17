@@ -122,7 +122,7 @@ namespace PROG7312_ST10023767.Views
             if (!ValidateFields()) return;
 
             var issue = new IssueClass(txtLocation.Text, (cmbCategory.SelectedItem as ComboBoxItem)?.Content.ToString(), 
-                GetRichTextBoxText(), 1);   
+                GetRichTextBoxText(), "Pending");   
 
             foreach (var mediaPath in attachedMediaPaths)
             {

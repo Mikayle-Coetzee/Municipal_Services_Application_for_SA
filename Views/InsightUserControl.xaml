@@ -20,7 +20,7 @@
             <Setter Property="FontWeight" Value="Bold"/>
 
             <!-- Style for DataGridCell -->
-     
+
             <!-- Header Style: Black Text -->
             <Setter Property="ColumnHeaderStyle">
                 <Setter.Value>
@@ -94,7 +94,7 @@
         </Border>
 
         <!-- Data Table -->
-        <Border Grid.Row="1" Margin="10" Background="{DynamicResource darkSolidColorBrush}" CornerRadius="15" Grid.ColumnSpan="2">
+        <Border Grid.Row="1" Grid.Column="0"  Margin="10,10,10,10" Background="{DynamicResource darkSolidColorBrush}" CornerRadius="15">
             <DataGrid ItemsSource="{Binding IssuesTable}"
                       AutoGenerateColumns="True"
                       Margin="10"
@@ -103,6 +103,13 @@
                 HeadersVisibility="Column"
                 IsReadOnly="True"
                 />
+        </Border>
+
+        <!-- Pi Chart -->
+        <Border Grid.Row="1" Grid.Column="1"  Margin="10,10,10,10" Background="{DynamicResource darkSolidColorBrush}" CornerRadius="15">
+            <lvc:PieChart>
+                <lvc:PieChart Series="{Binding PieChartSeries}" LegendLocation="Bottom"/>
+            </lvc:PieChart>
         </Border>
     </Grid>
 </UserControl>

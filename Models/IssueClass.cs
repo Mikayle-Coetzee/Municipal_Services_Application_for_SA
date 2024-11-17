@@ -38,7 +38,7 @@ namespace PROG7312_ST10023767.Models
         /// <summary>
         /// Gets or sets the status of the report posted, like 1= pendin
         /// </summary>
-        public int Status { get; set; }
+        public string Status { get; set; }
 
 
         public Guid IssueID { get; set; }
@@ -56,7 +56,7 @@ namespace PROG7312_ST10023767.Models
         /// <param name="location"></param>
         /// <param name="category"></param>
         /// <param name="description"></param>
-        public IssueClass(string location, string category, string description, int status)
+        public IssueClass(string location, string category, string description, string status)
         {
             IssueID = Guid.NewGuid();
             Location = location;

@@ -38,7 +38,7 @@ namespace PROG7312_ST10023767.Controllers
 
                 DateTime timestamp = GenerateRandomTimestamp(rand);  
 
-                var issue = new IssueClass(location, category, description, status)
+                var issue = new IssueClass(location, category, description, status.ToString())
                 {
                     Timestamp = timestamp 
                 };

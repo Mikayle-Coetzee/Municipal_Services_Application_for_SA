@@ -1,29 +1,41 @@
-﻿using PROG7312_ST10023767.Controllers;
-using PROG7312_ST10023767.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PROG7312_ST10023767.Models.DataStructures
 {
-    public class Graph
+    public class Graph<T>
     {
-        private Dictionary<string, List<IssueClass>> adjacencyList = new Dictionary<string, List<IssueClass>>();
+        private Dictionary<T, List<T>> _adjacencyList;
 
-        public void AddEdge(string category, IssueClass issue)
+        public Graph()
         {
-            if (!adjacencyList.ContainsKey(category))
-                adjacencyList[category] = new List<IssueClass>();
-
-            adjacencyList[category].Add(issue);
+            _adjacencyList = new Dictionary<T, List<T>>();
         }
 
-        public List<IssueClass> GetAdjacentIssues(string category)
+        public void AddVertex(T vertex)
         {
-            return adjacencyList.ContainsKey(category) ? adjacencyList[category] : new List<IssueClass>();
+            if (!_adjacencyList.ContainsKey(vertex))
+            {
+                _adjacencyList[vertex] = new List<T>();
+            }
+        }
+
+        public void AddEdge(T from, T to)
+        {
+            if (!_adjacencyList.ContainsKey(from)) AddVertex(from);
+            if (!_adjacencyList.ContainsKey(to)) AddVertex(to);
+
+            _adjacencyList[from].Add(to);
+        }
+
+        public List<T> GetConnections(T vertex)
+        {
+            return _adjacencyList.ContainsKey(vertex) ? _adjacencyList[vertex] : new List<T>();
+        }
+
+        public Dictionary<T, List<T>> GetGraph()
+        {
+            return _adjacencyList;
         }
     }
-
 }

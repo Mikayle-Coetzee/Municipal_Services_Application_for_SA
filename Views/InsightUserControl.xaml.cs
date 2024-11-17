@@ -13,23 +13,21 @@ namespace PROG7312_ST10023767.Views
 {
     public partial class InsightUserControl : UserControl
     {
-        public ChartValues<int> LineGraphValues { get; set; }
-        public ChartValues<int> BarGraphValues { get; set; }
-        public ObservableCollection<string> LineGraphLabels { get; set; }
-        public ObservableCollection<string> BarGraphLabels { get; set; }
-        public ObservableCollection<IssueClass> IssuesTable { get; set; }
-        public Func<double, string> YAxisFormatter { get; set; }
+        public ChartValues<int> LineGraphValues { get; private set; }
+        public ChartValues<int> BarGraphValues { get; private set; }
+        public ObservableCollection<string> LineGraphLabels { get; private set; }
+        public ObservableCollection<string> BarGraphLabels { get; private set; }
+        public ObservableCollection<IssueClass> IssuesTable { get; private set; }
+        public Func<double, string> YAxisFormatter { get; private set; }
 
         private readonly IssueTracker _issueTracker;
+        public SeriesCollection PieChartSeries { get; private set; }
 
         public InsightUserControl(IssueTracker issueTracker)
         {
             InitializeComponent();
 
-            if (issueTracker == null)
-                throw new ArgumentNullException(nameof(issueTracker), "IssueTracker cannot be null.");
-
-            _issueTracker = issueTracker;
+            _issueTracker = issueTracker ?? throw new ArgumentNullException(nameof(issueTracker), "IssueTracker cannot be null.");
 
             // Initialize properties
             LineGraphValues = new ChartValues<int>();
@@ -37,6 +35,7 @@ namespace PROG7312_ST10023767.Views
             LineGraphLabels = new ObservableCollection<string>();
             BarGraphLabels = new ObservableCollection<string>();
             IssuesTable = new ObservableCollection<IssueClass>();
+            PieChartSeries = new SeriesCollection();
 
             YAxisFormatter = value => value.ToString("N0");
 
@@ -46,53 +45,109 @@ namespace PROG7312_ST10023767.Views
             DataContext = this;
         }
 
-
         private void PopulateChartsAndTable()
         {
-            // Get issues and ensure the list is not null
-            var issues = _issueTracker.GetIssues() ?? new List<IssueClass>();
-
-            // Filter out issues where Timestamp or Category is null
-            var filteredIssues = issues.Where(i => i?.Timestamp != null && !string.IsNullOrEmpty(i?.Category)).ToList();
+            var issues = _issueTracker.GetIssues()?.Where(i => i?.Timestamp != null && !string.IsNullOrEmpty(i?.Category)) ?? Enumerable.Empty<IssueClass>();
 
             // Populate data table
-            foreach (var issue in filteredIssues)
+            foreach (var issue in issues)
             {
                 IssuesTable.Add(issue);
             }
 
-            // Populate Line Graph (e.g., Issues per Day)
-            var groupedByDate = filteredIssues
-                                .GroupBy(i => i.Timestamp.Date) // Grouping by the Date part of Timestamp
-                                .OrderBy(g => g.Key)
-                                .ToList(); // To List for debugging
+            PopulateLineGraph(issues);
+            PopulateBarGraph(issues);
+            PopulatePieChart(issues);
+            PopulateDependencyPieChart();
+        }
+
+        private void PopulateLineGraph(IEnumerable<IssueClass> issues)
+        {
+            var groupedByDate = issues
+                .GroupBy(i => i.Timestamp.Date)
+                .OrderBy(g => g.Key);
 
             foreach (var group in groupedByDate)
             {
                 LineGraphLabels.Add(group.Key.ToString("MMM dd"));
-                int count = group.Count();
-                LineGraphValues.Add(count);
-
-                // Debugging: check what values are being added
-                Console.WriteLine($"Date: {group.Key}, Count: {count}");
+                LineGraphValues.Add(group.Count());
             }
+        }
 
-            // Populate Bar Graph (e.g., Issues per Category)
-            var groupedByCategory = filteredIssues
-                                    .GroupBy(i => i.Category) // Grouping by Category
-                                    .ToList(); // To List for debugging
+        private void PopulateBarGraph(IEnumerable<IssueClass> issues)
+        {
+            var groupedByCategory = issues
+                .GroupBy(i => i.Category);
 
             foreach (var group in groupedByCategory)
             {
                 BarGraphLabels.Add(group.Key);
-                int count = group.Count();
-                BarGraphValues.Add(count);
-
-                // Debugging: check what values are being added
-                Console.WriteLine($"Category: {group.Key}, Count: {count}");
+                BarGraphValues.Add(group.Count());
             }
         }
 
+        private void PopulatePieChart(IEnumerable<IssueClass> issues)
+        {
+            var groupedByStatus = issues
+                .GroupBy(i => i.Status)
+                .Select(group => new { Status = group.Key, Count = group.Count() });
 
+            foreach (var group in groupedByStatus)
+            {
+                PieChartSeries.Add(new PieSeries
+                {
+                    Title = group.Status,
+                    Values = new ChartValues<int> { group.Count },
+                    DataLabels = true
+                });
+            }
+        }
+
+        private void PopulateDependencyPieChart()
+        {
+            var allDependencies = _issueTracker.GetAllDependencies();
+
+            foreach (var entry in allDependencies)
+            {
+                var statusCounts = entry.Value
+                    .GroupBy(i => GetStatusName(Convert.ToInt32(i.Status)))
+                    .Select(group => new { Status = group.Key, Count = group.Count() });
+
+                foreach (var statusGroup in statusCounts)
+                {
+                    var existingSeries = PieChartSeries
+                        .FirstOrDefault(p => p.Title == statusGroup.Status);
+
+                    if (existingSeries != null)
+                    {
+                        existingSeries.Values.Add(statusGroup.Count);
+                    }
+                    else
+                    {
+                        PieChartSeries.Add(new PieSeries
+                        {
+                            Title = statusGroup.Status,
+                            Values = new ChartValues<int> { statusGroup.Count },
+                            DataLabels = true
+                        });
+                    }
+                }
+            }
+        }
+
+        private string GetStatusName(int status)
+        {
+            switch (status)
+            {
+                case 0:
+                    return "Pending";
+                case 1:
+                    return "Closed";
+                case 2:
+                    return "Resolved";
+                default:
+                    return status.ToString();
+            }
+        }
     }
 }
