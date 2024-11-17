@@ -213,8 +213,6 @@
     </Compile>
     <Resource Include="Images\Backgrounds\new_background.png" />
     <Resource Include="Images\Backgrounds\new_background_home.png" />
-    <Resource Include="Images\Backgrounds\new_overlay.png" />
-    <Resource Include="Images\Logos\new_logo.png" />
     <Resource Include="Images\Backgrounds\event_background.png" />
     <Resource Include="Images\Part2\popup_background.png" />
     <Resource Include="Images\Part2\art.png" />
@@ -251,6 +249,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Logos\new_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Backgrounds\new_overlay.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\MaterialDesignThemes.5.1.0\build\MaterialDesignThemes.targets" Condition="Exists('packages\MaterialDesignThemes.5.1.0\build\MaterialDesignThemes.targets')" />

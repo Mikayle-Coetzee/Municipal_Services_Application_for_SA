@@ -77,7 +77,7 @@ namespace PROG7312_ST10023767.Views
             this.chatService = new ChatService(ChatHistoryPanel, issueManager, attachedMediaPaths);
             this.mediaManager = new MediaService(attachedMediaPaths);
 
-            btnSubmit.IsEnabled = false;
+            SubmitEventButton.IsEnabled = false;
             ShowWelcomeMessage();
         }
 
@@ -122,7 +122,7 @@ namespace PROG7312_ST10023767.Views
             if (!ValidateFields()) return;
 
             var issue = new IssueClass(txtLocation.Text, (cmbCategory.SelectedItem as ComboBoxItem)?.Content.ToString(), 
-                GetRichTextBoxText(), "Pending");   
+                GetRichTextBoxText(), "0");   
 
             foreach (var mediaPath in attachedMediaPaths)
             {
@@ -173,9 +173,10 @@ namespace PROG7312_ST10023767.Views
             txtDescription.Document.Blocks.Clear();
             cmbCategory.SelectedIndex = 0;
             lblMotivation.Content = "You're off to a great start! A category has been selected.";
-            ResetMediaUI();
             ResetValidationFlags();
             UpdateProgressBar(1);
+            attachedMediaPaths.Clear();
+            MediaList.Items.Clear();
         }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
@@ -187,17 +188,6 @@ namespace PROG7312_ST10023767.Views
         {
             progressBar.Value = value;
             progressValue = value;
-        }
-
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
-        /// Resets the media UI to its initial state
-        /// </summary>
-        private void ResetMediaUI()
-        {
-            attachedMediaPaths.Clear();
-            SetVisibility(Visibility.Collapsed, reUploadIcon, lblReUploadMedia, btnClearFile, mediaContainer, 
-                btnNext, btnPrevious);
         }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
@@ -382,23 +372,6 @@ namespace PROG7312_ST10023767.Views
                 "Awesome! You've described the issue. Almost there!", "Please describe the issue.");
         }
 
-        //・♫-------------------------------------------------------------------------------------------------♫・//
-        /// <summary>
-        /// Handles the logic for clearing attached files and updating the UI
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnClearFile_Click(object sender, RoutedEventArgs e)
-        {
-            attachedMediaPaths.Clear();
-            if (isMediaUploaded)
-            {
-                UpdateProgressBar(progressValue - 30);
-                isMediaUploaded = false;
-                lblMotivation.Content = "Media removed! You can still upload something if needed.";
-            }
-            ResetMediaUI();
-        }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
@@ -433,6 +406,62 @@ namespace PROG7312_ST10023767.Views
 
             CheckSubmitButtonVisibility();
         }
+        private void RemoveMedia_Click(object sender, RoutedEventArgs e)
+        {
+            if (MediaList.SelectedItem != null)
+            {
+                string selectedMedia = MediaList.SelectedItem.ToString().Trim(); // Selected file name
+
+                // Debugging: Check the selected media
+                Console.WriteLine($"Selected media: {selectedMedia}");
+
+                // Check if any item in the attachedMediaPaths list matches the file name
+                bool itemFound = false;
+                foreach (var mediaPath in attachedMediaPaths)
+                {
+                    // Extract the file name from the full file path
+                    string fileName = System.IO.Path.GetFileName(mediaPath);
+
+                    // Debugging: Check the file name from attached path
+                    Console.WriteLine($"Comparing {selectedMedia} with {fileName}");
+
+                    if (fileName.Equals(selectedMedia, StringComparison.OrdinalIgnoreCase))
+                    {
+                        // Found the media, remove it
+                        attachedMediaPaths.Remove(mediaPath);
+                        MediaList.Items.Remove(selectedMedia);
+
+                        // Update progress or other UI updates
+                        if (isMediaUploaded)
+                        {
+                            UpdateProgressBar(progressValue - 30); // Adjust the progress
+                            isMediaUploaded = false;
+                            lblMotivation.Content = "Media removed! You can still upload something if needed.";
+                        }
+
+                        itemFound = true;
+                        MessageBox.Show("Media item removed successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                        break;
+                    }
+                }
+
+                if (!itemFound)
+                {
+                    MessageBox.Show("Media item not found in the list.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a media item to remove.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            ClearFields();
+        }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
@@ -440,7 +469,7 @@ namespace PROG7312_ST10023767.Views
         /// </summary>
         private void CheckSubmitButtonVisibility()
         {
-            btnSubmit.IsEnabled = (progressValue == 61 && !isMediaUploaded) || (progressValue == 91);
+            SubmitEventButton.IsEnabled = (progressValue == 61 && !isMediaUploaded) || (progressValue == 91);
         }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
@@ -451,8 +480,6 @@ namespace PROG7312_ST10023767.Views
         /// <param name="e"></param>
         private void btnAttachFile_Click(object sender, RoutedEventArgs e)
         {
-            mediaManager.AttachMedia();
-
             if (!isMediaUploaded)
             {
                 UpdateProgressBar(progressValue + 30);
@@ -460,8 +487,22 @@ namespace PROG7312_ST10023767.Views
                 lblMotivation.Content = "Fantastic! Your report is ready. Click submit to complete!";
             }
 
-            mediaManager.DisplayUploadedMedia(mediaContainer, new ContentControl(), btnNext, btnPrevious,
-                lblReUploadMedia, reUploadIcon, btnClearFile);
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Multiselect = true,
+                Filter = "Media Files|*.jpg;*.jpeg;*.png;*.gif;*.mp4;*.avi;*.mov;*.doc;*.docx;*.pdf",
+                Title = "Select Media Files"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                foreach (string filePath in openFileDialog.FileNames)
+                {
+                    attachedMediaPaths.Add(filePath);                   
+                    MediaList.Items.Add(System.IO.Path.GetFileName(filePath));
+
+                }
+            }
         }
 
     }

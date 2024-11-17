@@ -88,7 +88,7 @@
                     <lvc:Axis Title="Categories" Labels="{Binding BarGraphLabels}"/>
                 </lvc:CartesianChart.AxisX>
                 <lvc:CartesianChart.AxisY>
-                    <lvc:Axis Title="Count" LabelFormatter="{Binding YAxisFormatter}"/>
+                    <lvc:Axis Title="Count" />
                 </lvc:CartesianChart.AxisY>
             </lvc:CartesianChart>
         </Border>

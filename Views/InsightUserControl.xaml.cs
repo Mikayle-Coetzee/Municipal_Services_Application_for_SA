@@ -52,7 +52,17 @@ namespace PROG7312_ST10023767.Views
             // Populate data table
             foreach (var issue in issues)
             {
-                IssuesTable.Add(issue);
+                try
+                {
+                    int statusAsInt = Convert.ToInt32(issue.Status);
+                    string name = GetStatusName(statusAsInt);
+                    issue.Status = name;
+                    IssuesTable.Add(issue);
+                }
+                catch (FormatException)
+                {
+                    IssuesTable.Add(issue);
+                }
             }
 
             PopulateLineGraph(issues);

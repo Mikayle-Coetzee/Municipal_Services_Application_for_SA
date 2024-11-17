@@ -94,7 +94,7 @@
                          BorderThickness="0">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <!-- FontAwesome Icon -->
-                            <fa:IconImage Icon="FaceSmile" Width="16" Height="16" Margin="5" VerticalAlignment="Center" Foreground="{DynamicResource whiteSolidColorBrush}"/>
+                            <fa:IconImage Icon="FaceSmile" Width="16" Height="16" Margin="5" VerticalAlignment="Center" Foreground="{DynamicResource darkestSolidColorBrush}"/>
                             <!-- Button Content -->
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
                         </StackPanel>
@@ -103,7 +103,7 @@
             </Setter.Value>
         </Setter>
         <!-- Additional properties for the button -->
-        <Setter Property="Foreground" Value="{DynamicResource blueSolidColorBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource darkestSolidColorBrush}"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Padding" Value="10"/>
     </Style>
@@ -187,6 +187,29 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <!-- FontAwesome Icon -->
                             <fa:IconImage Icon="Cancel" Width="16" Height="16" Margin="5" VerticalAlignment="Center" Foreground="{DynamicResource whiteSolidColorBrush}"/>
+                            <!-- Button Content -->
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <!-- Additional properties for the button -->
+        <Setter Property="Foreground" Value="{DynamicResource whiteSolidColorBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="10"/>
+    </Style>
+
+    <Style x:Key="RoundedButtonStyleAll" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{DynamicResource busySolidColorBrush}"
+                  CornerRadius="10" 
+                  BorderThickness="0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <!-- FontAwesome Icon -->
+                            <fa:IconImage Icon="PersonWalkingArrowLoopLeft" Width="16" Height="16" Margin="5" VerticalAlignment="Center" Foreground="{DynamicResource whiteSolidColorBrush}"/>
                             <!-- Button Content -->
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
                         </StackPanel>

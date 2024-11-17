@@ -5,13 +5,13 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Color x:Key="darkestColor">#4F4F4F</Color>
-    <Color x:Key="darkColor">#737373</Color>
+    <Color x:Key="darkColor">#00754F</Color>
     <Color x:Key="blueColor">#D1D3D4</Color>
     <Color x:Key="offWhiteColor">#F7F7F7</Color>
     <Color x:Key="whiteColor">#FFFFFF</Color>
     <Color x:Key="redColor">#D94F47</Color>
     <Color x:Key="darkRedColor">#913C48</Color>
-    <Color x:Key="greenColor">#00754F</Color>
+    <Color x:Key="greenColor">#06D6A0</Color>
 
 
     <Color x:Key="upcomingColor">#B5E0B2</Color>
@@ -22,12 +22,12 @@
 
 
     <SolidColorBrush x:Key="darkestSolidColorBrush">#4F4F4F</SolidColorBrush>
-    <SolidColorBrush x:Key="darkSolidColorBrush">#737373</SolidColorBrush>
+    <SolidColorBrush x:Key="darkSolidColorBrush">#00754F</SolidColorBrush>
     <SolidColorBrush x:Key="blueSolidColorBrush">#D1D3D4</SolidColorBrush>
     <SolidColorBrush x:Key="offWhiteSolidColorBrush">#F7F7F7</SolidColorBrush>
     <SolidColorBrush x:Key="whiteSolidColorBrush">#FFFFFF</SolidColorBrush>
     <SolidColorBrush x:Key="redSolidColorBrush">#D94F47</SolidColorBrush>
-    <SolidColorBrush x:Key="greenSolidColorBrush">#00754F</SolidColorBrush>
+    <SolidColorBrush x:Key="greenSolidColorBrush">#06D6A0</SolidColorBrush>
     <SolidColorBrush x:Key="darkRedSolidColorBrush">#8A1F26</SolidColorBrush>
 
     <SolidColorBrush x:Key="upcomingSolidColorBrush">#B5E0B2</SolidColorBrush>
