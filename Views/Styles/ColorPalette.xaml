@@ -14,7 +14,7 @@
     <Color x:Key="greenColor">#06D6A0</Color>
 
 
-    <Color x:Key="upcomingColor">#B5E0B2</Color>
+    <Color x:Key="upcomingColor">#B6F7B2</Color>
     <Color x:Key="busyColor">#F4C542</Color>
     <Color x:Key="pastColor">#D94F47</Color>
     
@@ -31,9 +31,12 @@
     <SolidColorBrush x:Key="darkRedSolidColorBrush">#8A1F26</SolidColorBrush>
     <SolidColorBrush x:Key="LightBlueSolidColorBrush">#9DFCF9</SolidColorBrush>
     <SolidColorBrush x:Key="PinkSolidColorBrush">#FFF5C2</SolidColorBrush>
-    <SolidColorBrush x:Key="upcomingSolidColorBrush">#B5E0B2</SolidColorBrush>
+    <SolidColorBrush x:Key="upcomingSolidColorBrush">#B6F7B2</SolidColorBrush>
     <SolidColorBrush x:Key="busySolidColorBrush">#F4C542</SolidColorBrush>
     <SolidColorBrush x:Key="pastSolidColorBrush">#D94F47</SolidColorBrush>
 
-
+    <SolidColorBrush x:Key="upcomingSolidColorBrushTwo">#00FF19</SolidColorBrush>
+    <SolidColorBrush x:Key="busySolidColorBrushTwo">#FFF500</SolidColorBrush>
+    <SolidColorBrush x:Key="pastSolidColorBrushTwo">#FF0000</SolidColorBrush>
+    
 </ResourceDictionary>

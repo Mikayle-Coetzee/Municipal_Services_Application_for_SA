@@ -273,17 +273,17 @@ namespace PROG7312_ST10023767.Controllers
                     if (currentDateTime >= startDateTime && currentDateTime <= endDateTime)
                     {
                         status = "busy";
-                        statusBorder.Background = (Brush)Application.Current.FindResource("busySolidColorBrush");
+                        statusBorder.Background = (Brush)Application.Current.FindResource("busySolidColorBrushTwo");
                     }
                     else if (currentDateTime > endDateTime)
                     {
                         status = "past";
-                        statusBorder.Background = (Brush)Application.Current.FindResource("pastSolidColorBrush");
+                        statusBorder.Background = (Brush)Application.Current.FindResource("pastSolidColorBrushTwo");
                     }
                     else
                     {
                         status = "upcoming";
-                        statusBorder.Background = (Brush)Application.Current.FindResource("upcomingSolidColorBrush");
+                        statusBorder.Background = (Brush)Application.Current.FindResource("upcomingSolidColorBrushTwo");
                     }
                 }
                 else
@@ -297,7 +297,27 @@ namespace PROG7312_ST10023767.Controllers
             }
             else
             {
-                return "pending"; //code
+
+
+                    if (ic.Status == "0" || ic.Status == "Pending")
+                    {
+                        status = "Pending";
+                        statusBorder.Background = (Brush)Application.Current.FindResource("busySolidColorBrushTwo");
+                    }
+                    else if (ic.Status == "1" || ic.Status == "Active")
+                    {
+                        status = "Active";
+                        statusBorder.Background = (Brush)Application.Current.FindResource("pastSolidColorBrushTwo");
+                    }
+                    else
+                    {
+                        status = "Resolved";
+                        statusBorder.Background = (Brush)Application.Current.FindResource("upcomingSolidColorBrushTwo");
+                    }
+  
+
+                return status;
+
             }
         }
 
@@ -315,7 +335,7 @@ namespace PROG7312_ST10023767.Controllers
                 {
                     CornerRadius = new CornerRadius(15),
                     Margin = new Thickness(5),
-                    Background = (Brush)Application.Current.FindResource(ev.Type == "Event" ? "darkSolidColorBrush" : "blueSolidColorBrush")
+                    Background = (Brush)Application.Current.FindResource(ev.Type == "Event" ? "greenSolidColorBrush" : "blueSolidColorBrush")
                 };
             }
             else

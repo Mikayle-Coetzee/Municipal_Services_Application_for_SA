@@ -26,6 +26,7 @@ namespace PROG7312_ST10023767
 
             // Add dummy issues to the IssueManager
             addDummyData.AddDummyIssues(issueManager,issueTracker);
+            addDummyData.AddDummyEvents(postManager);
 
         }
 

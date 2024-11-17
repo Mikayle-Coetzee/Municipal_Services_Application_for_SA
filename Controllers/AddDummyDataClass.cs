@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace PROG7312_ST10023767.Controllers
 {
@@ -43,7 +44,7 @@ namespace PROG7312_ST10023767.Controllers
                     Timestamp = timestamp 
                 };
 
-                issue.AddAttachment("report_" + i + ".pdf");
+                issue.Attachments = new List<string>();
 
                 issueManager.AddIssue(issue);
                 issueTracker.AddIssue(issue);
@@ -66,6 +67,134 @@ namespace PROG7312_ST10023767.Controllers
             int second = rand.Next(0, 60);   
 
             return new DateTime(randomDate.Year, randomDate.Month, randomDate.Day, hour, minute, second);
+        }
+
+
+        public void AddDummyEvents(PostManager postManager)
+        {
+            // Dummy data for events
+            var titles = new List<string>
+            {
+                "Local Music Festival",
+                "Art Exhibition",
+                "Theater Play Premiere",
+                "City Marathon",
+                "Tech Networking Event",
+                "Community Announcement"
+            };
+
+            var locations = new List<string>
+            {
+                "Claremont",
+                "Art Gallery",
+                "Local Theater",
+                "Langebaan",
+                "Convention Center",
+                "Online"
+            };
+
+            var venues = new List<string>
+            {
+                "Grand Arena",
+                "Studio Room A",
+                "Main Stage",
+                "Start Line",
+                "Conference Hall",
+                "Zoom Webinar"
+            };
+
+            var descriptions = new List<string>
+            {
+                "A night of live music and fun.",
+                "Explore the creativity of local artists.",
+                "Experience a captivating theatrical performance.",
+                "Join the annual marathon with participants from all over.",
+                "Meet professionals and grow your network.",
+                "An important announcement for the community."
+            };
+
+            var categories = new List<string>
+            {
+                "Music",
+                "Art",
+                "Theater",
+                "Sports",
+                "Networking",
+                "Other"
+            };
+
+            var types = new List<string>
+            {
+                "Event",
+                "Announcement"
+            };
+
+            Random rand = new Random();
+
+            // Generate 10 dummy events
+            for (int i = 0; i < 10; i++)
+            {
+                string title = titles[rand.Next(titles.Count)];
+                string location = locations[rand.Next(locations.Count)];
+                string venue = venues[rand.Next(venues.Count)];
+                string description = descriptions[rand.Next(descriptions.Count)];
+                string category = categories[rand.Next(categories.Count)];
+                string type = types[rand.Next(types.Count)];
+
+                // Generate random dates
+                DateTime startDate = DateTime.Now.AddDays(rand.Next(-10, 10));
+                DateTime endDate = startDate.AddHours(rand.Next(1, 48)); // Event lasts 1 to 48 hours
+                string startTime = startDate.ToString("hh:mm tt");
+                string endTime = endDate.ToString("hh:mm tt");
+
+                // Create dummy event
+                var dummyEvent = new EventClass(
+                    title,
+                    startDate.ToString("dd MMM yyyy"),
+                    startTime,
+                    location,
+                    description,
+                    new List<MediaFileClass>(), // Assuming no media files for dummy data
+                    type,
+                    category,
+                    endDate.ToString("dd MMM yyyy"),
+                    venue,
+                    endTime
+                );
+
+
+                if (IsNewLocation(location, postManager))
+                {
+                    AddNewLocation(location, postManager);
+                }
+                AddCategoryToUniqueCategories(category, postManager);
+                // Add to event list
+                postManager.locationEvents[location].Add(dummyEvent);
+            }
+        }
+
+
+        private bool IsNewLocation(string location, PostManager postManager)
+        {
+            return !postManager.locationEvents.ContainsKey(location);
+        }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Adds a new location to the PostManager
+        /// </summary>
+        /// <param name="location"></param>
+        private void AddNewLocation(string location, PostManager postManager)
+        {
+            postManager.locationEvents[location] = new List<EventClass>();
+        }
+
+        private void AddCategoryToUniqueCategories(string category, PostManager postManager)
+        {
+            if (!string.IsNullOrEmpty(category))
+            {
+                postManager.uniqueCategories.Add(category);
+            }
         }
     }
 }

@@ -19,7 +19,6 @@ namespace PROG7312_ST10023767.Models.Managers
             _redBlackTree = new RedBlackTreeNode(null);  
             _binarySearchTree = new BinarySearchTree();
             _issueGraph = new Graph<IssueClass>();
-
         }
 
         public void AddIssue(IssueClass issue)
