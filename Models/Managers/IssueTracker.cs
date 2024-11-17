@@ -100,7 +100,7 @@ namespace PROG7312_ST10023767.Models.Managers
         {
             return _issueGraph.GetGraph();
         }
-        private List<IssueClass> GetIssuesFromAVLTree()
+        public List<IssueClass> GetIssuesFromAVLTree()
         {
             var issues = new List<IssueClass>(); 
             InOrderTraversalAVL(_avlTree.Root, issues);

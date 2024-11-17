@@ -111,5 +111,6 @@
                 <lvc:PieChart Series="{Binding PieChartSeries}" LegendLocation="Bottom"/>
             </lvc:PieChart>
         </Border>
+        
     </Grid>
 </UserControl>

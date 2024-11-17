@@ -48,6 +48,7 @@ namespace PROG7312_ST10023767.Views
 
         private IssueTracker IssueTracker;
 
+        private bool onIssueListPage = false;
         /// <summary>
         /// Dictionary to store events sorted by location
         /// </summary>
@@ -70,6 +71,54 @@ namespace PROG7312_ST10023767.Views
 
             SetDateToNow(EventDate);
             SetDateToNow(EndDate);
+            PopulateComboBox();
+
+        }
+        private void PopulateComboBox()
+        {
+            if (onIssueListPage == false)
+            {
+                List<string> filterOptions = new List<string>
+                {
+                    "All", "Events", "Announcements", "Category", "Upcoming", "Past", "Busy"
+                };
+
+                cmbFilter.Items.Clear();
+
+                foreach (var option in filterOptions)
+                {
+                    ComboBoxItem item = new ComboBoxItem
+                    {
+                        Content = option
+                    };
+
+                    cmbFilter.Items.Add(item);
+                }
+
+                cmbFilter.SelectedIndex = 0;
+            }
+            else
+            {
+                List<string> filterOptions = new List<string>
+                {
+                    "All", "Date", "Category", "Pending", "Active", "Resolved"
+                };
+
+                cmbFilter.Items.Clear();
+
+                foreach (var option in filterOptions)
+                {
+                    ComboBoxItem item = new ComboBoxItem
+                    {
+                        Content = option
+                    };
+
+                    cmbFilter.Items.Add(item);
+                }
+
+                cmbFilter.SelectedIndex = 0;
+            }
+
         }
 
         private void ReportIssueUserControl_ShowAllReportsClicked(object sender, EventArgs e)
@@ -588,28 +637,57 @@ namespace PROG7312_ST10023767.Views
         /// <param name="e"></param>
         private void cmbFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string selectedFilter = (cmbFilter.SelectedItem as ComboBoxItem)?.Content.ToString();
-            string selectedLocation = GetSelectedLocation();
-
-            List<EventClass> eventsToDisplay = GetEventsToDisplay(selectedLocation);
-
-            DateTime currentDateTime = DateTime.Now;
-
-            // Apply filter based on the filter selected  
-            eventsToDisplay = ApplySelectedFilter(selectedFilter, eventsToDisplay, currentDateTime);
-
-            // Show message if no posts match the filter
-            if (eventsToDisplay.Count == 0)
+            if(onIssueListPage == false)
             {
-                NoPostsMessageBox("No Posts Matching That Filter Request",
-                    "Unfortunately, there are no posts that match your filtering requests. Feel free to add more posts or apply a different filter.");
-                LocationTextBlock.Text = "Filtered Posts";
+                string selectedFilter = (cmbFilter.SelectedItem as ComboBoxItem)?.Content.ToString();
+                string selectedLocation = GetSelectedLocation();
 
-                return;
+                List<EventClass> eventsToDisplay = GetEventsToDisplay(selectedLocation);
+
+                DateTime currentDateTime = DateTime.Now;
+
+                // Apply filter based on the filter selected  
+                eventsToDisplay = ApplySelectedFilter(selectedFilter, eventsToDisplay, currentDateTime);
+
+                // Show message if no posts match the filter
+                if (eventsToDisplay.Count == 0)
+                {
+                    NoPostsMessageBox("No Posts Matching That Filter Request",
+                        "Unfortunately, there are no posts that match your filtering requests. Feel free to add more posts or apply a different filter.");
+                    LocationTextBlock.Text = "Filtered Posts";
+
+                    return;
+                }
+
+                // Update the post list with filtered posts
+                UpdateEventsList(eventsToDisplay);
+            }
+            else
+            {
+                string selectedFilter = (cmbFilter.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+                List<IssueClass> issuesToDisplay = GetIssuesToDisplay();
+
+                DateTime currentDateTime = DateTime.Now;
+
+                // Apply filter based on the filter selected  
+                issuesToDisplay = ApplySelectedFilterIssues(selectedFilter, issuesToDisplay);
+
+                // Show message if no posts match the filter
+                if (issuesToDisplay.Count == 0)
+                {
+                    NoPostsMessageBox("No Issues Matching That Filter Request",
+                        "Unfortunately, there are no issues that match your filtering requests. Feel free to send more issues or apply a different filter.");
+                    LocationTextBlock.Text = "Filtered Posts";
+
+                    return;
+                }
+
+                // Update the post list with filtered posts
+                UpdateServicesList(null, issuesToDisplay);
             }
 
-            // Update the post list with filtered posts
-            UpdateEventsList(eventsToDisplay);
+
         }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
@@ -637,6 +715,16 @@ namespace PROG7312_ST10023767.Views
                 return PostManager.locationEvents[selectedLocation];
             }
             return PostManager.locationEvents.Values.SelectMany(evList => evList).ToList();
+        }
+
+
+        private List<IssueClass> GetIssuesToDisplay()
+        {
+            if (IssueManager.GetIssuesFromHeap() != null)
+            {
+                return IssueManager.GetIssuesFromHeap();
+            }
+            return IssueManager.GetIssues();
         }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
@@ -694,7 +782,48 @@ namespace PROG7312_ST10023767.Views
             }
 
         }
+        private List<IssueClass> ApplySelectedFilterIssues(string selectedFilter, List<IssueClass> issuesToDisplay)
+        {
+            switch (selectedFilter)
+            {                  
 
+                case "All":
+                    LocationTextBlock.Text = "All Service Issues Submitted";
+
+                    return issuesToDisplay.ToList();
+
+                case "Date":
+                    LocationTextBlock.Text = "All Service Issues Ordered by Date";
+
+                    return IssueManager.GetIssuesSortedByTimestamp().ToList();
+
+                case "Category":
+                    LocationTextBlock.Text = "Filtered By Category";
+
+                    return filterAndRecommendHelper.FilterByIssueCategory(issuesToDisplay, IssueManager.GetReportCategoryNames());
+
+                case "Pending":
+                    LocationTextBlock.Text = "Pending Service Issues";
+                    return issuesToDisplay.Where(item => item.Status == "0" || item.Status == "Pending").ToList();
+
+                case "Active":
+                    LocationTextBlock.Text = "Active Service Issues";
+
+                    return issuesToDisplay.Where(item => item.Status == "1" || item.Status == "Active").ToList();
+
+                case "Resolved":
+                    LocationTextBlock.Text = "Resolved Service Issues" + selectedFilter;
+
+                    return issuesToDisplay.Where(item => item.Status == "2" || item.Status == "Resolved").ToList();
+
+                default:
+                    LocationTextBlock.Text = "Filtered Posts";
+
+                    return issuesToDisplay;
+
+            }
+
+        }
         #endregion
 
         #region Post List Management
@@ -1078,50 +1207,69 @@ namespace PROG7312_ST10023767.Views
         /// <param name="e"></param>
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            LocationTextBlock.Text = $"Search Results";
-
-            string searchQuery = txbSearch.Text;
-
-            if (!string.IsNullOrEmpty(searchQuery))
+            if (onIssueListPage == false)
             {
-                filterAndRecommendHelper.TrackUserSearch("currentUserId", searchQuery, PostManager.userSearchHistory);
-            }
+                LocationTextBlock.Text = $"Search Results";
+
+                string searchQuery = txbSearch.Text;
+
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    filterAndRecommendHelper.TrackUserSearch("currentUserId", searchQuery, PostManager.userSearchHistory);
+                }
 
 
-            string query = searchQuery.ToLower().Trim();
+                string query = searchQuery.ToLower().Trim();
 
-            if (string.IsNullOrWhiteSpace(query))
-            {
-                UpdateEventsList();
+                if (string.IsNullOrWhiteSpace(query))
+                {
+                    UpdateEventsList();
+                    txbSearch.Text = "";
+                    return;
+                }
+
+                //search through everything related to a post to find matches
+                List<EventClass> filteredEvents = PostManager.locationEvents.Values
+                    .SelectMany(evList => evList)
+                    .Where(ev => ev.Title.ToLower().Contains(query) ||
+                                 ev.Location.ToLower().Contains(query) ||
+                                 ev.Category.ToLower().Contains(query) ||
+                                 ev.Venue.ToLower().Contains(query) ||
+                                 ev.EndDate.ToLower().Contains(query) ||
+                                 ev.StartDate.ToLower().Contains(query) ||
+                                 ev.StartTime.ToLower().Contains(query) ||
+                                 ev.EndTime.ToLower().Contains(query) ||
+                                 ev.Description.ToLower().Contains(query))
+                    .ToList();
+
+                if (filteredEvents.Count == 0)
+                {
+                    NoPostsMessageBox("No Posts Matching That Search Request", "Unfortunatley there is no posts matching that search request, feel free to try something else!");
+                    txbSearch.Text = "";
+                    return;
+                }
+
+                // Display the filtered list of posts
+                UpdateEventsList(filteredEvents);
                 txbSearch.Text = "";
-                return;
             }
-
-            //search through everything related to a post to find matches
-            List<EventClass> filteredEvents = PostManager.locationEvents.Values
-                .SelectMany(evList => evList)
-                .Where(ev => ev.Title.ToLower().Contains(query) ||
-                             ev.Location.ToLower().Contains(query) ||
-                             ev.Category.ToLower().Contains(query) ||
-                             ev.Venue.ToLower().Contains(query) ||
-                             ev.EndDate.ToLower().Contains(query) ||
-                             ev.StartDate.ToLower().Contains(query) ||
-                             ev.StartTime.ToLower().Contains(query) ||
-                             ev.EndTime.ToLower().Contains(query) ||
-                             ev.Description.ToLower().Contains(query))
-                .ToList();
-
-            if (filteredEvents.Count == 0)
+            else
             {
-                NoPostsMessageBox("No Posts Matching That Search Request", "Unfortunatley there is no posts matching that search request, feel free to try something else!");
+                string searchQuery = txbSearch.Text;
+                string query = searchQuery.ToLower().Trim();
+
+                List<IssueClass> issuesToDisplay = IssueTracker.GetIssuesFromAVLTree();
+                List<IssueClass> searchedIssues = issuesToDisplay.Where(ic => ic.Location.ToLower().Contains(query) ||
+                                 ic.Status.ToLower().Contains(query) ||
+                                 ic.Category.ToLower().Contains(query))
+                    .ToList();
+
+                UpdateServicesList(null, searchedIssues);
                 txbSearch.Text = "";
-                return;
+
             }
-            
-            // Display the filtered list of posts
-            UpdateEventsList(filteredEvents);
-            txbSearch.Text = "";
         }
+
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
@@ -1176,6 +1324,9 @@ namespace PROG7312_ST10023767.Views
         /// <param name="e"></param>
         private void BtnEvents_Click(object sender, RoutedEventArgs e)
         {
+            onIssueListPage = false;
+            PopulateComboBox();
+
             Visibility newVisibility = BtnViewByArea.Visibility == Visibility.Visible
                   ? Visibility.Collapsed
                   : Visibility.Visible;
@@ -1197,6 +1348,9 @@ namespace PROG7312_ST10023767.Views
 
         private void BtnServiceRequestStatus_Click(object sender, RoutedEventArgs e)
         {
+            onIssueListPage = true;
+            PopulateComboBox();
+
             BtnViewByArea.Visibility = Visibility.Collapsed;
             btnShowReccomended.Visibility = Visibility.Collapsed;
             btnAddEvent.Visibility = Visibility.Collapsed;
@@ -1213,7 +1367,7 @@ namespace PROG7312_ST10023767.Views
         /// Updates the post list with filtered or all events
         /// </summary>
         /// <param name="filteredEvents"></param>
-        private void UpdateServicesList(List<EventClass> filteredEvents = null)
+        private void UpdateServicesList(List<EventClass> filteredEvents = null, List<IssueClass> filteredIssues = null)
         {
             if (EventsList != null)
             {
@@ -1221,18 +1375,35 @@ namespace PROG7312_ST10023767.Views
 
                 LocationTextBlock.Text = filteredEvents == null ? "All Service Requests" : LocationTextBlock.Text;
 
-                var reportsToDisplay = GetReportsToDisplay();
-
-                if (reportsToDisplay.Count == 0)
+                if (filteredIssues == null)
                 {
-                    ShowNoReportsMessage();
-                    return;
+                    var reportsToDisplay = GetReportsToDisplay();
+                    if (reportsToDisplay.Count == 0)
+                    {
+                        ShowNoReportsMessage();
+                        return;
+                    }
+
+                    foreach (var ic in reportsToDisplay)
+                    {
+                        DisplayReport(ic);
+                    }
+                }
+                else
+                {
+                    if (filteredIssues.Count == 0)
+                    {
+                        ShowNoReportsMessage();
+                        return;
+                    }
+
+                    foreach (var ic in filteredIssues)
+                    {
+                        DisplayReport(ic);
+                    }
                 }
 
-                foreach (var ic in reportsToDisplay)
-                {
-                    DisplayReport(ic);
-                }
+                
             }
         }
         private List<IssueClass> GetReportsToDisplay()

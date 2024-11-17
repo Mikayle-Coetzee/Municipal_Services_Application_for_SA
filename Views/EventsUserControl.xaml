@@ -123,14 +123,14 @@ FontWeight="Bold"  Style="{StaticResource RoundedButtonStyle}" Click="btnShowRec
                                 </ScrollViewer>
                             </Border>
 
-                            
+
 
                             <ContentControl Grid.Column="1" x:Name="ContentArea" Panel.ZIndex="10"  />
 
                             <ScrollViewer 
      VerticalScrollBarVisibility="Hidden"  Grid.Column="1"
      >
-                                
+
                                 <StackPanel x:Name="MainEventDisplay" Grid.Column="1" Margin="10,10,10,10" Visibility="Visible">
                                     <Grid >
                                         <Grid.ColumnDefinitions>
@@ -174,20 +174,14 @@ FontWeight="Bold"  Style="{StaticResource RoundedButtonStyle}" Click="btnShowRec
                                             </Button>
                                         </Grid>
 
-                                        <TextBlock Text="Filter by" FontSize="13" TextWrapping="Wrap" Foreground="{DynamicResource darkestSolidColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2" Height="17" Width="46"/>
+                                        <TextBlock Text="Filter by: " FontSize="13" TextWrapping="Wrap" Foreground="{DynamicResource darkestSolidColorBrush}" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="2" Height="16" Width="67" Margin="35,0,0,0"/>
 
                                         <ComboBox x:Name="cmbFilter" Width="100" VerticalAlignment="Center"
-                                              ScrollViewer.CanContentScroll="False" VerticalContentAlignment="Center" Margin="1,0,0,0"
-                                              SelectionChanged="cmbFilter_SelectionChanged"  Style="{DynamicResource ComboBoxFlatStyle}"
-                                                Background="{x:Null}" HorizontalAlignment="Left" Grid.Column="3" Height="22"  >
-                                            <ComboBoxItem Content="All" IsSelected="True" />
-                                            <ComboBoxItem Content="Events" />
-                                            <ComboBoxItem Content="Announcements" />
-                                            <ComboBoxItem Content="Category" />
-                                            <ComboBoxItem Content="Upcoming" />
-                                            <ComboBoxItem Content="Past" />
-                                            <ComboBoxItem Content="Busy" />
-                                        </ComboBox>
+                                              ScrollViewer.CanContentScroll="False" VerticalContentAlignment="Center"
+                                              Margin="1,0,0,0" SelectionChanged="cmbFilter_SelectionChanged"
+                                              Style="{DynamicResource ComboBoxFlatStyle}" Background="{x:Null}"
+                                              HorizontalAlignment="Left" Grid.Column="3" Height="22">
+                                         </ComboBox>
 
 
                                     </Grid>

@@ -44,6 +44,19 @@ namespace PROG7312_ST10023767.Models.Managers
             CarCrash
         }
 
+        public static HashSet<string> GetReportCategoryNames()
+        {
+            var categoryNames = new HashSet<string>();
+
+            foreach (ReportCategory category in Enum.GetValues(typeof(ReportCategory)))
+            {
+                categoryNames.Add(category.ToString());
+            }
+
+            return categoryNames;
+        }
+
+
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -95,7 +108,7 @@ namespace PROG7312_ST10023767.Models.Managers
             return issues;
         }
 
-        private List<IssueClass> GetIssuesFromHeap()
+        public List<IssueClass> GetIssuesFromHeap()
         {
             var issues = new List<IssueClass>();
             var heapCopy = new MaxHeap();   

@@ -113,6 +113,19 @@ namespace PROG7312_ST10023767.Controllers
 
             return eventsToDisplay;
         }
+        public List<IssueClass> FilterByIssueCategory(List<IssueClass> eventsToDisplay, HashSet<string> uniqueCategories)
+        {
+            CategoryFilterWindow categoryWindow = new CategoryFilterWindow();
+            categoryWindow.PopulateCategories(uniqueCategories);
+
+            if (categoryWindow.ShowDialog() == true)
+            {
+                string selectedCategory = categoryWindow.SelectedCategory;
+                return eventsToDisplay.Where(item => item.Category == selectedCategory).ToList();
+            }
+
+            return eventsToDisplay;
+        }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
