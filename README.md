@@ -43,29 +43,59 @@ After launching the application, the main menu provides three options:
 - **Report Issues** (Active)
 - **Local Events and Announcements** (Active)
 - **Service Request Status** (Active)
-![image](https://github.com/user-attachments/assets/7f2952f4-05c4-45e9-b7de-c25af1269140)
+
+![image](https://github.com/user-attachments/assets/c79042c6-54a8-42a4-afc3-3c574f18f958)
+
 
 ### Reporting an Issue (Part 1; README_Part_1.md)
 To report a municipal issue, navigate to the **Report Issues** section and fill in the required details inorder to submit the report.
+![image](https://github.com/user-attachments/assets/07c793b7-ecde-470c-a68e-79b815324fb7)
+![image](https://github.com/user-attachments/assets/fc948923-c33f-4c3f-b784-dc2ca5a25c93)
+![image](https://github.com/user-attachments/assets/1d8f1850-a6d3-4a57-8b00-d421863ecc52)
+![image](https://github.com/user-attachments/assets/ecb07e70-e4cc-492e-86f5-81a8da1711b8)
+![image](https://github.com/user-attachments/assets/45cab770-dab6-4108-a25d-059872c06d5d)
+![image](https://github.com/user-attachments/assets/60d25fab-146f-46e4-a6c2-9f26eac7131f)
 
 ### Posting an Event (Part 2; README_Part_2.md)
 To post an event, navigate to the **Local Events and Announcements** section and fill in the required details inorder to post an event or announcement.
+![image](https://github.com/user-attachments/assets/b824aa80-cd8e-4c0b-97bc-531ac7c29322)
+![image](https://github.com/user-attachments/assets/56bb1a8d-887f-4330-b09e-22d43b5e440d)
+![image](https://github.com/user-attachments/assets/3cdb0c40-0f7e-42a3-af90-f9527b5a0548)
+![image](https://github.com/user-attachments/assets/17063c29-120f-4ea0-a7c5-3ed85a98b320)
+![image](https://github.com/user-attachments/assets/1e73ce76-e64d-4344-bff7-3ec3f547cac4)
+![image](https://github.com/user-attachments/assets/263bd2d0-e9d0-4a82-9121-6fd8f3619873)
+![image](https://github.com/user-attachments/assets/b2e35ca3-1cbe-4a24-994e-8ea7467d6456)
+![image](https://github.com/user-attachments/assets/c768f8bd-e69a-4412-92e8-c732fb2ff448)
+![image](https://github.com/user-attachments/assets/edaa3196-67fa-4a8a-98c6-e6b1c975fab3)
+![image](https://github.com/user-attachments/assets/a1ed8b33-c23a-4bd1-95df-d01093ef14e4)
+![image](https://github.com/user-attachments/assets/0dfcad0b-e2fe-4a97-9e99-3303018e40ff)
+![image](https://github.com/user-attachments/assets/03bfb83d-5eae-4f82-95a6-b9fc64eb9e46)
+![image](https://github.com/user-attachments/assets/5c915101-f218-481a-8132-f33fc280705d)
+
 
 ### Service Request Status List
-![image](https://github.com/user-attachments/assets/e0735985-ea1f-4033-91e0-a67969f3731e)
 
 1. **Create Post**: 
    - Click **Create Post** to add an event or announcement.
 
 2. **Filtering and Sorting**:
    - Use filters at the top of the page to sort by **All**, **Date**, **Category**, **Pending**, **Active**, **Resolved**.
-   - Filter categories based on existing service issues.
+![image](https://github.com/user-attachments/assets/995b76c5-5216-4625-8be9-633bedf1a493)
+![image](https://github.com/user-attachments/assets/bf62959e-8a2a-4986-a3aa-08140135de95)
+![image](https://github.com/user-attachments/assets/5d2ab372-1a42-4005-a388-48090a89ad5b)
+![image](https://github.com/user-attachments/assets/8d6dfe97-ca9d-4f32-a291-71b8e4abdca3)
+![image](https://github.com/user-attachments/assets/8114f1a2-0d2c-4924-a69d-088d4783860e)
+![image](https://github.com/user-attachments/assets/7280a4b2-c5e9-4cad-b10f-fbb858824f29)
+![image](https://github.com/user-attachments/assets/10b248cf-fea0-4d4a-ba46-36f663fb9841)
 
 ### Service Request Status Tracking
-![image](https://github.com/user-attachments/assets/e0735985-ea1f-4033-91e0-a67969f3731e)
+![image](https://github.com/user-attachments/assets/97b3d2cf-290b-4f06-a05b-0c5e23bca939)
+![image](https://github.com/user-attachments/assets/fb9cc344-1298-49b1-bc30-b84664ed02c5)
+![image](https://github.com/user-attachments/assets/c1cdbead-5e43-4ace-b277-02dc5bcd438a)
+![image](https://github.com/user-attachments/assets/828867a9-db02-4061-a492-9c64e66df13d)
 
 1. **Tracking All Submitted Service Issues**: 
-   - Click **Track Service Issue**
+   - Click **Track Service Request**
 
 ### Navigation
 - Use the navigation buttons (e.g., **Back to Main Menu**) to switch between sections of the application.
