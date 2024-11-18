@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="PROG7312_ST10023767.App">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.MainWindow" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAABAAAAAAgAAAAAgAAAAAAAAAAAAEAAiAA=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="PROG7312_ST10023767.Controllers.AddDummyDataClass">
+    <Position X="14.5" Y="13.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAEAAAAEAAAAAAAAAAAAAAAAAQAACgAAAA=</HashCode>
+      <FileName>Controllers\AddDummyDataClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Controllers.ButtonHelper">
+    <Position X="12.75" Y="3.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAACEAAAAAAAAAAAgAAAAQAAIAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Controllers\ButtonHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Controllers.ChatService">
+    <Position X="3" Y="3.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>KAAAgAAAAAEBCAAAAAAAABQIAAAQAAAAAABAAAAIgAA=</HashCode>
+      <FileName>Controllers\ChatService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Controllers.DisplayHelper">
+    <Position X="5.25" Y="3.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAEAAQgABAAAAAAACIAAAQBABAAABAAIAA=</HashCode>
+      <FileName>Controllers\DisplayHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Controllers.FilterAndRecommendHelper">
+    <Position X="12" Y="6" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAiAAAAAAAAAAAAAAAACCAAAAAAAAAAAAAAAgAAAIAA=</HashCode>
+      <FileName>Controllers\FilterAndRecommendHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Controllers.MediaService">
+    <Position X="8.25" Y="3.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>GAAAAAAIAAEJAACAAAAAAASAAABAAAAAAQACAAAAAAA=</HashCode>
+      <FileName>Controllers\MediaService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Controllers.PriorityQueue&lt;TElement, TPriority&gt;">
+    <Position X="0.5" Y="11.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAABAAAAAAAAAAAAAQAAQABBAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\PriorityQueue.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Models.DataStructures.AVLTree">
+    <Position X="6.75" Y="8.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAACAAAAAgAABIAAAAAAIAAIAAAAAAAAA=</HashCode>
+      <FileName>Models\DataStructures\AVLTree.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Models.DataStructures.AVLTreeNode">
+    <Position X="11.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAABAAAAAAAAAAAAAAAAAAAAAAACACAAAAAAAA=</HashCode>
+      <FileName>Models\DataStructures\AVLTreeNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Models.DataStructures.BinarySearchTree">
+    <Position X="4" Y="8.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAACAAAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\DataStructures\BinarySearchTree.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Models.DataStructures.BinarySearchTreeNode">
+    <Position X="14.75" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAACACAAAAAAAA=</HashCode>
+      <FileName>Models\DataStructures\BinarySearchTreeNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Models.DataStructures.BinaryTree">
+    <Position X="3.5" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAEAAAAAAAAAAAAAAAAAAAAAAAAAACACAAAAAAAA=</HashCode>
+      <FileName>Models\DataStructures\BinaryTree.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Models.DataStructures.Graph&lt;T&gt;">
+    <Position X="0.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAACAAAACAAAAAAACAAAAAAAAQAAAA=</HashCode>
+      <FileName>Models\DataStructures\Graph.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Models.DataStructures.MaxHeap">
+    <Position X="2.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEgAAAAAAAAAACAAAAQAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\DataStructures\MaxHeap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Models.DataStructures.RedBlackTreeNode">
+    <Position X="3.5" Y="13.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAgAAAAAAAAACACAAAAAAAA=</HashCode>
+      <FileName>Models\DataStructures\RedBlackTreeNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Models.DataStructures.TreeNode">
+    <Position X="13" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAYCAA=</HashCode>
+      <FileName>Models\DataStructures\TreeNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Models.EventClass">
+    <Position X="15.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAIAgAEAAAAIAAAAgIAAgAAAAAQAAAEAACAA=</HashCode>
+      <FileName>Models\EventClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Models.IssueClass">
+    <Position X="11.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAgAAEAAAICEAAAAAAQAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Models\IssueClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Models.MediaFileClass">
+    <Position X="10" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAoAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Models\MediaFileClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Models.Managers.IssueManager">
+    <Position X="14.75" Y="3.5" Width="2.25" />
+    <NestedTypes>
+      <Enum Name="PROG7312_ST10023767.Models.Managers.IssueManager.ReportCategory" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Models\Managers\IssueManager.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>QAAAIAgAAAAAEQIAAAAAgAECAAAACAAAAAAAAABIAAA=</HashCode>
+      <FileName>Models\Managers\IssueManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Models.Managers.IssueTracker">
+    <Position X="0.5" Y="3.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>IQAAAAAAAAAEsAAABAAAhAAACBRAgAAAAAAIAAAMBAA=</HashCode>
+      <FileName>Models\Managers\IssueTracker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Models.Managers.PostManager">
+    <Position X="10.75" Y="3.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAKAAAAAA=</HashCode>
+      <FileName>Models\Managers\PostManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Properties.Resources">
+    <Position X="13.5" Y="10.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Properties.Settings">
+    <Position X="13.5" Y="8.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PROG7312_ST10023767.Views.CategoryFilterWindow" BaseTypeListCollapsed="true">
+    <Position X="17.25" Y="13.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAABAAAMAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\CategoryFilterWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="PROG7312_ST10023767.Views.EventsUserControl" BaseTypeListCollapsed="true">
+    <Position X="19.75" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>YDAkAAIMJEAUIAgCgAAIAMIBBGNAGYAsEAWKAB5AAEg=</HashCode>
+      <FileName>Views\EventsUserControl.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="PROG7312_ST10023767.Views.InsightUserControl" BaseTypeListCollapsed="true">
+    <Position X="17.25" Y="8.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AgAIAAAIBAIAAAAAABAQEYgCAAAAAAQAAAgAAAAAAAA=</HashCode>
+      <FileName>Views\InsightUserControl.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="PROG7312_ST10023767.Views.ReportIssueUserControl" BaseTypeListCollapsed="true">
+    <Position X="17.25" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AUAAEgIAAEAIAKiIAAgACMSAAAKRGBEIQAAQABAAiIA=</HashCode>
+      <FileName>Views\ReportIssueUserControl.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="System.Windows.Controls.UserControl" Collapsed="true">
+    <Position X="20.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Object" Collapsed="true">
+    <Position X="20.5" Y="15" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Configuration.ApplicationSettingsBase" Collapsed="true">
+    <Position X="22.25" Y="13.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

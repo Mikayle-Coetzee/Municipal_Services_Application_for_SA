@@ -118,6 +118,7 @@
     <Compile Include="Controllers\DisplayHelper.cs" />
     <Compile Include="Models\DataStructures\AVLTreeNode.cs" />
     <Compile Include="Models\DataStructures\BinarySearchTreeNode.cs" />
+    <Compile Include="Models\DataStructures\RedBlackTree.cs" />
     <Compile Include="Models\EventClass.cs" />
     <Compile Include="Models\Managers\PostManager.cs" />
     <Compile Include="Models\MediaFileClass.cs" />
@@ -240,6 +241,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
