@@ -33,9 +33,16 @@ namespace PROG7312_ST10023767.Views
         /// </summary>
         private IssueManager issueManager;
 
+        /// <summary>
+        /// Manages the creation and storage of issues
+        /// </summary>
         private IssueTracker issueTracker;
 
+        /// <summary>
+        /// Manages the creation and storage of posts
+        /// </summary>
         private PostManager postManager;
+
         /// <summary>
         /// Manages the chat-based user interface for interacting with the issue report
         /// </summary>
@@ -392,35 +399,32 @@ namespace PROG7312_ST10023767.Views
 
             CheckSubmitButtonVisibility();
         }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Removed the media when selected
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RemoveMedia_Click(object sender, RoutedEventArgs e)
         {
             if (MediaList.SelectedItem != null)
             {
-                string selectedMedia = MediaList.SelectedItem.ToString().Trim(); // Selected file name
+                string selectedMedia = MediaList.SelectedItem.ToString().Trim(); 
 
-                // Debugging: Check the selected media
-                Console.WriteLine($"Selected media: {selectedMedia}");
-
-                // Check if any item in the attachedMediaPaths list matches the file name
                 bool itemFound = false;
                 foreach (var mediaPath in attachedMediaPaths)
                 {
-                    // Extract the file name from the full file path
                     string fileName = System.IO.Path.GetFileName(mediaPath);
-
-                    // Debugging: Check the file name from attached path
-                    Console.WriteLine($"Comparing {selectedMedia} with {fileName}");
 
                     if (fileName.Equals(selectedMedia, StringComparison.OrdinalIgnoreCase))
                     {
-                        // Found the media, remove it
                         attachedMediaPaths.Remove(mediaPath);
                         MediaList.Items.Remove(selectedMedia);
 
-                        // Update progress or other UI updates
                         if (isMediaUploaded)
                         {
-                            UpdateProgressBar(progressValue - 30); // Adjust the progress
+                            UpdateProgressBar(progressValue - 30); 
                             isMediaUploaded = false;
                             lblMotivation.Content = "Media removed! You can still upload.";
                         }
@@ -443,7 +447,12 @@ namespace PROG7312_ST10023767.Views
         }
 
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Cleares all the fields when clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             ClearFields();
@@ -496,7 +505,12 @@ namespace PROG7312_ST10023767.Views
             }
         }
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Removes preview message when clicked to enter
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -507,6 +521,12 @@ namespace PROG7312_ST10023767.Views
             }
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Shows preview message
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;

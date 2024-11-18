@@ -34,7 +34,7 @@ namespace PROG7312_ST10023767.Views
         private FilterAndRecommendHelper filterAndRecommendHelper = new FilterAndRecommendHelper();
 
         /// <summary>
-        /// 
+        /// Helps with displaying of data
         /// </summary>
         private DisplayHelper displayHelper = new DisplayHelper();
 
@@ -49,10 +49,13 @@ namespace PROG7312_ST10023767.Views
         private PostManager PostManager;
 
         /// <summary>
-        /// 
+        /// Manages the creation and storage of issues
         /// </summary>
         private IssueManager IssueManager;
 
+        /// <summary>
+        /// Manages the creation and storage of issues
+        /// </summary>
         private IssueTracker IssueTracker;
 
         private bool onIssueListPage = false;
@@ -81,6 +84,12 @@ namespace PROG7312_ST10023767.Views
             PopulateComboBox();
 
         }
+
+        #region Load and Display Methods
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Populates the filter combo box based on whether the events or issues is being displayed
+        /// </summary>
         private void PopulateComboBox()
         {
             if (onIssueListPage == false)
@@ -128,13 +137,17 @@ namespace PROG7312_ST10023767.Views
 
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Raises a button evvent 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ReportIssueUserControl_ShowAllReportsClicked(object sender, EventArgs e)
         {
-            // Trigger the parent button click
             BtnServiceRequestStatus.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
         }
 
-        #region Load and Display Methods
 
         /// <summary>
         /// Loads location buttons from PostManager into the UI
@@ -195,6 +208,7 @@ namespace PROG7312_ST10023767.Views
             }
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
         /// Displays a message when there are no posts.
         /// </summary>
@@ -273,11 +287,11 @@ namespace PROG7312_ST10023767.Views
                     var media = mediaAttachments.Pop();
                     if (media.FileName != selectedMedia)
                     {
-                        tempStack.Push(media); // If not the selected item, push it to the temp stack
+                        tempStack.Push(media);
                     }
                     else
                     {
-                        itemFound = true; // The item was found and removed
+                        itemFound = true; 
                         MediaList.Items.Remove(selectedMedia);
                         break;
                     }
@@ -653,10 +667,8 @@ namespace PROG7312_ST10023767.Views
 
                 DateTime currentDateTime = DateTime.Now;
 
-                // Apply filter based on the filter selected  
                 eventsToDisplay = ApplySelectedFilter(selectedFilter, eventsToDisplay, currentDateTime);
 
-                // Show message if no posts match the filter
                 if (eventsToDisplay.Count == 0)
                 {
                     NoPostsMessageBox("No Posts Matching That Filter Request",
@@ -666,7 +678,6 @@ namespace PROG7312_ST10023767.Views
                     return;
                 }
 
-                // Update the post list with filtered posts
                 UpdateEventsList(eventsToDisplay);
             }
             else
@@ -677,10 +688,8 @@ namespace PROG7312_ST10023767.Views
 
                 DateTime currentDateTime = DateTime.Now;
 
-                // Apply filter based on the filter selected  
                 issuesToDisplay = ApplySelectedFilterIssues(selectedFilter, issuesToDisplay);
 
-                // Show message if no posts match the filter
                 if (issuesToDisplay.Count == 0)
                 {
                     NoPostsMessageBox("No Issues Matching That Filter Request",
@@ -690,7 +699,6 @@ namespace PROG7312_ST10023767.Views
                     return;
                 }
 
-                // Update the post list with filtered posts
                 UpdateServicesList(null, issuesToDisplay);
             }
 
@@ -724,7 +732,11 @@ namespace PROG7312_ST10023767.Views
             return PostManager.locationEvents.Values.SelectMany(evList => evList).ToList();
         }
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Fetches issues to display based
+        /// </summary>
+        /// <returns></returns>
         private List<IssueClass> GetIssuesToDisplay()
         {
             if (IssueManager.GetIssuesFromHeap() != null)
@@ -789,6 +801,15 @@ namespace PROG7312_ST10023767.Views
             }
 
         }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Applies the selected filter to the list of issues
+        /// </summary>
+        /// <param name="selectedFilter"></param>
+        /// <param name="eventsToDisplay"></param>
+        /// <param name="currentDateTime"></param>
+        /// <returns></returns>
         private List<IssueClass> ApplySelectedFilterIssues(string selectedFilter, List<IssueClass> issuesToDisplay)
         {
             switch (selectedFilter)
@@ -970,7 +991,6 @@ namespace PROG7312_ST10023767.Views
             {
                 foreach (var filePath in ic.Attachments)
                 {
-                    // Ensure the file exists before processing
                     if (!System.IO.File.Exists(filePath))
                         continue;
 
@@ -1002,12 +1022,11 @@ namespace PROG7312_ST10023767.Views
                             Source = new Uri(filePath, UriKind.Absolute)
                         };
 
-                        videoItem.LoadedBehavior = MediaState.Play; // Optionally start playback automatically
+                        videoItem.LoadedBehavior = MediaState.Play; 
                         eventPanel.Children.Add(videoItem);
                     }
                     else
                     {
-                        // Handle unsupported media types
                         TextBlock unsupportedMedia = new TextBlock
                         {
                             Text = $"Unsupported file: {System.IO.Path.GetFileName(filePath)}",
@@ -1020,7 +1039,6 @@ namespace PROG7312_ST10023767.Views
                     }
                 }
 
-                // Add a section for displaying file names and allowing interaction
                 TextBlock mediaBlock = new TextBlock
                 {
                     Text = "All Media Files (Click on the file names to open):",
@@ -1033,7 +1051,6 @@ namespace PROG7312_ST10023767.Views
 
                 foreach (var filePath in ic.Attachments)
                 {
-                    // Ensure the file exists before displaying
                     if (!System.IO.File.Exists(filePath))
                         continue;
 
@@ -1324,6 +1341,8 @@ namespace PROG7312_ST10023767.Views
 
         #endregion
 
+        #region New Buttons
+        //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
         /// This method will make the buttons visible or collapsed when clicked on the 'Event' button
         /// </summary>
@@ -1353,6 +1372,12 @@ namespace PROG7312_ST10023767.Views
 
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// on click event when button service request statuses clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnServiceRequestStatus_Click(object sender, RoutedEventArgs e)
         {
             onIssueListPage = true;
@@ -1370,6 +1395,7 @@ namespace PROG7312_ST10023767.Views
             UpdateServicesList();
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
         /// Updates the post list with filtered or all events
         /// </summary>
@@ -1413,16 +1439,31 @@ namespace PROG7312_ST10023767.Views
                 
             }
         }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Gets all of the reports to dispaly form the tree
+        /// </summary>
+        /// <returns></returns>
         private List<IssueClass> GetReportsToDisplay()
         {
             return IssueManager.GetIssues();
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Show default message when no reports added
+        /// </summary>
         private void ShowNoReportsMessage()
         {
             NoPostsMessageBox("No Service Issue Reported Yet", "Feel free to report an issue!");
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Display report method 
+        /// </summary>
+        /// <param name="ic"></param>
         private void DisplayReport(IssueClass ic)
         {
             DateTime currentDateTime = DateTime.Now;
@@ -1441,12 +1482,16 @@ namespace PROG7312_ST10023767.Views
             EventsList.Items.Add(eventBorder);
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// on click event when button report issue is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnReportIssue_Click(object sender, RoutedEventArgs e)
         {
-            // Create an instance of the UserControl
             var reportIssue = new ReportIssueUserControl(IssueManager,IssueTracker, PostManager);
 
-            // Make sure the UserControl is interactive
             reportIssue.Visibility = Visibility.Visible;
             reportIssue.IsEnabled = true;
             reportIssue.IsHitTestVisible = true;
@@ -1458,19 +1503,22 @@ namespace PROG7312_ST10023767.Views
             btnAddEvent.Visibility = newVisibility;
             venueButtonsPanel.Visibility = newVisibility;
 
-            // Assign the UserControl to the ContentControl
             ContentArea.Content = reportIssue;
 
-            // Optionally, hide the main display if required
             MainEventDisplay.Visibility = Visibility.Collapsed;
             createPostPanel.Visibility = Visibility.Collapsed; 
 
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// on click event when button stats is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnStats_Click(object sender, RoutedEventArgs e)
         {
             var insight = new InsightUserControl(IssueTracker);
-            // Make sure the UserControl is interactive
             insight.Visibility = Visibility.Visible;
             insight.IsEnabled = true;
             insight.IsHitTestVisible = true;
@@ -1482,12 +1530,11 @@ namespace PROG7312_ST10023767.Views
             btnAddEvent.Visibility = newVisibility;
             venueButtonsPanel.Visibility = newVisibility;
 
-            // Assign the UserControl to the ContentControl
             ContentArea.Content = insight;
 
-            // Optionally, hide the main display if required
             MainEventDisplay.Visibility = Visibility.Collapsed;
             createPostPanel.Visibility = Visibility.Collapsed;
         }
+        #endregion
     }
 }//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//
