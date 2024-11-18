@@ -20,6 +20,15 @@ This part extends the application by introducing the **Service Request Status** 
 
 ---
 
+## Reports, Documents and Video for Part 3, if the links don't work, it will be found within the folder thats submitted 
+- **Implementation_Report.pdf** : [Implementation_Report.pdf](https://github.com/user-attachments/files/17804869/Implementation_Report.pdf)
+- **Project_Completion_Report.pdf** : [Project_Completion_Report.pdf](https://github.com/user-attachments/files/17804873/Project_Completion_Report.pdf)
+- **Technology_Recommendations_Report.pdf** : [Technology_Recommendations_Report.pdf](https://github.com/user-attachments/files/17804876/Technology_Recommendations_Report.pdf)
+- **Updates_Based_on_Feedback.pdf** : [Updates_Based_on_Feedback.pdf](https://github.com/user-attachments/files/17804877/Updates_Based_on_Feedback.pdf)
+- **run_through_of_app.mp4** : (in folder)
+
+---
+
 ## Instructions for Compiling and Running the Application
 
 ### Prerequisites
@@ -145,13 +154,6 @@ To post an event, navigate to the **Local Events and Announcements** section and
 - **Basic Trees, Binary Trees, Binary Search Trees (BST), AVL Trees, Red-Black Trees, Heaps, Graphs, Graph Traversal, and Minimum Spanning Tree**: For more detailes, please read the **Implementation_Report.pdf**.
 
 ---
-
-## Reports, Documents and Video for Part 3, if the links don't work, it will be found within the folder thats submitted 
-- **Implementation_Report.pdf** : [Implementation_Report.pdf](https://github.com/user-attachments/files/17804869/Implementation_Report.pdf)
-- **Project_Completion_Report.pdf** : [Project_Completion_Report.pdf](https://github.com/user-attachments/files/17804873/Project_Completion_Report.pdf)
-- **Technology_Recommendations_Report.pdf** : [Technology_Recommendations_Report.pdf](https://github.com/user-attachments/files/17804876/Technology_Recommendations_Report.pdf)
-- **Updates_Based_on_Feedback.pdf** : [Updates_Based_on_Feedback.pdf](https://github.com/user-attachments/files/17804877/Updates_Based_on_Feedback.pdf)
-- **run_through_of_app.mp4** : (in folder)
 
 ## Design Principles
 - **User-Centric Design**: The application is designed for ease of use with intuitive navigation and clear labels.
