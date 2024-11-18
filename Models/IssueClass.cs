@@ -35,12 +35,16 @@ namespace PROG7312_ST10023767.Models
         /// </summary>
         public DateTime Timestamp { get; set; }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
         /// Gets or sets the status of the report posted, like 1= pendin
         /// </summary>
         public string Status { get; set; }
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Holds generated ID
+        /// </summary>
         public Guid IssueID { get; set; }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//

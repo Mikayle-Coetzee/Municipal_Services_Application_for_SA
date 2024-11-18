@@ -298,23 +298,21 @@ namespace PROG7312_ST10023767.Controllers
             else
             {
 
-
-                    if (ic.Status == "0" || ic.Status == "Pending")
-                    {
-                        status = "Pending";
-                        statusBorder.Background = (Brush)Application.Current.FindResource("busySolidColorBrushTwo");
-                    }
-                    else if (ic.Status == "1" || ic.Status == "Active")
-                    {
-                        status = "Active";
-                        statusBorder.Background = (Brush)Application.Current.FindResource("pastSolidColorBrushTwo");
-                    }
-                    else
-                    {
-                        status = "Resolved";
-                        statusBorder.Background = (Brush)Application.Current.FindResource("upcomingSolidColorBrushTwo");
-                    }
-  
+                if (ic.Status == "0" || ic.Status == "Pending")
+                {
+                    status = "Pending";
+                    statusBorder.Background = (Brush)Application.Current.FindResource("busySolidColorBrushTwo");
+                }
+                else if (ic.Status == "1" || ic.Status == "Active")
+                {
+                    status = "Active";
+                    statusBorder.Background = (Brush)Application.Current.FindResource("pastSolidColorBrushTwo");
+                }
+                else
+                {
+                    status = "Resolved";
+                    statusBorder.Background = (Brush)Application.Current.FindResource("upcomingSolidColorBrushTwo");
+                }
 
                 return status;
 
@@ -348,7 +346,7 @@ namespace PROG7312_ST10023767.Controllers
                     Background = categoryBrush
                 };
             }
-            
+
         }
         private Brush GetCategoryBrush(string category)
         {

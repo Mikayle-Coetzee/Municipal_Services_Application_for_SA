@@ -1,6 +1,4 @@
-﻿using PROG7312_ST10023767.Controllers;
-using PROG7312_ST10023767.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,41 +6,41 @@ using System.Threading.Tasks;
 
 namespace PROG7312_ST10023767.Models.DataStructures
 {
-    public class RedBlackTreeNode
+    public class AVLTreeNode
     {
         /// <summary>
-        /// The issue associated with this node. The node stores an IssueClass object.
+        /// The issue associated with this node.
         /// </summary>
         public IssueClass Issue { get; set; }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
-        /// The left child of this node in the Red-Black tree.
+        /// The left child of the current node.
         /// </summary>
-        public RedBlackTreeNode Left { get; set; }
+        public AVLTreeNode Left { get; set; }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
-        ///  The right child of this node in the Red-Black tree.
+        /// The right child of the current node.
         /// </summary>
-        public RedBlackTreeNode Right { get; set; }
+        public AVLTreeNode Right { get; set; }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
-        /// A flag indicating the color of the node. True means Red, False means Black.
+        /// The height of this node, used for balancing the tree.
         /// </summary>
-        public bool IsRed { get; set; }
+        public int Height { get; set; }
 
         //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
-        /// Initializes a new instance of the RedBlackTreeNode class.
+        /// Constructor
         /// </summary>
         /// <param name="issue"></param>
-        public RedBlackTreeNode(IssueClass issue)
+        public AVLTreeNode(IssueClass issue)
         {
             Issue = issue;
             Left = Right = null;
-            IsRed = true;  
+            Height = 1;
         }
     }
 }//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//

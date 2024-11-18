@@ -11,17 +11,37 @@ namespace PROG7312_ST10023767.Models.DataStructures
 {
     public class MaxHeap
     {
+        /// <summary>
+        /// The internal list that stores the elements of the heap.
+        /// </summary>
         private List<IssueClass> heap = new List<IssueClass>();
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        ///  Gets the number of elements in the heap.
+        /// </summary>
+        /// <returns></returns>
         public int Count()
         {
             return heap.Count;
         }
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        ///  Inserts a new issue into the heap and maintains the heap property.
+        /// </summary>
+        /// <param name="issue"></param>
         public void Insert(IssueClass issue)
         {
             heap.Add(issue);
             HeapifyUp(heap.Count - 1);
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Restores the heap property by moving an element up the heap until it is in the correct position.
+        /// </summary>
+        /// <param name="index"></param>
         private void HeapifyUp(int index)
         {
             while (index > 0 && heap[index].Timestamp > heap[(index - 1) / 2].Timestamp)
@@ -34,6 +54,11 @@ namespace PROG7312_ST10023767.Models.DataStructures
             }
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Removes and returns the maximum element (root of the heap) and restores the heap property.
+        /// </summary>
+        /// <returns></returns>
         public IssueClass ExtractMax()
         {
             if (heap.Count == 0) return null;
@@ -46,6 +71,11 @@ namespace PROG7312_ST10023767.Models.DataStructures
             return max;
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        ///  Restores the heap property by moving an element down the heap until it is in the correct position.
+        /// </summary>
+        /// <param name="index"></param>
         private void HeapifyDown(int index)
         {
             int leftChild = 2 * index + 1;
@@ -67,5 +97,4 @@ namespace PROG7312_ST10023767.Models.DataStructures
             }
         }
     }
-
-}
+}//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//

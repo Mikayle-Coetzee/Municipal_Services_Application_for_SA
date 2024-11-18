@@ -8,34 +8,39 @@ using System.Threading.Tasks;
 
 namespace PROG7312_ST10023767.Models.DataStructures
 {
-    public class BinarySearchTreeNode
-    {
-        public IssueClass Issue { get; set; }
-        public BinarySearchTreeNode Left { get; set; }
-        public BinarySearchTreeNode Right { get; set; }
-
-        public BinarySearchTreeNode(IssueClass issue)
-        {
-            Issue = issue;
-            Left = null;
-            Right = null;
-        }
-    }
-
     public class BinarySearchTree
     {
+        /// <summary>
+        /// The root node of the binary search tree.
+        /// </summary>
         public BinarySearchTreeNode Root { get; set; }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Constructor initializes the tree with a null root.
+        /// </summary>
         public BinarySearchTree()
         {
             Root = null;
         }
 
-         public void Insert(IssueClass issue)
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        ///  Inserts a new issue into the binary search tree.
+        /// </summary>
+        /// <param name="issue"></param>
+        public void Insert(IssueClass issue)
         {
             Root = Insert(Root, issue);
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// method to insert an issue into the tree.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="issue"></param>
+        /// <returns></returns>
         private BinarySearchTreeNode Insert(BinarySearchTreeNode node, IssueClass issue)
         {
             if (node == null)
@@ -43,7 +48,6 @@ namespace PROG7312_ST10023767.Models.DataStructures
                 return new BinarySearchTreeNode(issue);
             }
 
-            // Assuming comparison by issue timestamp for simplicity
             if (issue.Timestamp < node.Issue.Timestamp)
             {
                 node.Left = Insert(node.Left, issue);
@@ -56,13 +60,24 @@ namespace PROG7312_ST10023767.Models.DataStructures
             return node;
         }
 
-         public List<IssueClass> InOrderTraversal()
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Performs an in-order traversal of the tree and returns a list of issues.
+        /// </summary>
+        /// <returns></returns>
+        public List<IssueClass> InOrderTraversal()
         {
             var issues = new List<IssueClass>();
             InOrderTraversal(Root, issues);
             return issues;
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        ///  Helper method for in-order traversal of the tree.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="issues"></param>
         private void InOrderTraversal(BinarySearchTreeNode node, List<IssueClass> issues)
         {
             if (node != null)
@@ -73,6 +88,4 @@ namespace PROG7312_ST10023767.Models.DataStructures
             }
         }
     }
-
-
-}
+}//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//

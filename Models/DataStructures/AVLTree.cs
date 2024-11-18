@@ -9,34 +9,39 @@ using System.Xml.Linq;
 
 namespace PROG7312_ST10023767.Models.DataStructures
 {
-    public class AVLTreeNode
-    {
-        public IssueClass Issue { get; set; }
-        public AVLTreeNode Left { get; set; }
-        public AVLTreeNode Right { get; set; }
-        public int Height { get; set; }
-
-        public AVLTreeNode(IssueClass issue)
-        {
-            Issue = issue;
-            Left = Right = null;
-            Height = 1;
-        }
-    }
-
     public class AVLTree
     {
+        /// <summary>
+        /// The root of the AVL tree.
+        /// </summary>
         private AVLTreeNode root;
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Gets the root node of the AVL tree.
+        /// </summary>
         public AVLTreeNode Root
         {
             get { return root; }
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Inserts a new issue into the AVL tree, maintaining the tree balance.
+        /// </summary>
+        /// <param name="issue"></param>
         public void Insert(IssueClass issue)
         {
             root = Insert(root, issue);
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Helper method to insert an issue into the AVL tree.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="issue"></param>
+        /// <returns></returns>
         private AVLTreeNode Insert(AVLTreeNode node, IssueClass issue)
         {
             if (node == null) return new AVLTreeNode(issue);
@@ -59,17 +64,34 @@ namespace PROG7312_ST10023767.Models.DataStructures
             return node;
         }
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Gets the height of a node.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         private int GetHeight(AVLTreeNode node)
         {
             return node == null ? 0 : node.Height;
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Gets the balance factor of a node.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         private int GetBalance(AVLTreeNode node)
         {
             return node == null ? 0 : GetHeight(node.Left) - GetHeight(node.Right);
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Performs a right rotation on the given node.
+        /// </summary>
+        /// <param name="y"></param>
+        /// <returns></returns>
         private AVLTreeNode RightRotate(AVLTreeNode y)
         {
             AVLTreeNode x = y.Left;
@@ -84,6 +106,12 @@ namespace PROG7312_ST10023767.Models.DataStructures
             return x;
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Performs a left rotation on the given node.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
         private AVLTreeNode LeftRotate(AVLTreeNode x)
         {
             AVLTreeNode y = x.Right;
@@ -98,5 +126,4 @@ namespace PROG7312_ST10023767.Models.DataStructures
             return y;
         }
     }
-
-}
+}//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//

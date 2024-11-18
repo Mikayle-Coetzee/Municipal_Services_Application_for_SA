@@ -28,9 +28,14 @@ namespace PROG7312_ST10023767.Views
     /// </summary>
     public partial class EventsUserControl : UserControl
     {
+        /// <summary>
+        /// 
+        /// </summary>
         private FilterAndRecommendHelper filterAndRecommendHelper = new FilterAndRecommendHelper();
 
-
+        /// <summary>
+        /// 
+        /// </summary>
         private DisplayHelper displayHelper = new DisplayHelper();
 
         /// <summary>
@@ -43,7 +48,9 @@ namespace PROG7312_ST10023767.Views
         /// </summary>
         private PostManager PostManager;
 
-
+        /// <summary>
+        /// 
+        /// </summary>
         private IssueManager IssueManager;
 
         private IssueTracker IssueTracker;

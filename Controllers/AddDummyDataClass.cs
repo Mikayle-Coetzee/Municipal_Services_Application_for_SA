@@ -14,11 +14,19 @@ namespace PROG7312_ST10023767.Controllers
         /// <summary>
         /// Adds dummy issues to the IssueManager.
         /// </summary>
-        /// <param name="issueManager">The IssueManager instance where issues will be added.</param>
+        /// <param name="issueManager"></param>
+        /// <param name="issueTracker"></param>
         public void AddDummyIssues(IssueManager issueManager, IssueTracker issueTracker)
         {
-            // Dummy data
-            var locations = new List<string> { "Claremont", "Bergvliet", "Langebaan", "Stellenbosch", "Mayville" };
+            var locations = new List<string>
+            {
+                "Claremont",
+                "Bergvliet",
+                "Langebaan",
+                "Stellenbosch",
+                "Mayville"
+            };
+
             var categories = Enum.GetValues(typeof(IssueManager.ReportCategory));
             var descriptions = new List<string>
             {
@@ -29,7 +37,7 @@ namespace PROG7312_ST10023767.Controllers
             };
 
             // Generate 10 dummy issues
-            Random rand = new Random();  
+            Random rand = new Random();
             for (int i = 0; i < 10; i++)
             {
                 string location = locations[rand.Next(locations.Count)];
@@ -37,11 +45,11 @@ namespace PROG7312_ST10023767.Controllers
                 string description = descriptions[rand.Next(descriptions.Count)];
                 int status = rand.Next(0, 3); // Status: 0 (Pending), 1 (In Progress), 2 (Resolved)
 
-                DateTime timestamp = GenerateRandomTimestamp(rand);  
+                DateTime timestamp = GenerateRandomTimestamp(rand);
 
                 var issue = new IssueClass(location, category, description, status.ToString())
                 {
-                    Timestamp = timestamp 
+                    Timestamp = timestamp
                 };
 
                 issue.Attachments = new List<string>();
@@ -51,28 +59,32 @@ namespace PROG7312_ST10023767.Controllers
             }
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
         /// Generates a random timestamp within the past month.
         /// </summary>
-        /// <returns>A random DateTime value.</returns>
+        /// <param name="rand"></param>
+        /// <returns></returns>
         private DateTime GenerateRandomTimestamp(Random rand)
         {
             DateTime today = DateTime.Now;
-            int daysAgo = rand.Next(0, 30);  
+            int daysAgo = rand.Next(0, 30);
             DateTime randomDate = today.AddDays(-daysAgo);
 
-            // Randomize the time within that day
-            int hour = rand.Next(0, 24);    
-            int minute = rand.Next(0, 60);   
-            int second = rand.Next(0, 60);   
+            int hour = rand.Next(0, 24);
+            int minute = rand.Next(0, 60);
+            int second = rand.Next(0, 60);
 
             return new DateTime(randomDate.Year, randomDate.Month, randomDate.Day, hour, minute, second);
         }
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Adds dummy issues to the PostManager
+        /// </summary>
+        /// <param name="postManager"></param>
         public void AddDummyEvents(PostManager postManager)
         {
-            // Dummy data for events
             var titles = new List<string>
             {
                 "Local Music Festival",
@@ -141,9 +153,8 @@ namespace PROG7312_ST10023767.Controllers
                 string category = categories[rand.Next(categories.Count)];
                 string type = types[rand.Next(types.Count)];
 
-                // Generate random dates
                 DateTime startDate = DateTime.Now.AddDays(rand.Next(-10, 10));
-                DateTime endDate = startDate.AddHours(rand.Next(1, 48)); // Event lasts 1 to 48 hours
+                DateTime endDate = startDate.AddHours(rand.Next(1, 48));
                 string startTime = startDate.ToString("hh:mm tt");
                 string endTime = endDate.ToString("hh:mm tt");
 
@@ -154,7 +165,7 @@ namespace PROG7312_ST10023767.Controllers
                     startTime,
                     location,
                     description,
-                    new List<MediaFileClass>(), // Assuming no media files for dummy data
+                    new List<MediaFileClass>(),
                     type,
                     category,
                     endDate.ToString("dd MMM yyyy"),
@@ -168,12 +179,17 @@ namespace PROG7312_ST10023767.Controllers
                     AddNewLocation(location, postManager);
                 }
                 AddCategoryToUniqueCategories(category, postManager);
-                // Add to event list
                 postManager.locationEvents[location].Add(dummyEvent);
             }
         }
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Makes location key
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="postManager"></param>
+        /// <returns></returns>
         private bool IsNewLocation(string location, PostManager postManager)
         {
             return !postManager.locationEvents.ContainsKey(location);
@@ -189,6 +205,12 @@ namespace PROG7312_ST10023767.Controllers
             postManager.locationEvents[location] = new List<EventClass>();
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Adds category to unique category list
+        /// </summary>
+        /// <param name="category"></param>
+        /// <param name="postManager"></param>
         private void AddCategoryToUniqueCategories(string category, PostManager postManager)
         {
             if (!string.IsNullOrEmpty(category))
@@ -197,4 +219,4 @@ namespace PROG7312_ST10023767.Controllers
             }
         }
     }
-}
+}//★---♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫---★・。。END OF FILE 。。・★---♫ ♬:;;;:♬ ♫:;;;: ♫ ♬:;;;:♬ ♫:;;;: ♫---★//

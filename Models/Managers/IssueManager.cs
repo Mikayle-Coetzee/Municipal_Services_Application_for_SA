@@ -44,6 +44,29 @@ namespace PROG7312_ST10023767.Models.Managers
             CarCrash
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Private tree structure that holds issues categorized by type.
+        /// </summary>
+        private TreeNode _issueTree;
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Private Binary Search Tree to store issues.
+        /// </summary>
+        private BinarySearchTree _issueBST;
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        ///  Private Max Heap used for retrieving issues based on priority.
+        /// </summary>
+        private MaxHeap _issueHeap;
+
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Retrieves all the issue categories as a HashSet of category names.
+        /// </summary>
+        /// <returns></returns>
         public static HashSet<string> GetReportCategoryNames()
         {
             var categoryNames = new HashSet<string>();
@@ -56,7 +79,7 @@ namespace PROG7312_ST10023767.Models.Managers
             return categoryNames;
         }
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -68,8 +91,9 @@ namespace PROG7312_ST10023767.Models.Managers
             _issueHeap = new MaxHeap();
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
-        /// Retrieves all issues from the tree structure by category
+        /// Retrieves all issues by combining those from the tree, binary search tree, and max heap.
         /// </summary>
         /// <returns>List of issues</returns>
         public List<IssueClass> GetIssues()
@@ -101,6 +125,11 @@ namespace PROG7312_ST10023767.Models.Managers
             return allIssuesSet.ToList();
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Retrieves issues from the Binary Search Tree.
+        /// </summary>
+        /// <returns></returns>
         private List<IssueClass> GetIssuesFromBST()
         {
             var issues = new List<IssueClass>();
@@ -108,6 +137,11 @@ namespace PROG7312_ST10023767.Models.Managers
             return issues;
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Retrieves issues from the Max Heap.
+        /// </summary>
+        /// <returns></returns>
         public List<IssueClass> GetIssuesFromHeap()
         {
             var issues = new List<IssueClass>();
@@ -122,8 +156,12 @@ namespace PROG7312_ST10023767.Models.Managers
             return issues;
         }
 
-
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// In-order traversal helper function to collect issues from the Binary Search Tree.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="issues"></param>
         private void InOrderTraversal(BinarySearchTreeNode node, List<IssueClass> issues)
         {
             if (node != null)
@@ -134,11 +172,11 @@ namespace PROG7312_ST10023767.Models.Managers
             }
         }
 
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
         /// <summary>
-        /// Retrieves the most recent issues in sorted order
+        /// Retrieves the most recent issues, up to a maximum of 5 issues.
         /// </summary>
-        /// <returns>List of issues</returns>
+        /// <returns></returns>
         public List<IssueClass> GetRecentIssues()
         {
             var recentIssues = new List<IssueClass>();
@@ -149,12 +187,11 @@ namespace PROG7312_ST10023767.Models.Managers
             return recentIssues;
         }
 
-        private TreeNode _issueTree;  
-        private BinarySearchTree _issueBST;   
-        private MaxHeap _issueHeap;   
-
-
-
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Adds a new issue to all the data structures: Tree, Binary Search Tree, and Max Heap.
+        /// </summary>
+        /// <param name="issue"></param>
         public void AddIssue(IssueClass issue)
         {
             // Add to Tree
@@ -176,11 +213,21 @@ namespace PROG7312_ST10023767.Models.Managers
             _issueHeap.Insert(issue);
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Retrieves issues sorted by timestamp from the Binary Search Tree.
+        /// </summary>
+        /// <returns></returns>
         public List<IssueClass> GetIssuesSortedByTimestamp()
         {
             return _issueBST.InOrderTraversal();
         }
 
+        //・♫-------------------------------------------------------------------------------------------------♫・//
+        /// <summary>
+        /// Retrieves the latest issue based on the Max Heap priority.
+        /// </summary>
+        /// <returns></returns>
         public IssueClass GetLatestIssue()
         {
             return _issueHeap.ExtractMax();

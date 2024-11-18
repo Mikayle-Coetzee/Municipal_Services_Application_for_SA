@@ -116,6 +116,8 @@
     <Compile Include="Controllers\ButtonHelper.cs" />
     <Compile Include="Controllers\ChatService.cs" />
     <Compile Include="Controllers\DisplayHelper.cs" />
+    <Compile Include="Models\DataStructures\AVLTreeNode.cs" />
+    <Compile Include="Models\DataStructures\BinarySearchTreeNode.cs" />
     <Compile Include="Models\EventClass.cs" />
     <Compile Include="Models\Managers\PostManager.cs" />
     <Compile Include="Models\MediaFileClass.cs" />
