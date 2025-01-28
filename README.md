@@ -1,4 +1,4 @@
-# ST10023767_PROG7312 (Municipal Services Application for South Africa)
+# Municipal Services Application for South Africa
 
 This project is part of a POE where I developed a **WPF Application** using **C#** and the **.NET Framework**. The application is designed for managing municipal services in South Africa, offering features that allow users to report issues, request services, view local events and announcements, and track service request statuses. The goal is to create an efficient and user-friendly platform that enhances the interaction between citizens and municipal services.
 
